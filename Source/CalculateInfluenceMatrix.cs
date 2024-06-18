@@ -8,92 +8,17 @@ using System.Collections.Generic;
 using System.Windows.Media.Media3D;
 using VMS.TPS.Common.Model.Types;
 using System.Security.Cryptography.X509Certificates;
+using PureHDF;
+using System.IO;
+using System.Windows;
+using HDF5CSharp;
+using System.Windows.Shapes;
+using HDF5DotNet;
 
 [assembly: ESAPIScript(IsWriteable = true)]
 
 namespace CalculateInfluenceMatrix
 {
-//    class ThreadData
-//    {
-//        IonPlanSetup m_hPlan;
-
-//        AutoResetEvent	eventThreadExited;		// signal thread has exited
-//        public ThreadData(IonPlanSetup plan)
-//        {
-//            m_hPlan = plan;
-//            eventThreadExited = new AutoResetEvent(false);
-//        }
-
-//        IonBeam m_hBeam;
-////        IonSpotParametersCollection rawSpotList;
-////        IonBeamParameters m_hFieldParams;
-//        int m_iFieldIdx, m_iLayerIdx, m_iSpotIdx;
-////        int m_iFieldIdx, m_iFieldCnt, m_iLayerIdx, m_iLayerCnt, m_iSpotIdx, m_iSpotCnt;
-////        float m_fSpotWgt;
-//        string m_szOutputPath;
-
-//        public ThreadData(IonPlanSetup plan, IonBeam hBeam, int iFieldIdx, int iLayerIdx, int iSpotIdx, string szOutputPath)
-//        {
-//            m_hPlan = plan;
-//            m_hBeam = hBeam;
-//            eventThreadExited = new AutoResetEvent(false);
-
-//            m_iFieldIdx = iFieldIdx;
-//            m_iLayerIdx = iLayerIdx;
-//            m_iSpotIdx = iSpotIdx;
-
-//            m_szOutputPath = szOutputPath;
-//        }
-
-//        public void ThreadFunc_CalcSpot2()
-//        {
-//            try
-//            {
-//                // When the raw spot list is modified above or in Helpers.SetAllSpotsToZero, the final spot list is cleared.
-//                // In this case, CalculateDoseWithoutPostProcessing calculates the dose using the raw spot list.
-
-//                CalculationResult calcRes = m_hPlan.CalculateDoseWithoutPostProcessing();
-//                //if (!calcRes.Success)
-//                //{
-//                //    throw new ApplicationException("Dose Calculation Failed");
-//                //}
-
-//                //DoseData doseData = Helpers.GetNonZeroDosePoints(m_hPlan);
-//                //string filename = string.Format("field{0}-layer{1}-spot{2}-results.csv", m_iFieldIdx, m_iLayerIdx, m_iSpotIdx);
-//                //string filepath = string.Format(m_szOutputPath + "\\{0}", filename);
-//                //Helpers.WriteResults(doseData, filepath);
-//            }
-//            catch (Exception e)
-//            {
-//                int i = 0;
-//            }
-//            finally
-//            {
-//                eventThreadExited.Set();
-//            }
-//        }
-//        public void ThreadFunc_CalcSpot()
-//        {
-//            try
-//            {
-//                // When the raw spot list is modified above or in Helpers.SetAllSpotsToZero, the final spot list is cleared.
-//                // In this case, CalculateDoseWithoutPostProcessing calculates the dose using the raw spot list.
-//                CalculationResult calcRes = m_hPlan.CalculateDoseWithoutPostProcessing();
-//                if (!calcRes.Success)
-//                {
-//                    throw new ApplicationException("Dose Calculation Failed");
-//                }
-//            }
-//            catch (Exception e)
-//            {
-//            }
-//            finally
-//            {
-//                eventThreadExited.Set();
-//            }
-//        }
-
-//    }
     public class MyBeamParameters
     {
         public MyBeamParameters(int iLayers, List<int> lstSpots, IonBeamParameters hParams)
@@ -127,7 +52,7 @@ namespace CalculateInfluenceMatrix
                 {
                     Helpers.GetPatientInfoFromUser(ref patientId, ref courseId, ref planId);
                 }
-                using (Application app = Application.CreateApplication())
+                using (VMS.TPS.Common.Model.API.Application app = VMS.TPS.Common.Model.API.Application.CreateApplication())
                 {
                     Execute(app, patientId, courseId, planId);
                 }
@@ -142,8 +67,10 @@ namespace CalculateInfluenceMatrix
             }
         }
 
-        static void Execute(Application app, string patientId, string courseId, string planId)
+        static void Execute(VMS.TPS.Common.Model.API.Application app, string patientId, string courseId, string planId)
         {
+            float fInfCutoffValue = 0.015f;
+
             IonPlanSetup plan = Helpers.GetIonPlan(app, patientId, courseId, planId);
 
             plan.CalculateBeamLine();
@@ -157,9 +84,12 @@ namespace CalculateInfluenceMatrix
             {
                 System.IO.Directory.CreateDirectory(resultsDirPath);
             }
+
             string planResultsPath = resultsDirPath + $"\\{planId}";
             System.IO.Directory.CreateDirectory(planResultsPath);
             Log.Information($"Results will be written to: {planResultsPath}");
+
+            ExportStructureOutlinesAndMasks(plan, planResultsPath);
 
             // cache data for all beams
             int iMaxLayerCnt = int.MinValue;
@@ -196,7 +126,7 @@ namespace CalculateInfluenceMatrix
                 lstMaxSpotCnt.Add(iMaxSpotCnt);
             }
 
-            double[,] arrFullDoseMatrix=null;
+            double[,,] arrFullDoseMatrix=null;
 
             // lopp thru layers
             for (int layerIdx = 0; layerIdx < iMaxLayerCnt; layerIdx++)
@@ -240,18 +170,20 @@ namespace CalculateInfluenceMatrix
                             if (layerIdx < bp.iLayerCnt && spotIdx < bp.lstSpotCnt[layerIdx])
                             {
                                 IonSpotParametersCollection rawSpotList = bp.hIonBeamParams.IonControlPointPairs[layerIdx].RawSpotList;
-                                BeamMetaData hBeamData = Helpers.PopulateBeamData(plan, b);
 
                                 BeamDose hBeamDose = b.Dose;
                                 if (arrFullDoseMatrix == null)
-                                    arrFullDoseMatrix = new double[1,hBeamDose.ZSize * hBeamDose.YSize * hBeamDose.XSize];
+                                    arrFullDoseMatrix = new double[hBeamDose.ZSize, hBeamDose.YSize, hBeamDose.XSize];
+                                Array.Clear(arrFullDoseMatrix, 0, arrFullDoseMatrix.Length);
                                 DoseData doseData = Helpers.GetNonZeroDosePoints(b.Dose, ref arrFullDoseMatrix);
+
+                                TBeamMetaData hBeamData = Helpers.PopulateBeamData(b);
+                                Helpers.WriteResults_HDF5(hBeamData, b.TreatmentUnit.Id, fInfCutoffValue, arrFullDoseMatrix, doseData, layerIdx, spotIdx, planResultsPath);
 
                                 //string filename = string.Format("{0}-layer{1}-spot{2}-results.csv", b.Id, layerIdx, spotIdx);
                                 //string szFilepath = string.Format(planResultsPath + "\\{0}", filename);
                                 //Helpers.WriteResults_CVS(hBeamData, doseData, szFilepath);
 
-                                Helpers.WriteResults_HDF5(hBeamData, arrFullDoseMatrix, doseData, layerIdx, spotIdx, planResultsPath);
 
                                 rawSpotList[spotIdx].Weight = 0.0f;
                                 b.ApplyParameters(bp.hIonBeamParams);
@@ -261,6 +193,119 @@ namespace CalculateInfluenceMatrix
                 }
             }
             Log.Information("Influence matrix calculation finished.");
+        }
+        public static void ExportStructureOutlinesAndMasks(IonPlanSetup hPlanSetup, string szOutputFolder)
+        {
+            string szStructOutlinesFolder = System.IO.Path.Combine(szOutputFolder, "Beams");
+
+            if (!Directory.Exists(szStructOutlinesFolder))
+            {
+                Directory.CreateDirectory(szStructOutlinesFolder);
+            }
+
+            // Export structure outlines
+            foreach (Beam b in hPlanSetup.Beams)
+            {
+                if (b.IsSetupField)
+                {
+                    continue;
+                }
+
+                string szH5OutlinesPath = System.IO.Path.Combine(szStructOutlinesFolder, $"Beam_{b.Id}_Data.h5");
+                long fileId1 = Hdf5.CreateFile(szH5OutlinesPath);
+
+                foreach (Structure s in hPlanSetup.StructureSet.Structures)
+                {
+                    Point[][] arrOutlines = b.GetStructureOutlines(s, true);
+                    if (arrOutlines != null && arrOutlines.Length > 0)
+                    {
+                        for(int j=0; j<arrOutlines.Length; j++)
+                        {
+                            Point[] points = arrOutlines[j];
+                            string szDatasetName = $"/BEV_structure_contour_points/{s.Id}/Segment-{j}";
+                            double[,] arrPoints = new double[points.Length, 2];
+                            for (int i = 0; i < points.Length; i++)
+                            {
+                                arrPoints[i, 0] = points[i].X;
+                                arrPoints[i, 1] = points[i].Y;
+                            }
+                            Helpers.CreateDataSet<double>(fileId1, szDatasetName, arrPoints);
+                        }
+                    }
+                }
+                Hdf5.CloseFile(fileId1);
+            }
+
+            // Export structure masks
+            string szH5MaskPath = System.IO.Path.Combine(szOutputFolder, "StructureSet_Data.h5");
+            long fileId = Hdf5.CreateFile(szH5MaskPath);
+            List<object> lstAllStructsMetaData = new List<object>();
+
+            Image hCT = hPlanSetup.StructureSet.Image;
+            foreach (Structure s in hPlanSetup.StructureSet.Structures)
+            {
+                if (s.HasSegment)
+                {
+                    string szStructID = s.Id;
+                    string szStandardStructName = szStructID; // dictOrganName[szStructID]
+
+                    byte[,,] struct3DMask = MakeSegmentMaskForStructure(hCT, s);
+                    Helpers.CreateDataSet<byte>(fileId, "/" + szStructID, struct3DMask);
+
+                    lstAllStructsMetaData.Add(new
+                    {
+                        name = szStandardStructName,
+                        volume_cc = s.Volume,
+                        dicom_structure_name = szStructID,
+                        fraction_of_vol_in_calc_box = 1, // echoData.dictOrganFractionVolInCalcBox[szStructID] if szStructID in echoData.dictOrganFractionVolInCalcBox else 1,
+                        structure_mask_3d_File = $"StructureSet_Data.h5/{szStandardStructName}"
+                    });
+                }
+            }
+            Hdf5.CloseFile(fileId);
+
+            string szMetaDataFile = System.IO.Path.Combine(szOutputFolder, "StructureSet_MetaData.json");
+            Helpers.WriteJSONFile(lstAllStructsMetaData, szMetaDataFile);
+        }
+        public static byte[,,] MakeSegmentMaskForStructure(Image hCT, Structure hStruct)
+        {
+            if (hStruct.HasSegment)
+            {
+                System.Collections.BitArray pre_buffer = new System.Collections.BitArray(hCT.ZSize);
+                return fill_in_profiles(hCT, hStruct, pre_buffer);
+            }
+            else
+                throw new Exception("Structure has no segment data");
+        }
+
+        private static byte[,,] fill_in_profiles(Image hCT, Structure hStruct, System.Collections.BitArray pre_buffer) // dose_or_image, profile_fxn, row_buffer, dtype, pre_buffer= None)
+        {
+            int iXSize = hCT.XSize;
+            int iYSize = hCT.YSize;
+            int iZSize = hCT.ZSize;
+            byte[,,] mask_array = new byte[iXSize, iYSize, iZSize];
+
+            VVector z_direction = ((iZSize - 1) * hCT.ZRes) * hCT.ZDirection;
+            VVector y_step = hCT.YRes * hCT.YDirection;
+
+            VVector start_x, stop;
+            for (int x = 0; x < iXSize; x++)    //) :  # scan X dimensions
+            {
+                start_x = hCT.Origin + ((x * hCT.XRes) * hCT.XDirection);
+
+                for (int y = 0; y < iYSize; y++)  // # scan Y dimension
+                {
+                    stop = start_x + z_direction;
+
+                    hStruct.GetSegmentProfile(start_x, stop, pre_buffer);
+
+                    for (int z = 0; z < iZSize; z++)
+                        mask_array[x, y, z] = (byte)(pre_buffer[z] ? 1 : 0);
+
+                    start_x = start_x + y_step;
+                }
+            }
+            return mask_array;
         }
     }
 }
