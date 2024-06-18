@@ -30,66 +30,24 @@ namespace CalculateInfluenceMatrix
         public List<DosePoint> dosePoints = new List<DosePoint>();
     };
 
-    public class BeamletInfo
-    {
-        public string id_File;
-        public string width_mm_File;
-        public string height_mm_File;
-        public string position_x_mm_File;
-        public string position_y_mm_File;
-        public string MLC_leaf_idx_File;
-    };
-    public class IsocenterPosition
-    {
-        public IsocenterPosition(double x, double y, double z)
-        {
-            x_mm = x;
-            y_mm = y;
-            z_mm = z;
-        }
-        public double x_mm;
-        public double y_mm;
-        public double z_mm;
-    }
 
-    public class JawPosition
+    public class TBeamMetaData
     {
-        public JawPosition(VRect<double> vrectJawPositions)
-        {
-            top_left_x_mm = vrectJawPositions.X1;
-            top_left_y_mm = vrectJawPositions.Y1;
-            bottom_right_x_mm = vrectJawPositions.X2;
-            bottom_right_y_mm = vrectJawPositions.Y2;
-        }
-        public double top_left_x_mm;
-        public double top_left_y_mm;
-        public double bottom_right_x_mm; 
-        public double bottom_right_y_mm;
-    }
-    public class BeamMetaData
-    {
-        public string ID;
-        public float gantry_angle;
-        public float collimator_angle;
-        public float couch_angle;
-        public int doseMatrixSizeX;
-        public int doseMatrixSizeY;
-        public int doseMatrixSizeZ;
-
-        public IsocenterPosition iso_center;
-        public BeamletInfo beamlets;
-        public JawPosition jaw_position;
-
-        public string BEV_structure_contour_points_File;
-        public string MLC_name;
-        public string beam_modality;
-        public string energy_MV;
-        public float SSD_mm;
-        public float SAD_mm;
-        public string influenceMatrixSparse_File;
-        public float influenceMatrixSparse_tol;
-        public string influenceMatrixFull_File;
-        public string MLC_leaves_pos_y_mm_File;
-        public string machine_name;
+        public string Id { get; set; } = "";
+        public string szEnergy { get; set; } = "";
+        public string szTechnique { get; set; } = "";
+        public string szMLCName { get; set; } = "";
+        public float fGantryRtn { get; set; } = 0;
+        public float fCollRtn { get; set; } = 0;
+        public float fJawX1 { get; set; } = 0;
+        public float fJawX2 { get; set; } = 0;
+        public float fJawY1 { get; set; } = 0;
+        public float fJawY2 { get; set; } = 0;
+        public float fPatientSuppAngle { get; set; } = 0;
+        public float fIsoX { get; set; } = 0;
+        public float fIsoY { get; set; } = 0;
+        public float fIsoZ { get; set; } = 0;
+        public float fSSD { get; set; } = 0;
+        public float fSAD { get; set; } = 100;
     }
 }
