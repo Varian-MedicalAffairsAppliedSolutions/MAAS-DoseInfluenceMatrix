@@ -90,7 +90,7 @@ class Helpers :
                     if (doseVal > 0) :
                         pointDose = doseVal / spotWeight
                         doseFromSpot.append(DosePoint(x, y, sliceIndex, pointDose))
-                    arrFullDoseMatrix[0, sliceIndex, y, x] = doseVal
+                    arrFullDoseMatrix[sliceIndex, y, x] = doseVal
         return DoseData(doseFromSpot)
 
     @staticmethod
@@ -186,11 +186,7 @@ class Helpers :
         with h5py.File(szPath, 'a') as hf:
 
             # write full inf matrix
-            Helpers.AddOrAppendDataSet(hf, '/inf_matrix_full/matrix', arrFullDoseMatrix)
-            arrLayer_Spot = np.zeros((1, 2), dtype=np.int16)
-            arrLayer_Spot[0, 0] = iLayerIdx
-            arrLayer_Spot[0, 1] = iSpotIdx
-            Helpers.AddOrAppendDataSet(hf, '/inf_matrix_full/layer_spot_indices', arrLayer_Spot)
+            Helpers.CreateDataSet(hf, '/inf_matrix_full/matrix/' + str(iLayerIdx) + '_' + str(iSpotIdx), arrFullDoseMatrix)
 
             # write sparse inf matrix
             lstDosePoints = doseData.dosePoints
