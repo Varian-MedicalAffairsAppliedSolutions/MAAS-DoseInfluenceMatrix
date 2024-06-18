@@ -214,8 +214,8 @@ def main():
                         rawSpotList = hIonBeamParams.IonControlPointPairs[layerIdx].RawSpotList
 
                         hBeamDose = b.Dose
-                        if (arrFullDoseMatrix is None):
-                            arrFullDoseMatrix = np.zeros((1, hBeamDose.ZSize,hBeamDose.YSize,hBeamDose.XSize))
+                        
+                        arrFullDoseMatrix = np.zeros((hBeamDose.ZSize,hBeamDose.YSize,hBeamDose.XSize))
                         doseData = Helpers.GetNonZeroDosePoints(b.Dose, arrFullDoseMatrix)
 
                         hBeamData = Helpers.PopulateBeamData(b)
