@@ -30,6 +30,11 @@ namespace CalculateInfluenceMatrix
         public int iLayerCnt;
         public List<int> lstSpotCnt;
         public IonBeamParameters hIonBeamParams;
+
+        public List<int> lstSpotId = new List<int>();
+        public List<float> lstSpotXPos = new List<float>();
+        public List<float> lstSpotYPos = new List<float>();
+        public List<double> lstSpotEnergyMeV = new List<double>();
     };
 
     class CalculateInfluenceMatrix
@@ -69,10 +74,10 @@ namespace CalculateInfluenceMatrix
 
         static void Execute(VMS.TPS.Common.Model.API.Application app, string patientId, string courseId, string planId)
         {
-            float fInfCutoffValue = 0.015f;
+            double dInfCutoffValue = System.Convert.ToDouble(System.Configuration.ConfigurationManager.AppSettings["InfCutoffValue"]);
+            bool bExportFullInfMatrix = System.Configuration.ConfigurationManager.AppSettings["ExportFullInfMatrix"]=="1";
 
             IonPlanSetup plan = Helpers.GetIonPlan(app, patientId, courseId, planId);
-
             plan.CalculateBeamLine();
             Helpers.SetAllSpotsToZero(plan);
 
@@ -126,8 +131,11 @@ namespace CalculateInfluenceMatrix
                 lstMaxSpotCnt.Add(iMaxSpotCnt);
             }
 
-            double[,,] arrFullDoseMatrix=null;
+            string szBeamPath = System.IO.Path.Combine(planResultsPath, "Beams");
+            if (!Directory.Exists(szBeamPath))
+                Directory.CreateDirectory(szBeamPath);
 
+            double[,,] arrFullDoseMatrix=null;
             // lopp thru layers
             for (int layerIdx = 0; layerIdx < iMaxLayerCnt; layerIdx++)
             {
@@ -142,9 +150,19 @@ namespace CalculateInfluenceMatrix
                         MyBeamParameters bp = tblBeamParameters[b];
                         if (layerIdx < bp.iLayerCnt && spotIdx < bp.lstSpotCnt[layerIdx])
                         {
-                            IonSpotParametersCollection rawSpotList = bp.hIonBeamParams.IonControlPointPairs[layerIdx].RawSpotList;
+                            IonControlPointPair icpp = bp.hIonBeamParams.IonControlPointPairs[layerIdx];
+                            IonSpotParameters spotParams = icpp.RawSpotList[spotIdx];
 
-                            rawSpotList[spotIdx].Weight = spotWeight;
+                            // save spot infor for export later
+                            if( bp.lstSpotId.Count>0) 
+                                bp.lstSpotId.Add(bp.lstSpotId.Last()+1); // increment spot id
+                            else
+                                bp.lstSpotId.Add(0); 
+                            bp.lstSpotXPos.Add(spotParams.X);
+                            bp.lstSpotYPos.Add(spotParams.Y);
+                            bp.lstSpotEnergyMeV.Add(icpp.NominalBeamEnergy);
+
+                            spotParams.Weight = spotWeight;
                             b.ApplyParameters(bp.hIonBeamParams);
                             bRunCalc = true;
                         }
@@ -175,22 +193,33 @@ namespace CalculateInfluenceMatrix
                                 if (arrFullDoseMatrix == null)
                                     arrFullDoseMatrix = new double[hBeamDose.ZSize, hBeamDose.YSize, hBeamDose.XSize];
                                 Array.Clear(arrFullDoseMatrix, 0, arrFullDoseMatrix.Length);
-                                DoseData doseData = Helpers.GetNonZeroDosePoints(b.Dose, ref arrFullDoseMatrix);
+                                DoseData doseData = Helpers.GetDosePoints(b.Dose, dInfCutoffValue, ref arrFullDoseMatrix);
 
-                                TBeamMetaData hBeamData = Helpers.PopulateBeamData(b);
-                                Helpers.WriteResults_HDF5(hBeamData, b.TreatmentUnit.Id, fInfCutoffValue, arrFullDoseMatrix, doseData, layerIdx, spotIdx, planResultsPath);
+                                string szHDF5DataFile = System.IO.Path.Combine(szBeamPath, $"Beam_{b.Id}_Data.h5");
+                                Helpers.WriteInfMatrixHDF5(bExportFullInfMatrix, arrFullDoseMatrix, doseData, bp.lstSpotId.Last(), szHDF5DataFile);
+
+                                // due to time constraint, CVS format has not been implemented
 
                                 //string filename = string.Format("{0}-layer{1}-spot{2}-results.csv", b.Id, layerIdx, spotIdx);
                                 //string szFilepath = string.Format(planResultsPath + "\\{0}", filename);
                                 //Helpers.WriteResults_CVS(hBeamData, doseData, szFilepath);
 
-
+                                //when done, turn off this spot for all beams
                                 rawSpotList[spotIdx].Weight = 0.0f;
                                 b.ApplyParameters(bp.hIonBeamParams);
                             }
                         }
                     }
                 }
+            }
+            // export beam meta data
+            foreach (IonBeam b in plan.IonBeams)
+            {
+                string szHDF5DataFile = System.IO.Path.Combine(szBeamPath, $"Beam_{b.Id}_Data.h5");
+                Helpers.WriteSpotInfoHDF5(tblBeamParameters[b], szHDF5DataFile);
+
+                string szBeamMetaDataFile = System.IO.Path.Combine(szBeamPath, $"Beam_{b.Id}_MetaData.json");
+                Helpers.WriteBeamMetaData(b, tblBeamParameters[b], dInfCutoffValue, szBeamMetaDataFile);
             }
             Log.Information("Influence matrix calculation finished.");
         }
