@@ -12,15 +12,8 @@ using Newtonsoft.Json.Converters;
 using HDF5CSharp;
 using HDF.PInvoke;
 using HDF5CSharp.DataTypes;
-using System;
-using System.Linq;
 using System.Runtime.InteropServices;
 
-using HDF.PInvoke;
-using HDF5CSharp.DataTypes;
-using System;
-using System.Linq;
-using System.Runtime.InteropServices;
 using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 using System.Windows.Shapes;
@@ -128,7 +121,7 @@ namespace CalculateInfluenceMatrix
                     }
                 }
             }
-            return new DoseData(doseFromSpot);
+            return new DoseData(doseFromSpot, 0, 0);
         }
 
         public static DoseData GetNonZeroDosePoints(PlanningItemDose hDose)
@@ -164,9 +157,9 @@ namespace CalculateInfluenceMatrix
                     }
                 }
             }
-            return new DoseData(doseFromSpot);
+            return new DoseData(doseFromSpot, 0, 0);
         }
-        public static DoseData GetNonZeroDosePoints(BeamDose hDose, ref double[,,] arrFullDoseMatrix)
+        public static DoseData GetDosePoints(BeamDose hDose, double dCutoffValue, ref double[,,] arrFullDoseMatrix)
         {
             if (hDose is null)
             {
@@ -180,6 +173,8 @@ namespace CalculateInfluenceMatrix
             int iZSize = hDose.ZSize;
             int[,] doseBuffer = new int[iXSize, iYSize];
             List<DosePoint> doseFromSpot = new List<DosePoint>();
+            double dSumCutOffValues = 0;
+            int iCutOffValueCnt = 0;
             for (int sliceIndex = 0; sliceIndex < iZSize; sliceIndex++)
             {
                 hDose.GetVoxels(sliceIndex, doseBuffer);
@@ -187,17 +182,22 @@ namespace CalculateInfluenceMatrix
                 {
                     for (int i = 0; i < iXSize; i++)
                     {
-                        double pointDose = 0;
-                        if (doseBuffer[i, j] > 0)
+                        double pointDose = (doseBuffer[i, j] * dScale + dIntercept) / CalculateInfluenceMatrix.spotWeight;
+                        if (pointDose > dCutoffValue)
                         {
-                            pointDose = (doseBuffer[i, j] * dScale + dIntercept) / CalculateInfluenceMatrix.spotWeight;
                             doseFromSpot.Add(new DosePoint(i, j, sliceIndex, pointDose));
                         }
+                        else if (pointDose > 0)
+                        {
+                            dSumCutOffValues += pointDose;
+                            iCutOffValueCnt++;
+                        }
+
                         arrFullDoseMatrix[sliceIndex, j, i] = pointDose;
                     }
                 }
             }
-            return new DoseData(doseFromSpot);
+            return new DoseData(doseFromSpot, dSumCutOffValues, iCutOffValueCnt);
         }
 
         public static void SetAllSpotsToZero(IonPlanSetup plan)
@@ -219,94 +219,50 @@ namespace CalculateInfluenceMatrix
             }
         }
 
-        public static void WriteResults_CVS(TBeamMetaData hBeamData, DoseData doseData, string szPath)
-        {
-            StringBuilder builder = new StringBuilder();
-            string header = "sliceIndex,yIndex,xIndex,dose";
-            builder.AppendLine(header);
-            foreach (DosePoint dosePoint in doseData.dosePoints)
-            {
-                builder.AppendLine($"{dosePoint.sliceIndex},{dosePoint.indexY},{dosePoint.indexX},{dosePoint.doseValue.ToString("0.0000000")}");
-            }
-            File.WriteAllText(szPath, builder.ToString());
-        }
+        //public static void WriteResults_CVS(TBeamMetaData hBeamData, DoseData doseData, string szPath)
+        //{
+        //    StringBuilder builder = new StringBuilder();
+        //    string header = "sliceIndex,yIndex,xIndex,dose";
+        //    builder.AppendLine(header);
+        //    foreach (DosePoint dosePoint in doseData.dosePoints)
+        //    {
+        //        builder.AppendLine($"{dosePoint.sliceIndex},{dosePoint.indexY},{dosePoint.indexX},{dosePoint.doseValue.ToString("0.0000000")}");
+        //    }
+        //    File.WriteAllText(szPath, builder.ToString());
+        //}
 
-        public static void WriteResults_HDF5(TBeamMetaData hBeamData, string szMachine, float fInfCutoffValue, double[,,] arrFullDoseMatrix, DoseData doseData, int iLayerIdx, int iSpotIdx, string szPath)
-        {
-            szPath = System.IO.Path.Combine(szPath, "Beams");
-            if (!Directory.Exists(szPath))
-            {
-                Directory.CreateDirectory(szPath);
-            }
 
-            string szBeamMetaDataFile = System.IO.Path.Combine(szPath, $"Beam_{hBeamData.Id}_MetaData.json");
-            Helpers.WriteBeamMetaData(hBeamData, szMachine, fInfCutoffValue, szBeamMetaDataFile);
-
-            string szHDF5DataFile = System.IO.Path.Combine(szPath, $"Beam_{hBeamData.Id}_Data.h5");
-            Helpers.WriteInfMatrixHDF5(arrFullDoseMatrix, doseData, iLayerIdx, iSpotIdx, szHDF5DataFile);
-        }
-
-        public static TBeamMetaData PopulateBeamData(Beam hBeam)
+        public static void WriteBeamMetaData(IonBeam b, MyBeamParameters beamParams, double dInfMatrixCutoffValue, string szOutputFile)
         {
-            ControlPoint firstCP = hBeam.ControlPoints[0];
-            TBeamMetaData hBeamData = new TBeamMetaData();
-            hBeamData.Id = hBeam.Id;
-            hBeamData.szEnergy = hBeam.EnergyModeDisplayName;
-            hBeamData.szTechnique = hBeam.Technique.Id;
-            hBeamData.szMLCName = (hBeam.MLC == null) ? "" : hBeam.MLC.Name;
-            hBeamData.fGantryRtn = (float)firstCP.GantryAngle;
-            hBeamData.fCollRtn = (float)firstCP.CollimatorAngle;
-            hBeamData.fPatientSuppAngle = (float)firstCP.PatientSupportAngle;
-            hBeamData.fIsoX = (float)hBeam.IsocenterPosition.x;
-            hBeamData.fIsoY = (float)hBeam.IsocenterPosition.y;
-            hBeamData.fIsoZ = (float)hBeam.IsocenterPosition.z;
-            hBeamData.fJawX1 = (float)firstCP.JawPositions.X1;
-            hBeamData.fJawX2 = (float)firstCP.JawPositions.X2;
-            hBeamData.fJawY1 = (float)firstCP.JawPositions.Y1;
-            hBeamData.fJawY2 = (float)firstCP.JawPositions.Y2;
-            return hBeamData;
-        }
-        public static void WriteBeamMetaData(TBeamMetaData echoBeam, string szMachine, float fInfMatrixCutoffValue, string szOutputFile)
-        {
-            string szBeamID = echoBeam.Id;
+            ControlPoint firstCP = b.ControlPoints[0];
+
+            string szBeamID = b.Id;
             string szFilename = $"Beam_{szBeamID}_Data.h5";
             Dictionary<string, object> dctBeamData = new Dictionary<string, object>
             {
                 { "ID", szBeamID },
-                { "gantry_angle", echoBeam.fGantryRtn },
-                { "collimator_angle", echoBeam.fCollRtn },
-                { "couch_angle", echoBeam.fPatientSuppAngle },
+                { "gantry_angle", (float)firstCP.GantryAngle },
+                { "couch_angle", (float)firstCP.PatientSupportAngle },
                 { "iso_center", new Dictionary<string, float> {
-                    { "x_mm", echoBeam.fIsoX },
-                    { "y_mm", echoBeam.fIsoY },
-                    { "z_mm", echoBeam.fIsoZ }
+                    { "x_mm", (float)b.IsocenterPosition.x },
+                    { "y_mm", (float)b.IsocenterPosition.y },
+                    { "z_mm", (float)b.IsocenterPosition.z }
                 }},
-                { "beamlets", new Dictionary<string, string> {
-                    { "id_File", $"{szFilename}/beamlets/id" },
-                    { "width_mm_File", $"{szFilename}/beamlets/width_mm" },
-                    { "height_mm_File", $"{szFilename}/beamlets/height_mm" },
-                    { "position_x_mm_File", $"{szFilename}/beamlets/position_x_mm" },
-                    { "position_y_mm_File", $"{szFilename}/beamlets/position_y_mm" },
-                    { "MLC_leaf_idx_File", $"{szFilename}/beamlets/MLC_leaf_idx" }
-                }},
-                { "jaw_position", new Dictionary<string, float> {
-                    { "top_left_x_mm", echoBeam.fJawX1 },
-                    { "top_left_y_mm", echoBeam.fJawY1 },
-                    { "bottom_right_x_mm", echoBeam.fJawX2 },
-                    { "bottom_right_y_mm", echoBeam.fJawY2 }
+                { "spots", new Dictionary<string, string> {
+                    { "id_File", $"{szFilename}/spots/id" },
+                    { "position_x_mm_File", $"{szFilename}/spots/position_x_mm" },
+                    { "position_y_mm_File", $"{szFilename}/spots/position_y_mm" },
+                    { "energy_layer_MeV_File", $"{szFilename}/spots/energy_layer_MeV" }
                 }},
                 { "BEV_structure_contour_points_File", $"{szFilename}/BEV_structure_contour_points" },
-                { "MLC_name", echoBeam.szMLCName },
-                { "beam_modality", echoBeam.szTechnique },
-                { "energy_MV", echoBeam.szEnergy },
-                { "SSD_mm", echoBeam.fSSD },
-                { "SAD_mm", echoBeam.fSAD },
+                { "beam_modality", "Proton" },
+                { "energy_MV", b.EnergyModeDisplayName },
+                { "SSD_mm", b.SSD},
+                { "SAD_mm", 100},
                 { "influenceMatrixSparse_File", $"{szFilename}/inf_matrix_sparse" },
-                { "influenceMatrixSparse_tol", fInfMatrixCutoffValue },
-                { "influenceMatrixFull_File", $"{szFilename}/inf_matrix_full/matrix" },
-                { "layer_spot_indices_File", $"{szFilename}/inf_matrix_full/layer_spot_indices" },
-                { "MLC_leaves_pos_y_mm_File", $"{szFilename}/MLC_leaves_pos_y_mm" },
-                { "machine_name", szMachine }
+                { "influenceMatrixSparse_tol", dInfMatrixCutoffValue },
+                { "influenceMatrixFull_File", $"{szFilename}/inf_matrix_full" },
+                { "machine_name", b.TreatmentUnit.Id }
             };
             Helpers.WriteJSONFile(dctBeamData, szOutputFile);
         }
@@ -380,7 +336,6 @@ namespace CalculateInfluenceMatrix
                     arrResult = ConcatArrays<T>(arrExistingData, arrDataSet);
             }
             Hdf5.WriteDatasetFromArray<T>(lGroupID, szName, arrResult);
-
             //using (ChunkedDataset<T> chunkedDSet = new ChunkedDataset<T>(szName, lGroupID))
             //{
             //    if (bDatasetExists)
@@ -393,7 +348,7 @@ namespace CalculateInfluenceMatrix
             for (int i = iLen - 1; i >= 0; i--)
                 Hdf5.CloseGroup(lstGroups[i]);
         }
-        public static void WriteInfMatrixHDF5(double[,,] arrFullDoseMatrix, DoseData doseData, int iLayerIdx, int iSpotIdx, string szPath) 
+        public static void WriteInfMatrixHDF5(bool bExportFullInfMatrix, double[,,] arrFullDoseMatrix, DoseData doseData, int iSpotIdx, string szPath)
         {
             long fileId;
             bool bAppend = System.IO.File.Exists(szPath);
@@ -402,26 +357,45 @@ namespace CalculateInfluenceMatrix
             else
                 fileId = Hdf5.CreateFile(szPath);
 
-            // write full inf matrix
-            Helpers.CreateDataSet<double>(fileId, "/inf_matrix_full/matrix/" + iLayerIdx.ToString() + "_" + iSpotIdx.ToString(), arrFullDoseMatrix);
+            if(bExportFullInfMatrix)
+            {
+                // write full inf matrix
+                Helpers.CreateDataSet<double>(fileId, "/inf_matrix_full/" + "spot_" + ((iSpotIdx > 9999) ? iSpotIdx.ToString() : iSpotIdx.ToString("D4")), arrFullDoseMatrix);
+            }
 
-            int iDoseMatrixSizeX = arrFullDoseMatrix.GetLength(1);
-            int iDoseMatrixSizeY = arrFullDoseMatrix.GetLength(0);
+            int iDoseMatrixSizeX = arrFullDoseMatrix.GetLength(2);
+            int iDoseMatrixSizeY = arrFullDoseMatrix.GetLength(1);
+            int iDoseMatrixSizeZ = arrFullDoseMatrix.GetLength(0);
 
             // write sparse inf matrix
             List<DosePoint> lstDosePoints = doseData.dosePoints;
             int iPtCnt = lstDosePoints.Count;
-            double[,] arrSparse = new double[iPtCnt, 4];
+            double[,] arrSparse = new double[iPtCnt, 3];
             int iSliceSize = iDoseMatrixSizeX * iDoseMatrixSizeY;
             for (int i = 0; i < iPtCnt; i++)
             {
                 DosePoint dp = lstDosePoints[i];
-                arrSparse[i, 0] = iLayerIdx;
+                arrSparse[i, 0] = dp.sliceIndex * iSliceSize + dp.indexY * iDoseMatrixSizeX + dp.indexX;
                 arrSparse[i, 1] = iSpotIdx;
-                arrSparse[i, 2] = dp.sliceIndex * iSliceSize + dp.indexY * iDoseMatrixSizeX + dp.indexX;
-                arrSparse[i, 3] = dp.doseValue;
+                arrSparse[i, 2] = dp.doseValue;
             }
             Helpers.AddOrAppendDataSet<double>(fileId, "/inf_matrix_sparse", arrSparse);
+
+            Hdf5.CloseFile(fileId);
+        }
+        public static void WriteSpotInfoHDF5(MyBeamParameters beamParams, string szPath)
+        {
+            long fileId;
+            bool bAppend = System.IO.File.Exists(szPath);
+            if (bAppend)
+                fileId = Hdf5.OpenFile(szPath);
+            else
+                fileId = Hdf5.CreateFile(szPath);
+
+            Helpers.CreateDataSet<int>(fileId, "/spots/id", beamParams.lstSpotId.ToArray());
+            Helpers.CreateDataSet<float>(fileId, "/spots/position_x_mm", beamParams.lstSpotXPos.ToArray());
+            Helpers.CreateDataSet<float>(fileId, "/spots/position_y_mm", beamParams.lstSpotYPos.ToArray());
+            Helpers.CreateDataSet<double>(fileId, "/spots/energy_layer_MeV", beamParams.lstSpotEnergyMeV.ToArray());
 
             Hdf5.CloseFile(fileId);
         }
