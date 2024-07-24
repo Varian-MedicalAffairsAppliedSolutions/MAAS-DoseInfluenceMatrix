@@ -7,16 +7,12 @@ namespace CalculateInfluenceMatrix
     public class DosePoint
     {
         public DosePoint() { }
-        public DosePoint(int x, int y, int slice, double dose)
+        public DosePoint(int idx, double dose)
         {
-            indexX = x;
-            indexY = y;
-            sliceIndex = slice;
+            iPtIndex = idx;
             doseValue = dose;
         }
-        public int indexX = 0;
-        public int indexY = 0;
-        public int sliceIndex = 0;
+        public int iPtIndex = 0;
         public double doseValue = 0;
     }
 
