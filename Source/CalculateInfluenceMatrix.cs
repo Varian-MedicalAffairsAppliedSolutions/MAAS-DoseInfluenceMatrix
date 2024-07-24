@@ -14,6 +14,8 @@ using System.Windows;
 using HDF5CSharp;
 using System.Windows.Shapes;
 using HDF5DotNet;
+using HDF.PInvoke;
+using System.Security.Cryptography;
 
 [assembly: ESAPIScript(IsWriteable = true)]
 
@@ -135,7 +137,8 @@ namespace CalculateInfluenceMatrix
             if (!Directory.Exists(szBeamPath))
                 Directory.CreateDirectory(szBeamPath);
 
-            double[,,] arrFullDoseMatrix=null;
+            bool bFirstDoseCalc = true;
+            double[,] arrFullDoseMatrix=null;
             // lopp thru layers
             for (int layerIdx = 0; layerIdx < iMaxLayerCnt; layerIdx++)
             {
@@ -181,6 +184,12 @@ namespace CalculateInfluenceMatrix
                             throw new ApplicationException("Dose Calculation Failed");
                         }
 
+                        if( bFirstDoseCalc )
+                        { 
+                            ExportOptimizationVoxels(plan, planResultsPath);
+                            bFirstDoseCalc = false;
+                        }
+
                         // extract dose for all beams
                         foreach (IonBeam b in plan.IonBeams)
                         {
@@ -191,7 +200,7 @@ namespace CalculateInfluenceMatrix
 
                                 BeamDose hBeamDose = b.Dose;
                                 if (arrFullDoseMatrix == null)
-                                    arrFullDoseMatrix = new double[hBeamDose.ZSize, hBeamDose.YSize, hBeamDose.XSize];
+                                    arrFullDoseMatrix = new double[hBeamDose.ZSize*hBeamDose.YSize*hBeamDose.XSize, 1];
                                 Array.Clear(arrFullDoseMatrix, 0, arrFullDoseMatrix.Length);
                                 DoseData doseData = Helpers.GetDosePoints(b.Dose, dInfCutoffValue, ref arrFullDoseMatrix);
 
@@ -223,6 +232,75 @@ namespace CalculateInfluenceMatrix
             }
             Log.Information("Influence matrix calculation finished.");
         }
+
+        public static void ExportOptimizationVoxels(IonPlanSetup hPlanSetup, string szOutputFolder)
+        {
+            if (!Directory.Exists(szOutputFolder))
+            {
+                Directory.CreateDirectory(szOutputFolder);
+            }
+
+            PlanningItemDose hPlanDose = hPlanSetup.Dose;
+            int iXSize = hPlanDose.XSize;
+            int iYSize = hPlanDose.YSize;
+            int iZSize = hPlanDose.ZSize;
+            int iPtCnt = iXSize * iYSize * iZSize;
+            VVector vOrigin = hPlanDose.Origin;
+            double dXRes = hPlanDose.XRes;
+            double dYRes = hPlanDose.YRes;
+            double dZRes = hPlanDose.ZRes;
+            double[,] npPtCoords = new double[iPtCnt, 3];
+            double[] npPtWeights = new double[iPtCnt];
+            double dZ, dY, dX;
+            int i = 0;
+            for(int z=0; z<iZSize; z++)
+            {
+                dZ = vOrigin.z + (z + 0.5) * dZRes;
+                for (int y = 0; y < iYSize; y++)
+                {
+                    dY = vOrigin.y + (y + 0.5) * dYRes;
+                    for (int x = 0; x < iXSize; x++)
+                    {
+                        dX = vOrigin.x + (x + 0.5) * dXRes;
+
+                        npPtCoords[i, 0] = dX;
+                        npPtCoords[i, 1] = dY;
+                        npPtCoords[i, 2] = dZ;
+                        npPtWeights[i] = 1;
+                        i++;
+                    }
+                }
+            }
+
+            string szDataFilename = "OptimizationVoxels_Data.h5";
+            string szH5Path = System.IO.Path.Combine(szOutputFolder, szDataFilename);
+            long hf = Hdf5.CreateFile(szH5Path);
+            Helpers.CreateDataSet<double>(hf, "/voxel_coordinate_XYZ_mm", npPtCoords);
+            Helpers.CreateDataSet<double>(hf, "/voxel_weight_mm3", npPtWeights);
+            Hdf5.CloseFile(hf);
+
+            // Save meta data
+            //TECHOConfig echoConfig = myECHOJob.ECHOConfig; // Adjust according to your actual implementation
+            Image hCT = hPlanSetup.StructureSet.Image;
+            VVector vCTOrigin = hCT.Origin;
+
+            var dctMetaData = new
+            {
+                ct_origin_xyz_mm = new[] { vCTOrigin.x, vCTOrigin.y, vCTOrigin.z },
+                ct_voxel_resolution_xyz_mm = new[] { hCT.XRes, hCT.YRes, hCT.ZRes },
+                dose_voxel_resolution_xyz_mm = new double[] { dXRes, dYRes, dZRes },
+                ct_size_xyz = new[] { hCT.XSize, hCT.YSize, hCT.ZSize },
+                cal_box_xyz_start = new[] { vOrigin.x, vOrigin.y, vOrigin.z },
+                cal_box_xyz_end = new[] { vOrigin.x + dXRes*iXSize, vOrigin.y + dYRes * iYSize, vOrigin.z + dZRes * iZSize},
+                ct_to_dose_voxel_map_File = $"{szDataFilename}/ct_to_dose_voxel_map",
+                voxel_coordinate_XYZ_mm_File = $"{szDataFilename}/voxel_coordinate_XYZ_mm",
+                opt_point_cnt = iPtCnt
+            };
+
+            string szMetaDataFile = System.IO.Path.Combine(szOutputFolder, "OptimizationVoxels_MetaData.json");
+            Helpers.WriteJSONFile(dctMetaData, szMetaDataFile);
+        }
+
         public static void ExportStructureOutlinesAndMasks(IonPlanSetup hPlanSetup, string szOutputFolder)
         {
             string szStructOutlinesFolder = System.IO.Path.Combine(szOutputFolder, "Beams");
