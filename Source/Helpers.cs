@@ -103,11 +103,13 @@ namespace CalculateInfluenceMatrix
             int iXSize = hDose.XSize;
             int iYSize = hDose.YSize;
             int iZSize = hDose.ZSize;
+            int iIdxOffset = 0;
             int[,] doseBuffer = new int[iXSize, iYSize];
             List<DosePoint> doseFromSpot = new List<DosePoint>();
             for (int sliceIndex = 0; sliceIndex < iZSize; sliceIndex++)
             {
                 hDose.GetVoxels(sliceIndex, doseBuffer);
+                iIdxOffset = sliceIndex * iXSize * iYSize;
                 for (int j = 0; j < iYSize; j++)
                 {
                     for (int i = 0; i < iXSize; i++)
@@ -116,7 +118,7 @@ namespace CalculateInfluenceMatrix
                         {
                             //double pointDose = plan.Dose.VoxelToDoseValue(doseBuffer[i, j]).Dose / CalculateInfluenceMatrix.spotWeight;
                             double pointDose = (doseBuffer[i, j] * dScale + dIntercept) / CalculateInfluenceMatrix.spotWeight;
-                            doseFromSpot.Add(new DosePoint(i, j, sliceIndex, pointDose));
+                            doseFromSpot.Add(new DosePoint(iIdxOffset + j * iXSize + i, pointDose));
                         }
                     }
                 }
@@ -136,10 +138,12 @@ namespace CalculateInfluenceMatrix
             int iXSize = hDose.XSize;
             int iYSize = hDose.YSize;
             int iZSize = hDose.ZSize;
+            int iIdxOffset = 0;
             int[,] doseBuffer = new int[iXSize, iYSize];
             List<DosePoint> doseFromSpot = new List<DosePoint>();
             for (int sliceIndex = 0; sliceIndex < iZSize; sliceIndex++)
             {
+                iIdxOffset = sliceIndex * iXSize * iYSize;
                 hDose.GetVoxels(sliceIndex, doseBuffer);
                 for (int j = 0; j < iYSize; j++)
                 {
@@ -152,14 +156,14 @@ namespace CalculateInfluenceMatrix
                             //if (Math.Abs(pointDose - pointDose1) > 0.0000001)
                             //    throw new ApplicationException("dose values don't match");
 
-                            doseFromSpot.Add(new DosePoint(i, j, sliceIndex, pointDose));
+                            doseFromSpot.Add(new DosePoint(iIdxOffset + j * iXSize + i, pointDose));
                         }
                     }
                 }
             }
             return new DoseData(doseFromSpot, 0, 0);
         }
-        public static DoseData GetDosePoints(BeamDose hDose, double dCutoffValue, ref double[,,] arrFullDoseMatrix)
+        public static DoseData GetDosePoints(BeamDose hDose, double dCutoffValue, ref double[,] arrFullDoseMatrix)
         {
             if (hDose is null)
             {
@@ -175,17 +179,21 @@ namespace CalculateInfluenceMatrix
             List<DosePoint> doseFromSpot = new List<DosePoint>();
             double dSumCutOffValues = 0;
             int iCutOffValueCnt = 0;
+            int iIdxOffset = 0, iPtIndex;
             for (int sliceIndex = 0; sliceIndex < iZSize; sliceIndex++)
             {
                 hDose.GetVoxels(sliceIndex, doseBuffer);
+                iIdxOffset = sliceIndex * iYSize * iXSize;
                 for (int j = 0; j < iYSize; j++)
                 {
                     for (int i = 0; i < iXSize; i++)
                     {
+                        iPtIndex = iIdxOffset + j * iXSize + i;
+
                         double pointDose = (doseBuffer[i, j] * dScale + dIntercept) / CalculateInfluenceMatrix.spotWeight;
                         if (pointDose > dCutoffValue)
                         {
-                            doseFromSpot.Add(new DosePoint(i, j, sliceIndex, pointDose));
+                            doseFromSpot.Add(new DosePoint(iPtIndex, pointDose));
                         }
                         else if (pointDose > 0)
                         {
@@ -193,7 +201,7 @@ namespace CalculateInfluenceMatrix
                             iCutOffValueCnt++;
                         }
 
-                        arrFullDoseMatrix[sliceIndex, j, i] = pointDose;
+                        arrFullDoseMatrix[iPtIndex,0] = pointDose;
                     }
                 }
             }
@@ -291,6 +299,26 @@ namespace CalculateInfluenceMatrix
             Buffer.BlockCopy(arr2, 0, arrResult, (int)iArr1Size, (int)iArr2Size);
             return arrResult;
         }
+        public static T[,] ConcatArrays2<T>(Array arr1, T[,] arr2) where T : struct // by columns
+        {
+            int iColCnt1 = arr1.GetLength(1);
+            int iColCnt2 = arr2.GetLength(1);
+            int iRowCnt = arr1.GetLength(0);
+            int iColCnt = iColCnt1 + iColCnt2;
+            T[,] arrResult = new T[iRowCnt, iColCnt];
+
+            for(int r=0; r<iRowCnt; r++)
+            {
+                for(int c=0; c<iColCnt; c++)
+                {
+                    if( c<iColCnt1)
+                        arrResult[r, c] = (T)arr1.GetValue(r, c);
+                    else
+                        arrResult[r, c] = arr2[r, c-iColCnt1];
+                }
+            }
+            return arrResult;
+        }
         public static void CreateDataSet<T>(long fileId, string szDataSetName, Array arrDataSet) where T : struct
         {
             string[] arrTokens = szDataSetName.Split(new char[1] { '/' }, StringSplitOptions.RemoveEmptyEntries);
@@ -348,7 +376,44 @@ namespace CalculateInfluenceMatrix
             for (int i = iLen - 1; i >= 0; i--)
                 Hdf5.CloseGroup(lstGroups[i]);
         }
-        public static void WriteInfMatrixHDF5(bool bExportFullInfMatrix, double[,,] arrFullDoseMatrix, DoseData doseData, int iSpotIdx, string szPath)
+        public static void AddOrAppendDataSet2<T>(long fileId, string szDataSetName, T[,] arrDataSet) where T : struct
+        {
+            string[] arrTokens = szDataSetName.Split(new char[1] { '/' }, StringSplitOptions.RemoveEmptyEntries);
+            int iLen = arrTokens.Length - 1;
+            List<long> lstGroups = new List<long>();
+            string szGroupName = "";
+            long lGroupID = fileId;
+            for (int i = 0; i < iLen; i++)
+            {
+                szGroupName += "/" + arrTokens[i];
+                lGroupID = Hdf5.CreateOrOpenGroup(fileId, szGroupName);
+                lstGroups.Add(lGroupID);
+            }
+            string szName = arrTokens[iLen];
+            System.Type t1 = typeof(T);
+            bool bDatasetExists = Hdf5Utils.ItemExists(lGroupID, szName, Hdf5ElementType.Dataset);
+
+            Array arrResult = arrDataSet;
+            if (bDatasetExists)
+            {
+                (bool bSuccess, Array arrExistingData) = Hdf5.ReadDataset<T>(lGroupID, szName);
+                if (bSuccess)
+                    arrResult = ConcatArrays2<T>(arrExistingData, arrDataSet);
+            }
+            Hdf5.WriteDatasetFromArray<T>(lGroupID, szName, arrResult);
+            //using (ChunkedDataset<T> chunkedDSet = new ChunkedDataset<T>(szName, lGroupID))
+            //{
+            //    if (bDatasetExists)
+            //    {
+            //        T[,,] dsets = Hdf5.ReadDataset<T>(lGroupID, szName).result as T[,,];
+            //        chunkedDSet.AppendOrCreateDataset(dsets);
+            //    }
+            //    chunkedDSet.AppendOrCreateDataset(arrDataSet);
+            //}
+            for (int i = iLen - 1; i >= 0; i--)
+                Hdf5.CloseGroup(lstGroups[i]);
+        }
+        public static void WriteInfMatrixHDF5(bool bExportFullInfMatrix, double[,] arrFullDoseMatrix, DoseData doseData, int iSpotIdx, string szPath)
         {
             long fileId;
             bool bAppend = System.IO.File.Exists(szPath);
@@ -360,22 +425,22 @@ namespace CalculateInfluenceMatrix
             if(bExportFullInfMatrix)
             {
                 // write full inf matrix
-                Helpers.CreateDataSet<double>(fileId, "/inf_matrix_full/" + "spot_" + ((iSpotIdx > 9999) ? iSpotIdx.ToString() : iSpotIdx.ToString("D4")), arrFullDoseMatrix);
+                //Helpers.CreateDataSet<double>(fileId, "/inf_matrix_full/" + "spot_" + ((iSpotIdx > 9999) ? iSpotIdx.ToString() : iSpotIdx.ToString("D4")), arrFullDoseMatrix);
+                Helpers.AddOrAppendDataSet2<double>(fileId, "/inf_matrix_full", arrFullDoseMatrix);
             }
 
-            int iDoseMatrixSizeX = arrFullDoseMatrix.GetLength(2);
-            int iDoseMatrixSizeY = arrFullDoseMatrix.GetLength(1);
-            int iDoseMatrixSizeZ = arrFullDoseMatrix.GetLength(0);
+            //int iDoseMatrixSizeX = arrFullDoseMatrix.GetLength(2);
+            //int iDoseMatrixSizeY = arrFullDoseMatrix.GetLength(1);
+            //int iDoseMatrixSizeZ = arrFullDoseMatrix.GetLength(0);
 
             // write sparse inf matrix
             List<DosePoint> lstDosePoints = doseData.dosePoints;
             int iPtCnt = lstDosePoints.Count;
             double[,] arrSparse = new double[iPtCnt, 3];
-            int iSliceSize = iDoseMatrixSizeX * iDoseMatrixSizeY;
             for (int i = 0; i < iPtCnt; i++)
             {
                 DosePoint dp = lstDosePoints[i];
-                arrSparse[i, 0] = dp.sliceIndex * iSliceSize + dp.indexY * iDoseMatrixSizeX + dp.indexX;
+                arrSparse[i, 0] = dp.iPtIndex;
                 arrSparse[i, 1] = iSpotIdx;
                 arrSparse[i, 2] = dp.doseValue;
             }
