@@ -16,6 +16,7 @@ using System.Windows.Shapes;
 using HDF5DotNet;
 using HDF.PInvoke;
 using System.Security.Cryptography;
+using System.Runtime.Serialization.Formatters.Binary;
 
 [assembly: ESAPIScript(IsWriteable = true)]
 
@@ -134,11 +135,12 @@ namespace CalculateInfluenceMatrix
             }
 
             string szBeamPath = System.IO.Path.Combine(planResultsPath, "Beams");
-            if (!Directory.Exists(szBeamPath))
-                Directory.CreateDirectory(szBeamPath);
+            if (Directory.Exists(szBeamPath))
+                Directory.Delete(szBeamPath, true);
+            Directory.CreateDirectory(szBeamPath);
 
             bool bFirstDoseCalc = true;
-            double[,] arrFullDoseMatrix=null;
+            float[,] arrFullDoseMatrix=null;
             // lopp thru layers
             for (int layerIdx = 0; layerIdx < iMaxLayerCnt; layerIdx++)
             {
@@ -200,7 +202,7 @@ namespace CalculateInfluenceMatrix
 
                                 BeamDose hBeamDose = b.Dose;
                                 if (arrFullDoseMatrix == null)
-                                    arrFullDoseMatrix = new double[hBeamDose.ZSize*hBeamDose.YSize*hBeamDose.XSize, 1];
+                                    arrFullDoseMatrix = new float[hBeamDose.ZSize*hBeamDose.YSize*hBeamDose.XSize, 1];
                                 Array.Clear(arrFullDoseMatrix, 0, arrFullDoseMatrix.Length);
                                 DoseData doseData = Helpers.GetDosePoints(b.Dose, dInfCutoffValue, ref arrFullDoseMatrix);
 
