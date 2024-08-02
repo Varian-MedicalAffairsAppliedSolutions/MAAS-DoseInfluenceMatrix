@@ -94,7 +94,13 @@ namespace CalculateInfluenceMatrix
             }
 
             string planResultsPath = resultsDirPath + $"\\{planId}";
-            System.IO.Directory.CreateDirectory(planResultsPath);
+            if (Directory.Exists(planResultsPath))
+            {
+                Directory.Delete(planResultsPath, true);
+                System.Threading.Thread.Sleep(5000);
+            }
+            Directory.CreateDirectory(planResultsPath);
+
             Log.Information($"Results will be written to: {planResultsPath}");
 
             ExportStructureOutlinesAndMasks(plan, planResultsPath);
@@ -135,9 +141,8 @@ namespace CalculateInfluenceMatrix
             }
 
             string szBeamPath = System.IO.Path.Combine(planResultsPath, "Beams");
-            if (Directory.Exists(szBeamPath))
-                Directory.Delete(szBeamPath, true);
-            Directory.CreateDirectory(szBeamPath);
+            if (!Directory.Exists(szBeamPath))
+                Directory.CreateDirectory(szBeamPath);
 
             bool bFirstDoseCalc = true;
             float[,] arrFullDoseMatrix=null;
@@ -210,10 +215,6 @@ namespace CalculateInfluenceMatrix
                                 Helpers.WriteInfMatrixHDF5(bExportFullInfMatrix, arrFullDoseMatrix, doseData, bp.lstSpotId.Last(), szHDF5DataFile);
 
                                 // due to time constraint, CVS format has not been implemented
-
-                                //string filename = string.Format("{0}-layer{1}-spot{2}-results.csv", b.Id, layerIdx, spotIdx);
-                                //string szFilepath = string.Format(planResultsPath + "\\{0}", filename);
-                                //Helpers.WriteResults_CVS(hBeamData, doseData, szFilepath);
 
                                 //when done, turn off this spot for all beams
                                 rawSpotList[spotIdx].Weight = 0.0f;
