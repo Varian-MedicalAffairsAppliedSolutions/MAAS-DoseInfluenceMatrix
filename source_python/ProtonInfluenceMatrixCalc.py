@@ -1,4 +1,5 @@
 import os
+import shutil
 #add ESAPI_PATH to system environments
 #os.environ['ESAPI_PATH'] = r'C:\Program Files (x86)\Varian\RTM\16.1\esapi'
 import pyesapi as pe
@@ -6,6 +7,7 @@ from pyesapi import *
 from array import *
 import numpy as np
 import datetime as dt
+import time
 from inspect import getsourcefile
 import h5py
 import json
@@ -127,13 +129,69 @@ def ExportStructureOutlinesAndMasks(hPlanSetup:IonPlanSetup, szOutputFolder:str)
                 
     szMetaDataFile = szOutputFolder + "\\StructureSet_MetaData.json"
     Helpers.WriteJSONFile(lstAllStructsMetaData, szMetaDataFile)
+def ExportOptimizationVoxels(hPlanSetup, szOutputFolder):
+    if not os.path.exists(szOutputFolder):
+        os.makedirs(szOutputFolder)
 
+    hPlanDose = hPlanSetup.Dose
+    iXSize = hPlanDose.XSize
+    iYSize = hPlanDose.YSize
+    iZSize = hPlanDose.ZSize
+    iPtCnt = iXSize * iYSize * iZSize
+    vOrigin = hPlanDose.Origin
+    dXRes = hPlanDose.XRes
+    dYRes = hPlanDose.YRes
+    dZRes = hPlanDose.ZRes
+
+    npPtCoords = [[0] * 3 for _ in range(iPtCnt)]
+    npPtWeights = [0] * iPtCnt
+    i = 0
+    
+    for z in range(iZSize):
+        dZ = vOrigin.z + (z + 0.5) * dZRes
+        for y in range(iYSize):
+            dY = vOrigin.y + (y + 0.5) * dYRes
+            for x in range(iXSize):
+                dX = vOrigin.x + (x + 0.5) * dXRes
+
+                npPtCoords[i][0] = dX
+                npPtCoords[i][1] = dY
+                npPtCoords[i][2] = dZ
+                npPtWeights[i] = 1
+                i += 1
+
+    szDataFilename = "OptimizationVoxels_Data.h5"
+    szH5Path = os.path.join(szOutputFolder, szDataFilename)
+    
+    with h5py.File(szH5Path, 'w') as hf:
+        hf.create_dataset('/voxel_coordinate_XYZ_mm', data=npPtCoords)
+        hf.create_dataset('/voxel_weight_mm3', data=npPtWeights)
+
+    # Save meta data
+    hCT = hPlanSetup.StructureSet.Image
+    vCTOrigin = hCT.Origin
+
+    dctMetaData = {
+        'ct_origin_xyz_mm': [vCTOrigin.x, vCTOrigin.y, vCTOrigin.z],
+        'ct_voxel_resolution_xyz_mm': [hCT.XRes, hCT.YRes, hCT.ZRes],
+        'dose_voxel_resolution_xyz_mm': [dXRes, dYRes, dZRes],
+        'ct_size_xyz': [hCT.XSize, hCT.YSize, hCT.ZSize],
+        'cal_box_xyz_start': [vOrigin.x, vOrigin.y, vOrigin.z],
+        'cal_box_xyz_end': [vOrigin.x + dXRes * iXSize, vOrigin.y + dYRes * iYSize, vOrigin.z + dZRes * iZSize],
+        'ct_to_dose_voxel_map_File': f"{szDataFilename}/ct_to_dose_voxel_map",
+        'voxel_coordinate_XYZ_mm_File': f"{szDataFilename}/voxel_coordinate_XYZ_mm",
+        'opt_point_cnt': iPtCnt
+    }
+    szMetaDataFile = os.path.join(szOutputFolder, "OptimizationVoxels_MetaData.json")
+    Helpers.WriteJSONFile(dctMetaData, szMetaDataFile)
+        
 def main():
     app = pe.CustomScriptExecutable.CreateApplication('ProtonInfluenecMatrixCalc')  # script name is used for logging
     patientId = '20230817'
     courseId = 'C1'
     planId = 'ProtonTestSM1' #'ProtonTest1'
-    fInfCutoffValue:float = 0.015
+    fInfCutoffValue:float = 0.0
+    bExportFullInfMatrix = True
     
     plan = Helpers.GetIonPlan(app, patientId, courseId, planId)
 
@@ -142,8 +200,11 @@ def main():
 
     resultsDirPath = os.path.dirname(os.path.abspath(getsourcefile(lambda:0))) + '\\Results\\'
     planResultsPath = resultsDirPath + patientId + "\\" + planId
-    if not os.path.exists(planResultsPath) :
-        os.makedirs(planResultsPath)
+    if os.path.exists(planResultsPath):
+        shutil.rmtree(planResultsPath)
+        time.sleep(5)
+    os.makedirs(planResultsPath)        
+
     Helpers.Log('Results will be written to: ' + planResultsPath)
     
     ExportStructureOutlinesAndMasks(plan, planResultsPath)
@@ -176,6 +237,11 @@ def main():
                     iMaxSpotCnt = lstSpotCnt[layerIdx]
         lstMaxSpotCnt.append(iMaxSpotCnt)
 
+    szBeamPath:str = planResultsPath + "\\Beams\\"
+    if not os.path.exists(szBeamPath):
+        os.makedirs(szBeamPath)
+
+    bFirstDoseCalc:bool = True
     arrFullDoseMatrix = None
 
     # Calculate influence matrix
@@ -190,9 +256,19 @@ def main():
                 bp = tblBeamParameters[b]
                 hIonBeamParams = bp.hIonBeamParams
                 if (layerIdx < bp.iLayerCnt and spotIdx < bp.lstSpotCnt[layerIdx]) :
-                    rawSpotList = hIonBeamParams.IonControlPointPairs[layerIdx].RawSpotList
+                    icpp:pe.IonControlPointPair = bp.hIonBeamParams.IonControlPointPairs[layerIdx]
+                    spotParams:pe.IonSpotParameters = icpp.RawSpotList[spotIdx]
 
-                    rawSpotList[spotIdx].Weight = spotWeight
+                    # save spot infor for export later
+                    if( len(bp.lstSpotId)>0 ) :
+                        bp.lstSpotId.append(bp.lstSpotId[-1] + 1) # increment spot id
+                    else:
+                        bp.lstSpotId.append(0)
+                    bp.lstSpotXPos.append(spotParams.X)
+                    bp.lstSpotYPos.append(spotParams.Y)
+                    bp.lstSpotEnergyMeV.append(icpp.NominalBeamEnergy);
+                    
+                    spotParams.Weight = spotWeight
                     b.ApplyParameters(hIonBeamParams)
                     bRunCalc = True
 
@@ -206,6 +282,10 @@ def main():
                 if (not calcRes.Success) :
                     raise Exception('Dose Calculation Failed')
                 
+                if bFirstDoseCalc :
+                    ExportOptimizationVoxels(plan, planResultsPath)
+                    bFirstDoseCalc = False
+
                 #// extract dose for all beams
                 for b in plan.IonBeams :
                     bp:MyBeamParameters = tblBeamParameters[b]
@@ -215,19 +295,24 @@ def main():
 
                         hBeamDose = b.Dose
                         
-                        arrFullDoseMatrix = np.zeros((hBeamDose.ZSize,hBeamDose.YSize,hBeamDose.XSize))
-                        doseData = Helpers.GetNonZeroDosePoints(b.Dose, arrFullDoseMatrix)
+                        if bExportFullInfMatrix :
+                            arrFullDoseMatrix = np.zeros((hBeamDose.ZSize,hBeamDose.YSize,hBeamDose.XSize))
+                            
+                        doseData = Helpers.GetDosePoints(b.Dose, fInfCutoffValue, arrFullDoseMatrix)
 
-                        hBeamData = Helpers.PopulateBeamData(b)
-                        Helpers.WriteResults_HDF5(hBeamData, b.TreatmentUnit.Id, fInfCutoffValue, arrFullDoseMatrix, doseData, layerIdx, spotIdx, planResultsPath)
-
-                        #filename = b.Id + '-layer' + str(layerIdx) + '-spot' + str(spotIdx) + '-results.csv'
-                        #filepath = planResultsPath + '\\' + filename
-                        #Helpers.WriteResults_CVS(doseData, filepath)
+                        szHDF5DataFile:str = szBeamPath + "Beam_" + b.Id + "_Data.h5"
+                        Helpers.WriteInfMatrixHDF5(arrFullDoseMatrix, doseData, bp.lstSpotId[-1], szHDF5DataFile);
 
                         rawSpotList[spotIdx].Weight = 0.0
                         b.ApplyParameters(hIonBeamParams)
-    
+    # export beam meta data
+    for b in plan.IonBeams :
+        szHDF5DataFile:str = szBeamPath + "Beam_" + b.Id + "_Data.h5"
+        Helpers.WriteSpotInfoHDF5(tblBeamParameters[b], szHDF5DataFile)
+
+        szBeamMetaDataFile:str = szBeamPath + "Beam_" + b.Id + "_MetaData.json"
+        Helpers.WriteBeamMetaData(b, tblBeamParameters[b], fInfCutoffValue, szBeamMetaDataFile);
+        
     #Log.Information("Influence matrix calculation finished.");
     app.Dispose()
 
