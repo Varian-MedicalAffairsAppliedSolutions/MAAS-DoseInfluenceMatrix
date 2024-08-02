@@ -19,6 +19,7 @@ using System.Security.Cryptography;
 using System.Windows.Shapes;
 using HDF5DotNet;
 using PureHDF;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace CalculateInfluenceMatrix
 {
@@ -163,7 +164,7 @@ namespace CalculateInfluenceMatrix
             }
             return new DoseData(doseFromSpot, 0, 0);
         }
-        public static DoseData GetDosePoints(BeamDose hDose, double dCutoffValue, ref double[,] arrFullDoseMatrix)
+        public static DoseData GetDosePoints(BeamDose hDose, double dCutoffValue, ref float[,] arrFullDoseMatrix)
         {
             if (hDose is null)
             {
@@ -201,7 +202,7 @@ namespace CalculateInfluenceMatrix
                             iCutOffValueCnt++;
                         }
 
-                        arrFullDoseMatrix[iPtIndex,0] = pointDose;
+                        arrFullDoseMatrix[iPtIndex,0] = (float)pointDose;
                     }
                 }
             }
@@ -307,15 +308,24 @@ namespace CalculateInfluenceMatrix
             int iColCnt = iColCnt1 + iColCnt2;
             T[,] arrResult = new T[iRowCnt, iColCnt];
 
-            for(int r=0; r<iRowCnt; r++)
+            int iItemSize = System.Runtime.InteropServices.Marshal.SizeOf(typeof(T));
+            int iRowSize1 = iColCnt1 * iItemSize;
+            int iRowSize2 = iColCnt2 * iItemSize;
+            int iRowSize = iColCnt * iItemSize;
+            for (int r=0; r<iRowCnt; r++)
             {
-                for(int c=0; c<iColCnt; c++)
-                {
-                    if( c<iColCnt1)
-                        arrResult[r, c] = (T)arr1.GetValue(r, c);
-                    else
-                        arrResult[r, c] = arr2[r, c-iColCnt1];
-                }
+                Buffer.BlockCopy(arr1, r * iRowSize1, arrResult, r * iRowSize, iRowSize1);
+                Buffer.BlockCopy(arr2, r * iRowSize2, arrResult, r * iRowSize+ iRowSize1, iRowSize2);
+                //for (int c = 0; c < iColCnt2; c++)
+                //    arrResult[r, c+ iColCnt1] = arr2[r, c];
+
+                //for (int c=0; c<iColCnt; c++)
+                //{
+                //    if( c<iColCnt1)
+                //        arrResult[r, c] = (T)arr1.GetValue(r, c);
+                //    else
+                //        arrResult[r, c] = arr2[r, c-iColCnt1];
+                //}
             }
             return arrResult;
         }
@@ -413,7 +423,34 @@ namespace CalculateInfluenceMatrix
             for (int i = iLen - 1; i >= 0; i--)
                 Hdf5.CloseGroup(lstGroups[i]);
         }
-        public static void WriteInfMatrixHDF5(bool bExportFullInfMatrix, double[,] arrFullDoseMatrix, DoseData doseData, int iSpotIdx, string szPath)
+
+        public static void AppendMatrixToTempFile<T>(string szTempFile, T[,] arrFullDoseMatrix) where T : struct
+        {
+            using (Stream stream = File.Open(szTempFile, FileMode.Append))
+            {
+                BinaryFormatter bformatter = new BinaryFormatter();
+                bformatter.Serialize(stream, arrFullDoseMatrix);
+            }
+
+            //T[,] arrResult = arrFullDoseMatrix;
+            //if( System.IO.File.Exists(szTempFile) )
+            //{
+            //    using (Stream stream = File.Open(szTempFile, FileMode.Open))
+            //    {
+            //        BinaryFormatter bformatter = new BinaryFormatter();
+            //        T[,] arr1 = (T[,])bformatter.Deserialize(stream);
+            //        arrResult = ConcatArrays2<T>(arr1, arrFullDoseMatrix);
+            //    }
+            //}
+
+            //using (Stream stream = File.Open(szTempFile, FileMode.Create))
+            //{
+            //    BinaryFormatter bformatter = new BinaryFormatter();
+            //    bformatter.Serialize(stream, arrResult);
+            //}
+        }
+
+        public static void WriteInfMatrixHDF5(bool bExportFullInfMatrix, float[,] arrFullDoseMatrix, DoseData doseData, int iSpotIdx, string szPath)
         {
             long fileId;
             bool bAppend = System.IO.File.Exists(szPath);
@@ -421,17 +458,13 @@ namespace CalculateInfluenceMatrix
                 fileId = Hdf5.OpenFile(szPath);
             else
                 fileId = Hdf5.CreateFile(szPath);
-
+            string szTempFile = szPath + ".tmp";
             if(bExportFullInfMatrix)
             {
                 // write full inf matrix
-                //Helpers.CreateDataSet<double>(fileId, "/inf_matrix_full/" + "spot_" + ((iSpotIdx > 9999) ? iSpotIdx.ToString() : iSpotIdx.ToString("D4")), arrFullDoseMatrix);
-                Helpers.AddOrAppendDataSet2<double>(fileId, "/inf_matrix_full", arrFullDoseMatrix);
+                //Helpers.AddOrAppendDataSet2<double>(fileId, "/inf_matrix_full", arrFullDoseMatrix);
+                Helpers.AppendMatrixToTempFile<float>(szTempFile, arrFullDoseMatrix);
             }
-
-            //int iDoseMatrixSizeX = arrFullDoseMatrix.GetLength(2);
-            //int iDoseMatrixSizeY = arrFullDoseMatrix.GetLength(1);
-            //int iDoseMatrixSizeZ = arrFullDoseMatrix.GetLength(0);
 
             // write sparse inf matrix
             List<DosePoint> lstDosePoints = doseData.dosePoints;
@@ -461,6 +494,30 @@ namespace CalculateInfluenceMatrix
             Helpers.CreateDataSet<float>(fileId, "/spots/position_x_mm", beamParams.lstSpotXPos.ToArray());
             Helpers.CreateDataSet<float>(fileId, "/spots/position_y_mm", beamParams.lstSpotYPos.ToArray());
             Helpers.CreateDataSet<double>(fileId, "/spots/energy_layer_MeV", beamParams.lstSpotEnergyMeV.ToArray());
+
+            // create fullmatrix dataset from temp file
+            string szTempFile = szPath + ".tmp";
+            if (System.IO.File.Exists(szTempFile))
+            {
+                using (Stream stream = File.Open(szTempFile, FileMode.Open))
+                {
+                    BinaryFormatter bformatter = new BinaryFormatter();
+                    float[,] arrFullDoseMatrix = null;
+                    try
+                    {
+                        arrFullDoseMatrix = (float[,])bformatter.Deserialize(stream);
+                        while (true)
+                        {
+                            float[,] arr1 = (float[,])bformatter.Deserialize(stream);
+                            arrFullDoseMatrix = ConcatArrays2<float>(arrFullDoseMatrix, arr1);
+                        }
+                    }
+                    catch (Exception) { }
+
+                    Helpers.CreateDataSet<float>(fileId, "/inf_matrix_full", arrFullDoseMatrix);
+                }
+                System.IO.File.Delete(szTempFile);
+            }
 
             Hdf5.CloseFile(fileId);
         }
