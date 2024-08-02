@@ -69,29 +69,48 @@ class Helpers :
             field.ApplyParameters(fieldParams)
 
     @staticmethod
-    def GetNonZeroDosePoints(hDose:pe.BeamDose, arrFullDoseMatrix:np.array) :
+    def GetDosePoints(hDose:pe.BeamDose, fCutoffValue:float, arrFullDoseMatrix:np.array) :
         if (hDose is None) :
             raise Exception("Dose does not exist.")
 
+        #python api seems to apply scale & intercept already, so no need to do it here like the c# version
         #dIntercept = hDose.VoxelToDoseValue(0).Dose
-        #dScale = hDose.VoxelToDoseValue(1).Dose - dIntercept
+        #dScale = hDose.VoxelToDoseValue(1).Dose - dIntercept   
+
         iXSize = hDose.XSize
         iYSize = hDose.YSize
         iZSize = hDose.ZSize
+        iSliceSize = iXSize*iYSize
 
+        dSumCutOffValues:float = 0.0
+        iCutOffValueCnt:int = 0
         arr3DVoxels = hDose.np_array_like() # 3D dose matrix AFTER scale and intercept are applied
         doseFromSpot = list()
-        for sliceIndex in range(iZSize) : 
-            doseBuffer = arr3DVoxels[:,:,sliceIndex]
-            #voxels = arrVoxels
-            for y in range(iYSize) :
-                for x in range(iXSize) :
-                    doseVal = doseBuffer[x,y]
-                    if (doseVal > 0) :
-                        pointDose = doseVal / spotWeight
-                        doseFromSpot.append(DosePoint(x, y, sliceIndex, pointDose))
-                    arrFullDoseMatrix[sliceIndex, y, x] = doseVal
-        return DoseData(doseFromSpot)
+        if( arrFullDoseMatrix is None ) :
+            for sliceIndex in range(iZSize) : 
+                doseBuffer = arr3DVoxels[:,:,sliceIndex]
+                for y in range(iYSize) :
+                    for x in range(iXSize) :
+                        pointDose:float = float(doseBuffer[x,y]/spotWeight)
+                        if (pointDose > fCutoffValue) :
+                            doseFromSpot.append(DosePoint(sliceIndex*iSliceSize + y*iXSize + x, pointDose))
+                        elif (pointDose>0):
+                            dSumCutOffValues += pointDose
+                            iCutOffValueCnt += 1
+        else :
+            for sliceIndex in range(iZSize) : 
+                doseBuffer = arr3DVoxels[:,:,sliceIndex]
+                for y in range(iYSize) :
+                    for x in range(iXSize) :
+                        pointDose:float = float(doseBuffer[x,y]/spotWeight)
+                        if (pointDose > fCutoffValue) :
+                            doseFromSpot.append(DosePoint(sliceIndex*iSliceSize + y*iXSize + x, pointDose))
+                        elif (pointDose>0):
+                            dSumCutOffValues += pointDose
+                            iCutOffValueCnt += 1
+                      
+                        arrFullDoseMatrix[sliceIndex, y, x] = pointDose
+        return DoseData(doseFromSpot, dSumCutOffValues, iCutOffValueCnt)
 
     @staticmethod
     def WriteResults_CVS(doseData: DoseData, filepath) :
@@ -115,38 +134,51 @@ class Helpers :
         
         szHDF5DataFile = szPath + "\Beam_" + hBeamData.Id + "_Data.h5"
         Helpers.WriteInfMatrixHDF5(arrFullDoseMatrix, doseData, iLayerIdx, iSpotIdx, szHDF5DataFile)
-          
+        
     @staticmethod
-    def WriteBeamMetaData(echoBeam:TBeamMetaData, szMachine:str, fInfMatrixCutoffValue:float, szOuputFile:str) :
-        szBeamID = echoBeam.Id
-        szFilename:str = "Beam_" + szBeamID + "_Data.h5"
-        dctBeamData =  { 
-            "ID" : szBeamID,
-            "gantry_angle" : echoBeam.fGantryRtn,
-            "collimator_angle" : echoBeam.fCollRtn,
-            "couch_angle" : echoBeam.fPatientSuppAngle,
-            'iso_center' : {'x_mm':echoBeam.fIsoX, 'y_mm':echoBeam.fIsoY, 'z_mm':echoBeam.fIsoZ},
-            'beamlets' : { 'id_File' : szFilename + "/beamlets/id",
-                            'width_mm_File' : szFilename + "/beamlets/width_mm",
-                            'height_mm_File' : szFilename + "/beamlets/height_mm",
-                            'position_x_mm_File' : szFilename + "/beamlets/position_x_mm",
-                            'position_y_mm_File' : szFilename + "/beamlets/position_y_mm",
-                            'MLC_leaf_idx_File' : szFilename + "/beamlets/MLC_leaf_idx" },
-            'jaw_position' : {'top_left_x_mm':echoBeam.fJawX1, 'top_left_y_mm':echoBeam.fJawY1, 'bottom_right_x_mm':echoBeam.fJawX2, 'bottom_right_y_mm':echoBeam.fJawY2 },
-            'BEV_structure_contour_points_File' : szFilename + "/BEV_structure_contour_points",
-            'MLC_name' :  echoBeam.szMLCName,
-            'beam_modality' : echoBeam.szTechnique,
-            'energy_MV' :  echoBeam.szEnergy,
-            'SSD_mm' :  echoBeam.fSSD,
-            'SAD_mm' :  echoBeam.fSAD,
-            'influenceMatrixSparse_File' :  szFilename + "/inf_matrix_sparse",
-            'influenceMatrixSparse_tol' :  fInfMatrixCutoffValue,
-            'influenceMatrixFull_File' :  szFilename + "/inf_matrix_full/matrix",
-            'layer_spot_indices_File' :  szFilename + "/inf_matrix_full/layer_spot_indices",
-            'MLC_leaves_pos_y_mm_File' :  szFilename + "/MLC_leaves_pos_y_mm",
-            'machine_name' : szMachine
-                        }
-        Helpers.WriteJSONFile(dctBeamData, szOuputFile)
+    def WriteSpotInfoHDF5(beamParams: MyBeamParameters, szPath: str):
+        with h5py.File(szPath, 'a') as hf:
+            Helpers.CreateDataSet(hf, "/spots/id", np.array(beamParams.lstSpotId))
+            Helpers.CreateDataSet(hf, "/spots/position_x_mm", np.array(beamParams.lstSpotXPos))
+            Helpers.CreateDataSet(hf, "/spots/position_y_mm", np.array(beamParams.lstSpotYPos))
+            Helpers.CreateDataSet(hf, "/spots/energy_layer_MeV", np.array(beamParams.lstSpotEnergyMeV))
+            
+            szDataSetName = '/inf_matrix_full'
+            if( szDataSetName in hf ) :
+                hf[szDataSetName] = np.transpose(hf[szDataSetName],(2,1,0))
+        
+    @staticmethod
+    def WriteBeamMetaData(b:pe.IonBeam, beamParams:MyBeamParameters, dInfMatrixCutoffValue: float, szOutputFile: str):
+        firstCP = b.ControlPoints[0]
+
+        szBeamID = b.Id
+        szFilename = f"Beam_{szBeamID}_Data.h5"
+        dctBeamData = {
+            "ID": szBeamID,
+            "gantry_angle": float(firstCP.GantryAngle),
+            "couch_angle": float(firstCP.PatientSupportAngle),
+            "iso_center": {
+                "x_mm": float(b.IsocenterPosition.x),
+                "y_mm": float(b.IsocenterPosition.y),
+                "z_mm": float(b.IsocenterPosition.z)
+            },
+            "spots": {
+                "id_File": f"{szFilename}/spots/id",
+                "position_x_mm_File": f"{szFilename}/spots/position_x_mm",
+                "position_y_mm_File": f"{szFilename}/spots/position_y_mm",
+                "energy_layer_MeV_File": f"{szFilename}/spots/energy_layer_MeV"
+            },
+            "BEV_structure_contour_points_File": f"{szFilename}/BEV_structure_contour_points",
+            "beam_modality": "Proton",
+            "energy_MV": b.EnergyModeDisplayName,
+            "SSD_mm": b.SSD,
+            "SAD_mm": 100,
+            "influenceMatrixSparse_File": f"{szFilename}/inf_matrix_sparse",
+            "influenceMatrixSparse_tol": dInfMatrixCutoffValue,
+            "influenceMatrixFull_File": f"{szFilename}/inf_matrix_full",
+            "machine_name": b.TreatmentUnit.Id
+        }
+        Helpers.WriteJSONFile(dctBeamData, szOutputFile)
 
     @staticmethod
     def WriteJSONFile(hObj, szPath):
@@ -178,32 +210,29 @@ class Helpers :
         else:
             hf[szDataSetName].resize((hf[szDataSetName].shape[0] + arrData.shape[0]), axis = 0)
             hf[szDataSetName][-arrData.shape[0]:] = arrData
-
+            
     @staticmethod
-    def WriteInfMatrixHDF5(arrFullDoseMatrix:np.array, doseData:DoseData, iLayerIdx, iSpotIdx, szPath) :
+    def WriteInfMatrixHDF5(arrFullDoseMatrix:np.array, doseData:DoseData, iSpotIdx, szPath) :
         bNewFile:bool = os.path.exists(szPath)
-
+      
         with h5py.File(szPath, 'a') as hf:
-
-            # write full inf matrix
-            Helpers.CreateDataSet(hf, '/inf_matrix_full/matrix/' + str(iLayerIdx) + '_' + str(iSpotIdx), arrFullDoseMatrix)
-
+            if arrFullDoseMatrix is not None :
+                # write full inf matrix
+                fDoseMatrixSizeX = arrFullDoseMatrix.shape[2]
+                fDoseMatrixSizeY = arrFullDoseMatrix.shape[1]
+                fDoseMatrixSizeZ = arrFullDoseMatrix.shape[0]
+                Helpers.AddOrAppendDataSet(hf, '/inf_matrix_full' + str(iSpotIdx), arrFullDoseMatrix.reshape(fDoseMatrixSizeX*fDoseMatrixSizeY*fDoseMatrixSizeZ))
+                
             # write sparse inf matrix
             lstDosePoints = doseData.dosePoints
-           
-            fDoseMatrixSizeX = arrFullDoseMatrix.shape[2]
-            fDoseMatrixSizeY = arrFullDoseMatrix.shape[1]
-            fDoseMatrixSizeZ = arrFullDoseMatrix.shape[0]
-            
+                      
             iPtCnt = len(lstDosePoints)
-            arrSparse = np.zeros((iPtCnt, 4))
-            iSliceSize = fDoseMatrixSizeX * fDoseMatrixSizeY
+            arrSparse = np.zeros((iPtCnt, 3))
             for idx in range(iPtCnt) : 
                 dp:DosePoint = lstDosePoints[idx]
-                arrSparse[idx, 0] = iLayerIdx
+                arrSparse[idx, 0] = dp.iPtIndex
                 arrSparse[idx, 1] = iSpotIdx
-                arrSparse[idx, 2] = dp.sliceIndex * iSliceSize + dp.indexY * fDoseMatrixSizeX + dp.indexX
-                arrSparse[idx, 3] = dp.doseValue
+                arrSparse[idx, 2] = dp.doseValue
             Helpers.AddOrAppendDataSet(hf, '/inf_matrix_sparse', arrSparse)
 
 class ObjectEncoder(JSONEncoder):
