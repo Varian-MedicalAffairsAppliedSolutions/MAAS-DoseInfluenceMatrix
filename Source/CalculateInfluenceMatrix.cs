@@ -17,6 +17,7 @@ using HDF5DotNet;
 using HDF.PInvoke;
 using System.Security.Cryptography;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Windows.Media;
 
 [assembly: ESAPIScript(IsWriteable = true)]
 
@@ -359,7 +360,7 @@ namespace CalculateInfluenceMatrix
                     string szStructID = s.Id;
                     string szStandardStructName = szStructID; // dictOrganName[szStructID]
 
-                    byte[,,] struct3DMask = MakeSegmentMaskForStructure(hCT, s);
+                    byte[,,] struct3DMask = Transpose<byte>(MakeSegmentMaskForStructure(hCT, s));
                     Helpers.CreateDataSet<byte>(fileId, "/" + szStructID, struct3DMask);
 
                     lstAllStructsMetaData.Add(new
@@ -386,6 +387,27 @@ namespace CalculateInfluenceMatrix
             }
             else
                 throw new Exception("Structure has no segment data");
+        }
+        public static T[,,] Transpose<T>(T[,,] arrInput) where T : struct
+        {
+            int iXSize = arrInput.GetLength(2);
+            int iYSize = arrInput.GetLength(1);
+            int iZSize = arrInput.GetLength(0);
+
+            T[,,] transposed = new T[iXSize, iYSize, iZSize];
+
+            for (int z = 0; z < iZSize; z++)
+            {
+                for (int y = 0; y < iYSize; y++)
+                {
+                    for (int x = 0; x < iXSize; x++)
+                    {
+                        transposed[x, y, z] = arrInput[z, y, x];
+                    }
+                }
+            }
+
+            return transposed;
         }
 
         private static byte[,,] fill_in_profiles(Image hCT, Structure hStruct, System.Collections.BitArray pre_buffer) // dose_or_image, profile_fxn, row_buffer, dtype, pre_buffer= None)
