@@ -221,7 +221,7 @@ class Helpers :
                 fDoseMatrixSizeX = arrFullDoseMatrix.shape[2]
                 fDoseMatrixSizeY = arrFullDoseMatrix.shape[1]
                 fDoseMatrixSizeZ = arrFullDoseMatrix.shape[0]
-                Helpers.AddOrAppendDataSet(hf, '/inf_matrix_full' + str(iSpotIdx), arrFullDoseMatrix.reshape(fDoseMatrixSizeX*fDoseMatrixSizeY*fDoseMatrixSizeZ))
+                Helpers.AddOrAppendDataSet(hf, '/inf_matrix_full', arrFullDoseMatrix.reshape(fDoseMatrixSizeX*fDoseMatrixSizeY*fDoseMatrixSizeZ))
                 
             # write sparse inf matrix
             lstDosePoints = doseData.dosePoints
