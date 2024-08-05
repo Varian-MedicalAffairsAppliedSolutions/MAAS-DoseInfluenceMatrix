@@ -145,7 +145,9 @@ class Helpers :
             
             szDataSetName = '/inf_matrix_full'
             if( szDataSetName in hf ) :
-                hf[szDataSetName] = np.transpose(hf[szDataSetName],(2,1,0))
+                arrFullMatrix = hf[szDataSetName]
+                del hf[szDataSetName]
+                hf[szDataSetName] = np.transpose(arrFullMatrix,(1,0))
         
     @staticmethod
     def WriteBeamMetaData(b:pe.IonBeam, beamParams:MyBeamParameters, dInfMatrixCutoffValue: float, szOutputFile: str):
@@ -221,7 +223,7 @@ class Helpers :
                 fDoseMatrixSizeX = arrFullDoseMatrix.shape[2]
                 fDoseMatrixSizeY = arrFullDoseMatrix.shape[1]
                 fDoseMatrixSizeZ = arrFullDoseMatrix.shape[0]
-                Helpers.AddOrAppendDataSet(hf, '/inf_matrix_full', arrFullDoseMatrix.reshape(fDoseMatrixSizeX*fDoseMatrixSizeY*fDoseMatrixSizeZ))
+                Helpers.AddOrAppendDataSet(hf, '/inf_matrix_full', arrFullDoseMatrix.reshape((1, fDoseMatrixSizeX*fDoseMatrixSizeY*fDoseMatrixSizeZ)))
                 
             # write sparse inf matrix
             lstDosePoints = doseData.dosePoints
