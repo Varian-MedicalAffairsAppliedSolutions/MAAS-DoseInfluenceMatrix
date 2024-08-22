@@ -145,6 +145,8 @@ namespace CalculateInfluenceMatrix
             if (!Directory.Exists(szBeamPath))
                 Directory.CreateDirectory(szBeamPath);
 
+            int iMaxPointCnt = 0;
+
             bool bFirstDoseCalc = true;
             float[,] arrFullDoseMatrix=null;
             // lopp thru layers
@@ -194,7 +196,7 @@ namespace CalculateInfluenceMatrix
 
                         if( bFirstDoseCalc )
                         { 
-                            ExportOptimizationVoxels(plan, planResultsPath);
+                            iMaxPointCnt = ExportOptimizationVoxels(plan, planResultsPath);
                             bFirstDoseCalc = false;
                         }
 
@@ -213,7 +215,8 @@ namespace CalculateInfluenceMatrix
                                 DoseData doseData = Helpers.GetDosePoints(b.Dose, dInfCutoffValue, ref arrFullDoseMatrix);
 
                                 string szHDF5DataFile = System.IO.Path.Combine(szBeamPath, $"Beam_{b.Id}_Data.h5");
-                                Helpers.WriteInfMatrixHDF5(bExportFullInfMatrix, arrFullDoseMatrix, doseData, bp.lstSpotId.Last(), szHDF5DataFile);
+                                bool bAddLastEntry = (layerIdx==bp.iLayerCnt-1 && spotIdx == bp.lstSpotCnt[layerIdx]-1);
+                                Helpers.WriteInfMatrixHDF5(bExportFullInfMatrix, arrFullDoseMatrix, doseData, bAddLastEntry, iMaxPointCnt, bp.lstSpotId.Last(), szHDF5DataFile);
 
                                 // due to time constraint, CVS format has not been implemented
 
@@ -237,7 +240,7 @@ namespace CalculateInfluenceMatrix
             Log.Information("Influence matrix calculation finished.");
         }
 
-        public static void ExportOptimizationVoxels(IonPlanSetup hPlanSetup, string szOutputFolder)
+        public static int ExportOptimizationVoxels(IonPlanSetup hPlanSetup, string szOutputFolder)
         {
             if (!Directory.Exists(szOutputFolder))
             {
@@ -303,6 +306,7 @@ namespace CalculateInfluenceMatrix
 
             string szMetaDataFile = System.IO.Path.Combine(szOutputFolder, "OptimizationVoxels_MetaData.json");
             Helpers.WriteJSONFile(dctMetaData, szMetaDataFile);
+            return iPtCnt;
         }
 
         public static void ExportStructureOutlinesAndMasks(IonPlanSetup hPlanSetup, string szOutputFolder)
