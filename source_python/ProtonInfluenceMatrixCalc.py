@@ -1,5 +1,6 @@
 import os
 import shutil
+from xmlrpc.client import boolean
 #add ESAPI_PATH to system environments
 #os.environ['ESAPI_PATH'] = r'C:\Program Files (x86)\Varian\RTM\16.1\esapi'
 import pyesapi as pe
@@ -29,53 +30,53 @@ clr.AddReference("NETHelpers_ProdESAPI")
 import NETHelpers as nh
 from NETHelpers import *
 
-def ExportOptimizationVoxels(hPlanSetup:IonPlanSetup, r3DCalcBox:Rect3D, pointCloudsW:dict, szOutputFolder:str) :
-    if not os.path.exists(szOutputFolder):
-        os.mkdir(szOutputFolder)
+# def ExportOptimizationVoxels(hPlanSetup:IonPlanSetup, r3DCalcBox:Rect3D, pointCloudsW:dict, szOutputFolder:str) :
+#     if not os.path.exists(szOutputFolder):
+#         os.mkdir(szOutputFolder)
 
-    # save optimization points
-    dictOptPointCnt:dict = dict()
-    iPtCnt:int = 0
-    for s in pointCloudsW :
-        dictOptPointCnt[s.Id] = len(pointCloudsW[s])
-        iPtCnt += dictOptPointCnt[s.Id]
-    dictOptPointCnt['Total'] = iPtCnt
+#     # save optimization points
+#     dictOptPointCnt:dict = dict()
+#     iPtCnt:int = 0
+#     for s in pointCloudsW :
+#         dictOptPointCnt[s.Id] = len(pointCloudsW[s])
+#         iPtCnt += dictOptPointCnt[s.Id]
+#     dictOptPointCnt['Total'] = iPtCnt
 
-    npPtCoords:np.array = np.empty(shape=(iPtCnt,3), dtype=float, order='C')
-    npPtWeights:np.array = np.empty(shape=(iPtCnt), dtype=float, order='C')
-    i:int = 0
-    for s in pointCloudsW :
-        lstPoints = pointCloudsW[s]
-        for cp in lstPoints:
-            p:pe.VVector = cp.Item1
-            npPtCoords[i,0] = p.x
-            npPtCoords[i,1] = p.y
-            npPtCoords[i,2] = p.z
-            npPtWeights[i] = cp.Item2
-            i += 1
+#     npPtCoords:np.array = np.empty(shape=(iPtCnt,3), dtype=float, order='C')
+#     npPtWeights:np.array = np.empty(shape=(iPtCnt), dtype=float, order='C')
+#     i:int = 0
+#     for s in pointCloudsW :
+#         lstPoints = pointCloudsW[s]
+#         for cp in lstPoints:
+#             p:pe.VVector = cp.Item1
+#             npPtCoords[i,0] = p.x
+#             npPtCoords[i,1] = p.y
+#             npPtCoords[i,2] = p.z
+#             npPtWeights[i] = cp.Item2
+#             i += 1
 
-    szDataFilename:str = "OptimizationVoxels_Data.h5"
-    szH5Path:str = szOutputFolder + "\\" + szDataFilename
-    with h5py.File(szH5Path, 'a') as hf:
-        Helpers.CreateDataSet(hf, "/voxel_coordinate_XYZ_mm", npPtCoords)
-        Helpers.CreateDataSet(hf, "/voxel_weight_mm3", npPtWeights)
+#     szDataFilename:str = "OptimizationVoxels_Data.h5"
+#     szH5Path:str = szOutputFolder + "\\" + szDataFilename
+#     with h5py.File(szH5Path, 'a') as hf:
+#         Helpers.CreateDataSet(hf, "/voxel_coordinate_XYZ_mm", npPtCoords)
+#         Helpers.CreateDataSet(hf, "/voxel_weight_mm3", npPtWeights)
 
-    # save meta data
-    hCT:Image = hPlanSetup.StructureSet.Image
-    vCTOrigin:pe.VVector = hCT.Origin
-    dctMetaData =  { 
-        "ct_origin_xyz_mm" : [vCTOrigin.x, vCTOrigin.y, vCTOrigin.z],
-        "ct_voxel_resolution_xyz_mm" : [hCT.XRes, hCT.YRes, hCT.ZRes],
-        "dose_voxel_resolution_xyz_mm" : [0,0,0], #[0,0,0] if echoConfig.isUniformPointSampling else [echoConfig.fUPS_XRes, echoConfig.fUPS_YRes, echoConfig.fUPS_ZRes],
-        "ct_size_xyz" : [hCT.XSize, hCT.YSize, hCT.ZSize],
-        "cal_box_xyz_start" : [r3DCalcBox.X, r3DCalcBox.Y, r3DCalcBox.Z],
-        'cal_box_xyz_end' : [r3DCalcBox.X+r3DCalcBox.SizeX, r3DCalcBox.Y+r3DCalcBox.SizeY, r3DCalcBox.Z+r3DCalcBox.SizeZ],
-        'ct_to_dose_voxel_map_File' :  szDataFilename + "/ct_to_dose_voxel_map",
-        'voxel_coordinate_XYZ_mm_File' :  szDataFilename + "/voxel_coordinate_XYZ_mm"
-        ,'opt_point_cnt' : dictOptPointCnt
-    }
-    szMetaDataFile = szOutputFolder + "\\OptimizationVoxels_MetaData.json"
-    Helpers.WriteJSONFile(dctMetaData, szMetaDataFile)      
+#     # save meta data
+#     hCT:Image = hPlanSetup.StructureSet.Image
+#     vCTOrigin:pe.VVector = hCT.Origin
+#     dctMetaData =  { 
+#         "ct_origin_xyz_mm" : [vCTOrigin.x, vCTOrigin.y, vCTOrigin.z],
+#         "ct_voxel_resolution_xyz_mm" : [hCT.XRes, hCT.YRes, hCT.ZRes],
+#         "dose_voxel_resolution_xyz_mm" : [0,0,0], #[0,0,0] if echoConfig.isUniformPointSampling else [echoConfig.fUPS_XRes, echoConfig.fUPS_YRes, echoConfig.fUPS_ZRes],
+#         "ct_size_xyz" : [hCT.XSize, hCT.YSize, hCT.ZSize],
+#         "cal_box_xyz_start" : [r3DCalcBox.X, r3DCalcBox.Y, r3DCalcBox.Z],
+#         'cal_box_xyz_end' : [r3DCalcBox.X+r3DCalcBox.SizeX, r3DCalcBox.Y+r3DCalcBox.SizeY, r3DCalcBox.Z+r3DCalcBox.SizeZ],
+#         'ct_to_dose_voxel_map_File' :  szDataFilename + "/ct_to_dose_voxel_map",
+#         'voxel_coordinate_XYZ_mm_File' :  szDataFilename + "/voxel_coordinate_XYZ_mm"
+#         ,'opt_point_cnt' : dictOptPointCnt
+#     }
+#     szMetaDataFile = szOutputFolder + "\\OptimizationVoxels_MetaData.json"
+#     Helpers.WriteJSONFile(dctMetaData, szMetaDataFile)      
 
 def ExportStructureOutlinesAndMasks(hPlanSetup:IonPlanSetup, szOutputFolder:str):
     szStructOutlinesFolder = szOutputFolder + "\\Beams"
@@ -184,6 +185,8 @@ def ExportOptimizationVoxels(hPlanSetup, szOutputFolder):
     }
     szMetaDataFile = os.path.join(szOutputFolder, "OptimizationVoxels_MetaData.json")
     Helpers.WriteJSONFile(dctMetaData, szMetaDataFile)
+    
+    return iPtCnt
         
 def main():
     app = pe.CustomScriptExecutable.CreateApplication('ProtonInfluenecMatrixCalc')  # script name is used for logging
@@ -244,6 +247,7 @@ def main():
     bFirstDoseCalc:bool = True
     arrFullDoseMatrix = None
 
+    iMaxPointCnt:int = 0
     # Calculate influence matrix
     #// lopp thru layers
     for layerIdx in range(iMaxLayerCnt) :
@@ -283,7 +287,7 @@ def main():
                     raise Exception('Dose Calculation Failed')
                 
                 if bFirstDoseCalc :
-                    ExportOptimizationVoxels(plan, planResultsPath)
+                    iMaxPointCnt = ExportOptimizationVoxels(plan, planResultsPath)
                     bFirstDoseCalc = False
 
                 #// extract dose for all beams
@@ -299,9 +303,10 @@ def main():
                             arrFullDoseMatrix = np.zeros((hBeamDose.ZSize,hBeamDose.YSize,hBeamDose.XSize))
                             
                         doseData = Helpers.GetDosePoints(b.Dose, fInfCutoffValue, arrFullDoseMatrix)
-
+                        
                         szHDF5DataFile:str = szBeamPath + "Beam_" + b.Id + "_Data.h5"
-                        Helpers.WriteInfMatrixHDF5(arrFullDoseMatrix, doseData, bp.lstSpotId[-1], szHDF5DataFile);
+                        bAddLastEntry:bool = (layerIdx == bp.iLayerCnt-1 and spotIdx == bp.lstSpotCnt[layerIdx]-1)
+                        Helpers.WriteInfMatrixHDF5(arrFullDoseMatrix, doseData, bAddLastEntry, iMaxPointCnt, bp.lstSpotId[-1], szHDF5DataFile);
 
                         rawSpotList[spotIdx].Weight = 0.0
                         b.ApplyParameters(hIonBeamParams)
@@ -313,9 +318,10 @@ def main():
         szBeamMetaDataFile:str = szBeamPath + "Beam_" + b.Id + "_MetaData.json"
         Helpers.WriteBeamMetaData(b, tblBeamParameters[b], fInfCutoffValue, szBeamMetaDataFile);
         
-    #Log.Information("Influence matrix calculation finished.");
+    Helpers.createCTDoseVoxelMap(planResultsPath, numPoints=iMaxPointCnt)
+    
+    Helpers.Log('Influence matrix calculation finished.')
     app.Dispose()
-
 
 if __name__ == "__main__":
     main()
