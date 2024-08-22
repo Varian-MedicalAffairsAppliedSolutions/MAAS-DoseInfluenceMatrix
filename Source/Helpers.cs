@@ -450,7 +450,7 @@ namespace CalculateInfluenceMatrix
             //}
         }
 
-        public static void WriteInfMatrixHDF5(bool bExportFullInfMatrix, float[,] arrFullDoseMatrix, DoseData doseData, int iSpotIdx, string szPath)
+        public static void WriteInfMatrixHDF5(bool bExportFullInfMatrix, float[,] arrFullDoseMatrix, DoseData doseData, bool bAddLastEntry, int iMaxPointCnt, int iSpotIdx, string szPath)
         {
             long fileId;
             bool bAppend = System.IO.File.Exists(szPath);
@@ -469,13 +469,19 @@ namespace CalculateInfluenceMatrix
             // write sparse inf matrix
             List<DosePoint> lstDosePoints = doseData.dosePoints;
             int iPtCnt = lstDosePoints.Count;
-            double[,] arrSparse = new double[iPtCnt, 3];
+            double[,] arrSparse = new double[(bAddLastEntry ? iPtCnt+1 : iPtCnt), 3];
             for (int i = 0; i < iPtCnt; i++)
             {
                 DosePoint dp = lstDosePoints[i];
                 arrSparse[i, 0] = dp.iPtIndex;
                 arrSparse[i, 1] = iSpotIdx;
                 arrSparse[i, 2] = dp.doseValue;
+            }
+            if( bAddLastEntry )
+            {
+                arrSparse[iPtCnt, 0] = iMaxPointCnt-1;
+                arrSparse[iPtCnt, 1] = iSpotIdx;
+                arrSparse[iPtCnt, 2] = 0;
             }
             Helpers.AddOrAppendDataSet<double>(fileId, "/inf_matrix_sparse", arrSparse);
 
