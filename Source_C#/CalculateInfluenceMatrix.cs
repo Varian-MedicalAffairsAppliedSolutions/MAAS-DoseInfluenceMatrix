@@ -331,22 +331,26 @@ namespace CalculateInfluenceMatrix
 
                 foreach (Structure s in hPlanSetup.StructureSet.Structures)
                 {
-                    Point[][] arrOutlines = b.GetStructureOutlines(s, true);
-                    if (arrOutlines != null && arrOutlines.Length > 0)
+                    try
                     {
-                        for(int j=0; j<arrOutlines.Length; j++)
+                        Point[][] arrOutlines = b.GetStructureOutlines(s, true);
+                        if (arrOutlines != null && arrOutlines.Length > 0)
                         {
-                            Point[] points = arrOutlines[j];
-                            string szDatasetName = $"/BEV_structure_contour_points/{s.Id}/Segment-{j}";
-                            double[,] arrPoints = new double[points.Length, 2];
-                            for (int i = 0; i < points.Length; i++)
+                            for (int j = 0; j < arrOutlines.Length; j++)
                             {
-                                arrPoints[i, 0] = points[i].X;
-                                arrPoints[i, 1] = points[i].Y;
+                                Point[] points = arrOutlines[j];
+                                string szDatasetName = $"/BEV_structure_contour_points/{s.Id}/Segment-{j}";
+                                double[,] arrPoints = new double[points.Length, 2];
+                                for (int i = 0; i < points.Length; i++)
+                                {
+                                    arrPoints[i, 0] = points[i].X;
+                                    arrPoints[i, 1] = points[i].Y;
+                                }
+                                Helpers.CreateDataSet<double>(fileId1, szDatasetName, arrPoints);
                             }
-                            Helpers.CreateDataSet<double>(fileId1, szDatasetName, arrPoints);
                         }
                     }
+                    catch (Exception) { }   // if there is any error (empty, incomplete, etc.), we skip this structure
                 }
                 Hdf5.CloseFile(fileId1);
             }
@@ -359,23 +363,27 @@ namespace CalculateInfluenceMatrix
             Image hCT = hPlanSetup.StructureSet.Image;
             foreach (Structure s in hPlanSetup.StructureSet.Structures)
             {
-                if (s.HasSegment)
+                try
                 {
-                    string szStructID = s.Id;
-                    string szStandardStructName = szStructID; // dictOrganName[szStructID]
-
-                    byte[,,] struct3DMask = Transpose<byte>(MakeSegmentMaskForStructure(hCT, s));
-                    Helpers.CreateDataSet<byte>(fileId, "/" + szStructID, struct3DMask);
-
-                    lstAllStructsMetaData.Add(new
+                    if (s.HasSegment)
                     {
-                        name = szStandardStructName,
-                        volume_cc = s.Volume,
-                        dicom_structure_name = szStructID,
-                        fraction_of_vol_in_calc_box = 1, // echoData.dictOrganFractionVolInCalcBox[szStructID] if szStructID in echoData.dictOrganFractionVolInCalcBox else 1,
-                        structure_mask_3d_File = $"StructureSet_Data.h5/{szStandardStructName}"
-                    });
+                        string szStructID = s.Id;
+                        string szStandardStructName = szStructID; // dictOrganName[szStructID]
+
+                        byte[,,] struct3DMask = Transpose<byte>(MakeSegmentMaskForStructure(hCT, s));
+                        Helpers.CreateDataSet<byte>(fileId, "/" + szStructID, struct3DMask);
+
+                        lstAllStructsMetaData.Add(new
+                        {
+                            name = szStandardStructName,
+                            volume_cc = s.Volume,
+                            dicom_structure_name = szStructID,
+                            fraction_of_vol_in_calc_box = 1, // echoData.dictOrganFractionVolInCalcBox[szStructID] if szStructID in echoData.dictOrganFractionVolInCalcBox else 1,
+                            structure_mask_3d_File = $"StructureSet_Data.h5/{szStandardStructName}"
+                        });
+                    }
                 }
+                catch (Exception) { }
             }
             Hdf5.CloseFile(fileId);
 

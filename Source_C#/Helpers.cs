@@ -228,19 +228,6 @@ namespace CalculateInfluenceMatrix
             }
         }
 
-        //public static void WriteResults_CVS(TBeamMetaData hBeamData, DoseData doseData, string szPath)
-        //{
-        //    StringBuilder builder = new StringBuilder();
-        //    string header = "sliceIndex,yIndex,xIndex,dose";
-        //    builder.AppendLine(header);
-        //    foreach (DosePoint dosePoint in doseData.dosePoints)
-        //    {
-        //        builder.AppendLine($"{dosePoint.sliceIndex},{dosePoint.indexY},{dosePoint.indexX},{dosePoint.doseValue.ToString("0.0000000")}");
-        //    }
-        //    File.WriteAllText(szPath, builder.ToString());
-        //}
-
-
         public static void WriteBeamMetaData(IonBeam b, MyBeamParameters beamParams, double dInfMatrixCutoffValue, string szOutputFile)
         {
             ControlPoint firstCP = b.ControlPoints[0];
@@ -316,16 +303,6 @@ namespace CalculateInfluenceMatrix
             {
                 Buffer.BlockCopy(arr1, r * iRowSize1, arrResult, r * iRowSize, iRowSize1);
                 Buffer.BlockCopy(arr2, r * iRowSize2, arrResult, r * iRowSize+ iRowSize1, iRowSize2);
-                //for (int c = 0; c < iColCnt2; c++)
-                //    arrResult[r, c+ iColCnt1] = arr2[r, c];
-
-                //for (int c=0; c<iColCnt; c++)
-                //{
-                //    if( c<iColCnt1)
-                //        arrResult[r, c] = (T)arr1.GetValue(r, c);
-                //    else
-                //        arrResult[r, c] = arr2[r, c-iColCnt1];
-                //}
             }
             return arrResult;
         }
@@ -374,15 +351,7 @@ namespace CalculateInfluenceMatrix
                     arrResult = ConcatArrays<T>(arrExistingData, arrDataSet);
             }
             Hdf5.WriteDatasetFromArray<T>(lGroupID, szName, arrResult);
-            //using (ChunkedDataset<T> chunkedDSet = new ChunkedDataset<T>(szName, lGroupID))
-            //{
-            //    if (bDatasetExists)
-            //    {
-            //        T[,,] dsets = Hdf5.ReadDataset<T>(lGroupID, szName).result as T[,,];
-            //        chunkedDSet.AppendOrCreateDataset(dsets);
-            //    }
-            //    chunkedDSet.AppendOrCreateDataset(arrDataSet);
-            //}
+
             for (int i = iLen - 1; i >= 0; i--)
                 Hdf5.CloseGroup(lstGroups[i]);
         }
@@ -411,15 +380,7 @@ namespace CalculateInfluenceMatrix
                     arrResult = ConcatArrays2<T>(arrExistingData, arrDataSet);
             }
             Hdf5.WriteDatasetFromArray<T>(lGroupID, szName, arrResult);
-            //using (ChunkedDataset<T> chunkedDSet = new ChunkedDataset<T>(szName, lGroupID))
-            //{
-            //    if (bDatasetExists)
-            //    {
-            //        T[,,] dsets = Hdf5.ReadDataset<T>(lGroupID, szName).result as T[,,];
-            //        chunkedDSet.AppendOrCreateDataset(dsets);
-            //    }
-            //    chunkedDSet.AppendOrCreateDataset(arrDataSet);
-            //}
+
             for (int i = iLen - 1; i >= 0; i--)
                 Hdf5.CloseGroup(lstGroups[i]);
         }
@@ -431,23 +392,6 @@ namespace CalculateInfluenceMatrix
                 BinaryFormatter bformatter = new BinaryFormatter();
                 bformatter.Serialize(stream, arrFullDoseMatrix);
             }
-
-            //T[,] arrResult = arrFullDoseMatrix;
-            //if( System.IO.File.Exists(szTempFile) )
-            //{
-            //    using (Stream stream = File.Open(szTempFile, FileMode.Open))
-            //    {
-            //        BinaryFormatter bformatter = new BinaryFormatter();
-            //        T[,] arr1 = (T[,])bformatter.Deserialize(stream);
-            //        arrResult = ConcatArrays2<T>(arr1, arrFullDoseMatrix);
-            //    }
-            //}
-
-            //using (Stream stream = File.Open(szTempFile, FileMode.Create))
-            //{
-            //    BinaryFormatter bformatter = new BinaryFormatter();
-            //    bformatter.Serialize(stream, arrResult);
-            //}
         }
 
         public static void WriteInfMatrixHDF5(bool bExportFullInfMatrix, float[,] arrFullDoseMatrix, DoseData doseData, bool bAddLastEntry, int iMaxPointCnt, int iSpotIdx, string szPath)
