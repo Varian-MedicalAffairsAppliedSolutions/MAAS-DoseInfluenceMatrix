@@ -88,7 +88,8 @@ namespace CalculateInfluenceMatrix
             int iFieldCnt = plan.IonBeams.Count();
 
             string exePath = System.Reflection.Assembly.GetExecutingAssembly().Location;
-            string resultsDirPath = System.IO.Path.GetDirectoryName(exePath) + "\\results";
+            //string resultsDirPath = System.IO.Path.GetDirectoryName(exePath) + "\\results";
+            string resultsDirPath = @"F:\Matt_and_Japan\Results";
             if (!System.IO.Directory.Exists(resultsDirPath))
             {
                 System.IO.Directory.CreateDirectory(resultsDirPath);
