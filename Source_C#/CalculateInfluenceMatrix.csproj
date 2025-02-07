@@ -42,6 +42,9 @@
     <Reference Include="HDF5DotNet, Version=1.8.9.0, Culture=neutral, PublicKeyToken=a4952c8df86d6e8c, processorArchitecture=AMD64">
       <HintPath>packages\HDF5DotNet.x64.1.8.9\lib\Net40\HDF5DotNet.dll</HintPath>
     </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib, Version=1.4.2.13, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
+      <HintPath>packages\SharpZipLib.1.4.2\lib\netstandard2.0\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=8.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.Bcl.AsyncInterfaces.8.0.0\lib\net462\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
     </Reference>
@@ -67,7 +70,10 @@
       <HintPath>packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="PureHDF, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\PureHDF.1.0.0-beta.2\lib\netstandard2.0\PureHDF.dll</HintPath>
+      <HintPath>packages\PureHDF.1.0.0\lib\netstandard2.0\PureHDF.dll</HintPath>
+    </Reference>
+    <Reference Include="PureHDF.Filters.Deflate.SharpZipLib, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\PureHDF.Filters.Deflate.SharpZipLib.1.0.0\lib\netstandard2.0\PureHDF.Filters.Deflate.SharpZipLib.dll</HintPath>
     </Reference>
     <Reference Include="Serilog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
       <HintPath>packages\Serilog.4.0.0-dev-02160\lib\net471\Serilog.dll</HintPath>

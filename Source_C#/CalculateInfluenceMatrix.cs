@@ -11,9 +11,9 @@ using System.Security.Cryptography.X509Certificates;
 using PureHDF;
 using System.IO;
 using System.Windows;
-using HDF5CSharp;
+using HDF5CSharp; // used for HDF5 storage 
 using System.Windows.Shapes;
-using HDF5DotNet;
+using HDF5DotNet; // used by HDF5CSharp
 using HDF.PInvoke;
 using System.Security.Cryptography;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -216,7 +216,23 @@ namespace CalculateInfluenceMatrix
 
                                 string szHDF5DataFile = System.IO.Path.Combine(szBeamPath, $"Beam_{b.Id}_Data.h5");
                                 bool bAddLastEntry = (layerIdx==bp.iLayerCnt-1 && spotIdx == bp.lstSpotCnt[layerIdx]-1);
-                                Helpers.WriteInfMatrixHDF5(bExportFullInfMatrix, arrFullDoseMatrix, doseData, bAddLastEntry, iMaxPointCnt, bp.lstSpotId.Last(), szHDF5DataFile);
+
+                                try
+                                {
+                                    Helpers.WriteInfMatrixHDF5(bExportFullInfMatrix, arrFullDoseMatrix, doseData, bAddLastEntry, iMaxPointCnt, bp.lstSpotId.Last(), szHDF5DataFile);
+                                    Helpers.VerifyCompression(szHDF5DataFile);
+                                    Log.Information("WriteInfMatrixHDF5 completed successfully");
+                                }
+
+                                catch (Exception ex)
+                                {
+                                    Log.Error($"Fatal error during matrix processing: {ex.Message}");
+                                    Log.Error($"Stack trace: {ex.StackTrace}");
+                                    // Optionally:
+                                    Console.WriteLine($"Error occurred: {ex.Message}");
+                                    Console.WriteLine("Press any key to exit...");
+                                    Console.ReadKey();
+                                }
 
                                 // due to time constraint, CVS format has not been implemented
 
