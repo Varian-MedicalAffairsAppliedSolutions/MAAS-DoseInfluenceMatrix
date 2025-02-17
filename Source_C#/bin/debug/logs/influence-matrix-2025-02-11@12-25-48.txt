@@ -1,0 +1,13 @@
+2025-02-11 12:25:48.462 -05:00 [INF] Log output directed to D:\Projects\Git\MAAS-ProtonInfluenceMatrixCalc\MAAS-DoseInfluenceMatrix\Source_C#\bin\debug\logs\influence-matrix-2025-02-11@12-25-48.txt
+2025-02-11 12:25:52.492 -05:00 [INF] Opening Patient "20230817"
+2025-02-11 12:25:52.533 -05:00 [INF] Opening Plan "C1 / ProtonTestSM1"
+2025-02-11 12:25:52.677 -05:00 [INF] ProtonTestSM1 found.
+2025-02-11 12:25:52.683 -05:00 [INF] Influence matrix calculation started.
+2025-02-11 12:25:52.693 -05:00 [INF] Calculating beam line...
+2025-02-11 12:26:14.464 -05:00 [INF] Results will be written to: D:\Projects\Git\MAAS-ProtonInfluenceMatrixCalc\MAAS-DoseInfluenceMatrix\Results\PROTON$20230817\ProtonTestSM1
+2025-02-11 12:26:14.465 -05:00 [INF] Exporting structure outlines and masks...
+2025-02-11 12:26:14.476 -05:00 [INF] Progress: Layer 1 / 29, Spot 1 / 2.
+2025-02-11 12:26:35.024 -05:00 [INF] Starting to write matrix to D:\Projects\Git\MAAS-ProtonInfluenceMatrixCalc\MAAS-DoseInfluenceMatrix\Results\PROTON$20230817\ProtonTestSM1\Beams\Beam_Field 1_Data.h5
+2025-02-11 12:26:44.451 -05:00 [INF] Created new HDF5 file
+2025-02-11 12:26:51.030 -05:00 [INF] Full matrix dataset does not exist
+2025-02-11 12:26:53.992 -05:00 [INF] Successfully created extensible dataset: /inf_matrix_full
