@@ -1,0 +1,6 @@
+2024-12-14 21:01:05.795 +00:00 [INF] Log output directed to C:\Users\japankpatel\Source\Repos\MAAS-DoseInfluenceMatrix\Source_C#\bin\debug\logs\influence-matrix-2024-12-14@21-01-05.txt
+2024-12-14 21:01:13.960 +00:00 [INF] Opening Patient "20230817"
+2024-12-14 21:01:14.069 +00:00 [ERR] System.ApplicationException: Could not find Patient with ID "20230817"
+   at CalculateInfluenceMatrix.Helpers.GetIonPlan(Application app, String patientId, String courseId, String planId) in C:\Users\japankpatel\Source\Repos\MAAS-DoseInfluenceMatrix\Source_C#\Helpers.cs:line 78
+   at CalculateInfluenceMatrix.CalculateInfluenceMatrix.Execute(Application app, String patientId, String courseId, String planId) in C:\Users\japankpatel\Source\Repos\MAAS-DoseInfluenceMatrix\Source_C#\CalculateInfluenceMatrix.cs:line 84
+   at CalculateInfluenceMatrix.CalculateInfluenceMatrix.Main(String[] args) in C:\Users\japankpatel\Source\Repos\MAAS-DoseInfluenceMatrix\Source_C#\CalculateInfluenceMatrix.cs:line 66

@@ -1,10 +1,4 @@
-﻿################################################################################
-# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
-################################################################################
-
-/.idea
-/Source_C#/.vs/CalculateInfluenceMatrix/FileContentIndex
-/Source/bin/release/CalculateInfluenceMatrix.exe
-/Source/bin/release/CalculateInfluenceMatrix.exe
-/Source/bin/release/CalculateInfluenceMatrix.exe.config
-/Source/bin/release/CalculateInfluenceMatrix.pdb
+.vs/ 
+*.vsidx 
+.vs/ 
+*.vsidx 

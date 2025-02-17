@@ -1,0 +1,2 @@
+2024-10-25 01:17:38.583 +00:00 [INF] Log output directed to C:\Users\japankpatel\source\repos\MAAS-DoseInfluenceMatrix\Source_C#\bin\debug\logs\influence-matrix-2024-10-25@01-17-38.txt
+2024-10-25 01:17:38.630 +00:00 [INF] Enter PatientId:

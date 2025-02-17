@@ -1,0 +1,303 @@
+2025-01-31 21:26:41.794 +00:00 [INF] Log output directed to C:\Users\japankpatel\source\repos\MAAS-DoseInfluenceMatrix\Source_C#\bin\debug\logs\influence-matrix-2025-01-31@21-26-41.txt
+2025-01-31 21:26:41.841 +00:00 [INF] Enter PatientId:
+2025-01-31 21:26:45.544 +00:00 [INF] Enter CourseId:
+2025-01-31 21:26:48.731 +00:00 [INF] Enter PlanId:
+2025-01-31 21:26:56.763 +00:00 [INF] Opening Patient "Proton 06"
+2025-01-31 21:26:56.809 +00:00 [INF] Opening Plan "Demo_00 / Plan1"
+2025-01-31 21:26:56.903 +00:00 [INF] Plan1 found.
+2025-01-31 21:27:04.919 +00:00 [INF] Results will be written to: C:\Users\japankpatel\source\repos\MAAS-DoseInfluenceMatrix\Source_C#\bin\debug\results\Plan1
+2025-01-31 21:35:06.014 +00:00 [INF] Progress: Layer 1 / 13, Spot 1 / 4.
+2025-01-31 21:35:20.529 +00:00 [INF] Starting to write matrix to C:\Users\japankpatel\source\repos\MAAS-DoseInfluenceMatrix\Source_C#\bin\debug\results\Plan1\Beams\Beam_Field 1_Data.h5
+2025-01-31 21:35:20.529 +00:00 [INF] Matrix dimensions: 3474720 x 1
+2025-01-31 21:35:20.545 +00:00 [INF] Opened existing HDF5 file
+2025-01-31 21:35:20.545 +00:00 [INF] Full matrix dataset does not exist
+2025-01-31 21:35:21.404 +00:00 [INF] Successfully created and wrote initial dataset
+2025-01-31 21:35:21.467 +00:00 [INF] Successfully closed HDF5 file
+2025-01-31 21:35:21.483 +00:00 [INF] HDF5 file size: 464773 bytes
+2025-01-31 21:35:21.483 +00:00 [INF] Dataset: /inf_matrix_full
+2025-01-31 21:35:21.483 +00:00 [INF] Dimensions: 3474720 x 1
+2025-01-31 21:35:21.483 +00:00 [INF] Storage size: 117832 bytes
+2025-01-31 21:35:21.483 +00:00 [INF] Compression ratio: 235.91:1
+2025-01-31 21:35:21.483 +00:00 [INF] Number of filters: 2
+2025-01-31 21:35:21.623 +00:00 [INF] WriteInfMatrixHDF5 completed successfully
+2025-01-31 21:35:21.623 +00:00 [INF] Progress: Layer 1 / 13, Spot 2 / 4.
+2025-01-31 21:35:34.092 +00:00 [INF] Starting to write matrix to C:\Users\japankpatel\source\repos\MAAS-DoseInfluenceMatrix\Source_C#\bin\debug\results\Plan1\Beams\Beam_Field 1_Data.h5
+2025-01-31 21:35:34.108 +00:00 [INF] Matrix dimensions: 3474720 x 1
+2025-01-31 21:35:34.108 +00:00 [INF] Opened existing HDF5 file
+2025-01-31 21:35:34.108 +00:00 [INF] Full matrix dataset exists
+2025-01-31 21:35:34.983 +00:00 [INF] Successfully appended data. Dataset now has 2 spots
+2025-01-31 21:35:35.045 +00:00 [INF] Successfully closed HDF5 file
+2025-01-31 21:35:35.061 +00:00 [INF] HDF5 file size: 749368 bytes
+2025-01-31 21:35:35.076 +00:00 [INF] Dataset: /inf_matrix_full
+2025-01-31 21:35:35.076 +00:00 [INF] Dimensions: 3474720 x 2
+2025-01-31 21:35:35.076 +00:00 [INF] Storage size: 234196 bytes
+2025-01-31 21:35:35.076 +00:00 [INF] Compression ratio: 237.39:1
+2025-01-31 21:35:35.076 +00:00 [INF] Number of filters: 2
+2025-01-31 21:35:35.217 +00:00 [INF] WriteInfMatrixHDF5 completed successfully
+2025-01-31 21:35:35.217 +00:00 [INF] Progress: Layer 1 / 13, Spot 3 / 4.
+2025-01-31 21:35:47.842 +00:00 [INF] Starting to write matrix to C:\Users\japankpatel\source\repos\MAAS-DoseInfluenceMatrix\Source_C#\bin\debug\results\Plan1\Beams\Beam_Field 1_Data.h5
+2025-01-31 21:35:47.842 +00:00 [INF] Matrix dimensions: 3474720 x 1
+2025-01-31 21:35:47.842 +00:00 [INF] Opened existing HDF5 file
+2025-01-31 21:35:47.842 +00:00 [INF] Full matrix dataset exists
+2025-01-31 21:35:48.701 +00:00 [INF] Successfully appended data. Dataset now has 3 spots
+2025-01-31 21:35:48.764 +00:00 [INF] Successfully closed HDF5 file
+2025-01-31 21:35:48.779 +00:00 [INF] HDF5 file size: 1183378 bytes
+2025-01-31 21:35:48.779 +00:00 [INF] Dataset: /inf_matrix_full
+2025-01-31 21:35:48.779 +00:00 [INF] Dimensions: 3474720 x 3
+2025-01-31 21:35:48.779 +00:00 [INF] Storage size: 347147 bytes
+2025-01-31 21:35:48.779 +00:00 [INF] Compression ratio: 240.22:1
+2025-01-31 21:35:48.795 +00:00 [INF] Number of filters: 2
+2025-01-31 21:35:48.935 +00:00 [INF] WriteInfMatrixHDF5 completed successfully
+2025-01-31 21:35:48.935 +00:00 [INF] Progress: Layer 1 / 13, Spot 4 / 4.
+2025-01-31 21:36:01.671 +00:00 [INF] Starting to write matrix to C:\Users\japankpatel\source\repos\MAAS-DoseInfluenceMatrix\Source_C#\bin\debug\results\Plan1\Beams\Beam_Field 1_Data.h5
+2025-01-31 21:36:01.687 +00:00 [INF] Matrix dimensions: 3474720 x 1
+2025-01-31 21:36:01.687 +00:00 [INF] Opened existing HDF5 file
+2025-01-31 21:36:01.687 +00:00 [INF] Full matrix dataset exists
+2025-01-31 21:36:02.656 +00:00 [INF] Successfully appended data. Dataset now has 4 spots
+2025-01-31 21:36:02.718 +00:00 [INF] Successfully closed HDF5 file
+2025-01-31 21:36:02.734 +00:00 [INF] HDF5 file size: 1296398 bytes
+2025-01-31 21:36:02.734 +00:00 [INF] Dataset: /inf_matrix_full
+2025-01-31 21:36:02.734 +00:00 [INF] Dimensions: 3474720 x 4
+2025-01-31 21:36:02.750 +00:00 [INF] Storage size: 460167 bytes
+2025-01-31 21:36:02.750 +00:00 [INF] Compression ratio: 241.63:1
+2025-01-31 21:36:02.750 +00:00 [INF] Number of filters: 2
+2025-01-31 21:36:02.890 +00:00 [INF] WriteInfMatrixHDF5 completed successfully
+2025-01-31 21:36:02.890 +00:00 [INF] Progress: Layer 2 / 13, Spot 1 / 4.
+2025-01-31 21:36:15.546 +00:00 [INF] Starting to write matrix to C:\Users\japankpatel\source\repos\MAAS-DoseInfluenceMatrix\Source_C#\bin\debug\results\Plan1\Beams\Beam_Field 1_Data.h5
+2025-01-31 21:36:15.546 +00:00 [INF] Matrix dimensions: 3474720 x 1
+2025-01-31 21:36:15.562 +00:00 [INF] Opened existing HDF5 file
+2025-01-31 21:36:15.562 +00:00 [INF] Full matrix dataset exists
+2025-01-31 21:36:16.468 +00:00 [INF] Successfully appended data. Dataset now has 5 spots
+2025-01-31 21:36:16.531 +00:00 [INF] Successfully closed HDF5 file
+2025-01-31 21:36:16.546 +00:00 [INF] HDF5 file size: 1885447 bytes
+2025-01-31 21:36:16.546 +00:00 [INF] Dataset: /inf_matrix_full
+2025-01-31 21:36:16.546 +00:00 [INF] Dimensions: 3474720 x 5
+2025-01-31 21:36:16.546 +00:00 [INF] Storage size: 576416 bytes
+2025-01-31 21:36:16.546 +00:00 [INF] Compression ratio: 241.13:1
+2025-01-31 21:36:16.562 +00:00 [INF] Number of filters: 2
+2025-01-31 21:36:16.703 +00:00 [INF] WriteInfMatrixHDF5 completed successfully
+2025-01-31 21:36:16.703 +00:00 [INF] Progress: Layer 2 / 13, Spot 2 / 4.
+2025-01-31 21:36:29.374 +00:00 [INF] Starting to write matrix to C:\Users\japankpatel\source\repos\MAAS-DoseInfluenceMatrix\Source_C#\bin\debug\results\Plan1\Beams\Beam_Field 1_Data.h5
+2025-01-31 21:36:29.374 +00:00 [INF] Matrix dimensions: 3474720 x 1
+2025-01-31 21:36:29.374 +00:00 [INF] Opened existing HDF5 file
+2025-01-31 21:36:29.374 +00:00 [INF] Full matrix dataset exists
+2025-01-31 21:36:30.202 +00:00 [INF] Successfully appended data. Dataset now has 6 spots
+2025-01-31 21:36:30.265 +00:00 [INF] Successfully closed HDF5 file
+2025-01-31 21:36:30.281 +00:00 [INF] HDF5 file size: 2006633 bytes
+2025-01-31 21:36:30.296 +00:00 [INF] Dataset: /inf_matrix_full
+2025-01-31 21:36:30.296 +00:00 [INF] Dimensions: 3474720 x 6
+2025-01-31 21:36:30.296 +00:00 [INF] Storage size: 692350 bytes
+2025-01-31 21:36:30.296 +00:00 [INF] Compression ratio: 240.90:1
+2025-01-31 21:36:30.296 +00:00 [INF] Number of filters: 2
+2025-01-31 21:36:30.437 +00:00 [INF] WriteInfMatrixHDF5 completed successfully
+2025-01-31 21:36:30.437 +00:00 [INF] Progress: Layer 2 / 13, Spot 3 / 4.
+2025-01-31 21:36:43.093 +00:00 [INF] Starting to write matrix to C:\Users\japankpatel\source\repos\MAAS-DoseInfluenceMatrix\Source_C#\bin\debug\results\Plan1\Beams\Beam_Field 1_Data.h5
+2025-01-31 21:36:43.093 +00:00 [INF] Matrix dimensions: 3474720 x 1
+2025-01-31 21:36:43.093 +00:00 [INF] Opened existing HDF5 file
+2025-01-31 21:36:43.093 +00:00 [INF] Full matrix dataset exists
+2025-01-31 21:36:43.921 +00:00 [INF] Successfully appended data. Dataset now has 7 spots
+2025-01-31 21:36:43.984 +00:00 [INF] Successfully closed HDF5 file
+2025-01-31 21:36:43.999 +00:00 [INF] HDF5 file size: 2274268 bytes
+2025-01-31 21:36:43.999 +00:00 [INF] Dataset: /inf_matrix_full
+2025-01-31 21:36:43.999 +00:00 [INF] Dimensions: 3474720 x 7
+2025-01-31 21:36:43.999 +00:00 [INF] Storage size: 804881 bytes
+2025-01-31 21:36:44.030 +00:00 [INF] Compression ratio: 241.76:1
+2025-01-31 21:36:44.046 +00:00 [INF] Number of filters: 2
+2025-01-31 21:36:44.218 +00:00 [INF] WriteInfMatrixHDF5 completed successfully
+2025-01-31 21:36:44.218 +00:00 [INF] Progress: Layer 2 / 13, Spot 4 / 4.
+2025-01-31 21:36:56.546 +00:00 [INF] Starting to write matrix to C:\Users\japankpatel\source\repos\MAAS-DoseInfluenceMatrix\Source_C#\bin\debug\results\Plan1\Beams\Beam_Field 1_Data.h5
+2025-01-31 21:36:56.546 +00:00 [INF] Matrix dimensions: 3474720 x 1
+2025-01-31 21:36:56.562 +00:00 [INF] Opened existing HDF5 file
+2025-01-31 21:36:56.562 +00:00 [INF] Full matrix dataset exists
+2025-01-31 21:36:57.343 +00:00 [INF] Successfully appended data. Dataset now has 8 spots
+2025-01-31 21:36:57.405 +00:00 [INF] Successfully closed HDF5 file
+2025-01-31 21:36:57.421 +00:00 [INF] HDF5 file size: 2385999 bytes
+2025-01-31 21:36:57.421 +00:00 [INF] Dataset: /inf_matrix_full
+2025-01-31 21:36:57.421 +00:00 [INF] Dimensions: 3474720 x 8
+2025-01-31 21:36:57.437 +00:00 [INF] Storage size: 916612 bytes
+2025-01-31 21:36:57.437 +00:00 [INF] Compression ratio: 242.61:1
+2025-01-31 21:36:57.437 +00:00 [INF] Number of filters: 2
+2025-01-31 21:36:57.577 +00:00 [INF] WriteInfMatrixHDF5 completed successfully
+2025-01-31 21:36:57.577 +00:00 [INF] Progress: Layer 3 / 13, Spot 1 / 6.
+2025-01-31 21:37:10.061 +00:00 [INF] Starting to write matrix to C:\Users\japankpatel\source\repos\MAAS-DoseInfluenceMatrix\Source_C#\bin\debug\results\Plan1\Beams\Beam_Field 1_Data.h5
+2025-01-31 21:37:10.061 +00:00 [INF] Matrix dimensions: 3474720 x 1
+2025-01-31 21:37:10.077 +00:00 [INF] Opened existing HDF5 file
+2025-01-31 21:37:10.077 +00:00 [INF] Full matrix dataset exists
+2025-01-31 21:37:10.858 +00:00 [INF] Successfully appended data. Dataset now has 9 spots
+2025-01-31 21:37:10.921 +00:00 [INF] Successfully closed HDF5 file
+2025-01-31 21:37:10.936 +00:00 [INF] HDF5 file size: 3305020 bytes
+2025-01-31 21:37:10.952 +00:00 [INF] Dataset: /inf_matrix_full
+2025-01-31 21:37:10.952 +00:00 [INF] Dimensions: 3474720 x 9
+2025-01-31 21:37:10.952 +00:00 [INF] Storage size: 1037847 bytes
+2025-01-31 21:37:10.952 +00:00 [INF] Compression ratio: 241.06:1
+2025-01-31 21:37:10.952 +00:00 [INF] Number of filters: 2
+2025-01-31 21:37:11.093 +00:00 [INF] WriteInfMatrixHDF5 completed successfully
+2025-01-31 21:37:11.108 +00:00 [INF] Progress: Layer 3 / 13, Spot 2 / 6.
+2025-01-31 21:37:23.561 +00:00 [INF] Starting to write matrix to C:\Users\japankpatel\source\repos\MAAS-DoseInfluenceMatrix\Source_C#\bin\debug\results\Plan1\Beams\Beam_Field 1_Data.h5
+2025-01-31 21:37:23.561 +00:00 [INF] Matrix dimensions: 3474720 x 1
+2025-01-31 21:37:23.577 +00:00 [INF] Opened existing HDF5 file
+2025-01-31 21:37:23.577 +00:00 [INF] Full matrix dataset exists
+2025-01-31 21:37:24.327 +00:00 [INF] Successfully appended data. Dataset now has 10 spots
+2025-01-31 21:37:24.374 +00:00 [INF] Successfully closed HDF5 file
+2025-01-31 21:37:24.389 +00:00 [INF] HDF5 file size: 3575286 bytes
+2025-01-31 21:37:24.405 +00:00 [INF] Dataset: /inf_matrix_full
+2025-01-31 21:37:24.405 +00:00 [INF] Dimensions: 3474720 x 10
+2025-01-31 21:37:24.405 +00:00 [INF] Storage size: 1152975 bytes
+2025-01-31 21:37:24.405 +00:00 [INF] Compression ratio: 241.10:1
+2025-01-31 21:37:24.405 +00:00 [INF] Number of filters: 2
+2025-01-31 21:37:24.546 +00:00 [INF] WriteInfMatrixHDF5 completed successfully
+2025-01-31 21:37:24.561 +00:00 [INF] Progress: Layer 3 / 13, Spot 3 / 6.
+2025-01-31 21:37:37.155 +00:00 [INF] Starting to write matrix to C:\Users\japankpatel\source\repos\MAAS-DoseInfluenceMatrix\Source_C#\bin\debug\results\Plan1\Beams\Beam_Field 1_Data.h5
+2025-01-31 21:37:37.155 +00:00 [INF] Matrix dimensions: 3474720 x 1
+2025-01-31 21:37:37.155 +00:00 [INF] Opened existing HDF5 file
+2025-01-31 21:37:37.155 +00:00 [INF] Full matrix dataset exists
+2025-01-31 21:37:37.843 +00:00 [INF] Successfully appended data. Dataset now has 11 spots
+2025-01-31 21:37:37.889 +00:00 [INF] Successfully closed HDF5 file
+2025-01-31 21:37:37.905 +00:00 [INF] HDF5 file size: 3694396 bytes
+2025-01-31 21:37:37.921 +00:00 [INF] Dataset: /inf_matrix_full
+2025-01-31 21:37:37.936 +00:00 [INF] Dimensions: 3474720 x 11
+2025-01-31 21:37:37.936 +00:00 [INF] Storage size: 1269469 bytes
+2025-01-31 21:37:37.936 +00:00 [INF] Compression ratio: 240.87:1
+2025-01-31 21:37:37.936 +00:00 [INF] Number of filters: 2
+2025-01-31 21:37:38.092 +00:00 [INF] WriteInfMatrixHDF5 completed successfully
+2025-01-31 21:37:38.092 +00:00 [INF] Progress: Layer 3 / 13, Spot 4 / 6.
+2025-01-31 21:37:50.686 +00:00 [INF] Starting to write matrix to C:\Users\japankpatel\source\repos\MAAS-DoseInfluenceMatrix\Source_C#\bin\debug\results\Plan1\Beams\Beam_Field 1_Data.h5
+2025-01-31 21:37:50.686 +00:00 [INF] Matrix dimensions: 3474720 x 1
+2025-01-31 21:37:50.686 +00:00 [INF] Opened existing HDF5 file
+2025-01-31 21:37:50.686 +00:00 [INF] Full matrix dataset exists
+2025-01-31 21:37:51.436 +00:00 [INF] Successfully appended data. Dataset now has 12 spots
+2025-01-31 21:37:51.467 +00:00 [INF] Successfully closed HDF5 file
+2025-01-31 21:37:51.483 +00:00 [INF] HDF5 file size: 3809601 bytes
+2025-01-31 21:37:51.514 +00:00 [INF] Dataset: /inf_matrix_full
+2025-01-31 21:37:51.514 +00:00 [INF] Dimensions: 3474720 x 12
+2025-01-31 21:37:51.514 +00:00 [INF] Storage size: 1384674 bytes
+2025-01-31 21:37:51.514 +00:00 [INF] Compression ratio: 240.90:1
+2025-01-31 21:37:51.514 +00:00 [INF] Number of filters: 2
+2025-01-31 21:37:51.655 +00:00 [INF] WriteInfMatrixHDF5 completed successfully
+2025-01-31 21:37:51.655 +00:00 [INF] Progress: Layer 3 / 13, Spot 5 / 6.
+2025-01-31 21:38:04.108 +00:00 [INF] Starting to write matrix to C:\Users\japankpatel\source\repos\MAAS-DoseInfluenceMatrix\Source_C#\bin\debug\results\Plan1\Beams\Beam_Field 1_Data.h5
+2025-01-31 21:38:04.123 +00:00 [INF] Matrix dimensions: 3474720 x 1
+2025-01-31 21:38:04.123 +00:00 [INF] Opened existing HDF5 file
+2025-01-31 21:38:04.123 +00:00 [INF] Full matrix dataset exists
+2025-01-31 21:38:04.858 +00:00 [INF] Successfully appended data. Dataset now has 13 spots
+2025-01-31 21:38:04.905 +00:00 [INF] Successfully closed HDF5 file
+2025-01-31 21:38:04.967 +00:00 [INF] HDF5 file size: 4240424 bytes
+2025-01-31 21:38:04.983 +00:00 [INF] Dataset: /inf_matrix_full
+2025-01-31 21:38:04.983 +00:00 [INF] Dimensions: 3474720 x 13
+2025-01-31 21:38:04.983 +00:00 [INF] Storage size: 1497380 bytes
+2025-01-31 21:38:04.998 +00:00 [INF] Compression ratio: 241.34:1
+2025-01-31 21:38:04.998 +00:00 [INF] Number of filters: 2
+2025-01-31 21:38:05.155 +00:00 [INF] WriteInfMatrixHDF5 completed successfully
+2025-01-31 21:38:05.155 +00:00 [INF] Progress: Layer 3 / 13, Spot 6 / 6.
+2025-01-31 21:38:17.576 +00:00 [INF] Starting to write matrix to C:\Users\japankpatel\source\repos\MAAS-DoseInfluenceMatrix\Source_C#\bin\debug\results\Plan1\Beams\Beam_Field 1_Data.h5
+2025-01-31 21:38:17.576 +00:00 [INF] Matrix dimensions: 3474720 x 1
+2025-01-31 21:38:17.576 +00:00 [INF] Opened existing HDF5 file
+2025-01-31 21:38:17.576 +00:00 [INF] Full matrix dataset exists
+2025-01-31 21:38:18.295 +00:00 [INF] Successfully appended data. Dataset now has 14 spots
+2025-01-31 21:38:18.342 +00:00 [INF] Successfully closed HDF5 file
+2025-01-31 21:38:18.358 +00:00 [INF] HDF5 file size: 4352241 bytes
+2025-01-31 21:38:18.373 +00:00 [INF] Dataset: /inf_matrix_full
+2025-01-31 21:38:18.373 +00:00 [INF] Dimensions: 3474720 x 14
+2025-01-31 21:38:18.373 +00:00 [INF] Storage size: 1609197 bytes
+2025-01-31 21:38:18.389 +00:00 [INF] Compression ratio: 241.84:1
+2025-01-31 21:38:18.389 +00:00 [INF] Number of filters: 2
+2025-01-31 21:38:18.530 +00:00 [INF] WriteInfMatrixHDF5 completed successfully
+2025-01-31 21:38:18.530 +00:00 [INF] Progress: Layer 4 / 13, Spot 1 / 9.
+2025-01-31 21:38:30.920 +00:00 [INF] Starting to write matrix to C:\Users\japankpatel\source\repos\MAAS-DoseInfluenceMatrix\Source_C#\bin\debug\results\Plan1\Beams\Beam_Field 1_Data.h5
+2025-01-31 21:38:31.811 +00:00 [INF] Matrix dimensions: 3474720 x 1
+2025-01-31 21:38:31.811 +00:00 [INF] Opened existing HDF5 file
+2025-01-31 21:38:31.811 +00:00 [INF] Full matrix dataset exists
+2025-01-31 21:38:32.529 +00:00 [INF] Successfully appended data. Dataset now has 15 spots
+2025-01-31 21:38:32.576 +00:00 [INF] Successfully closed HDF5 file
+2025-01-31 21:38:32.592 +00:00 [INF] HDF5 file size: 4473134 bytes
+2025-01-31 21:38:32.623 +00:00 [INF] Dataset: /inf_matrix_full
+2025-01-31 21:38:32.623 +00:00 [INF] Dimensions: 3474720 x 15
+2025-01-31 21:38:32.623 +00:00 [INF] Storage size: 1730090 bytes
+2025-01-31 21:38:32.623 +00:00 [INF] Compression ratio: 241.01:1
+2025-01-31 21:38:32.623 +00:00 [INF] Number of filters: 2
+2025-01-31 21:38:32.764 +00:00 [INF] WriteInfMatrixHDF5 completed successfully
+2025-01-31 21:38:32.779 +00:00 [INF] Progress: Layer 4 / 13, Spot 2 / 9.
+2025-01-31 21:38:45.248 +00:00 [INF] Starting to write matrix to C:\Users\japankpatel\source\repos\MAAS-DoseInfluenceMatrix\Source_C#\bin\debug\results\Plan1\Beams\Beam_Field 1_Data.h5
+2025-01-31 21:38:45.248 +00:00 [INF] Matrix dimensions: 3474720 x 1
+2025-01-31 21:38:45.248 +00:00 [INF] Opened existing HDF5 file
+2025-01-31 21:38:45.248 +00:00 [INF] Full matrix dataset exists
+2025-01-31 21:38:45.967 +00:00 [INF] Successfully appended data. Dataset now has 16 spots
+2025-01-31 21:38:46.014 +00:00 [INF] Successfully closed HDF5 file
+2025-01-31 21:38:46.029 +00:00 [INF] HDF5 file size: 4590970 bytes
+2025-01-31 21:38:46.061 +00:00 [INF] Dataset: /inf_matrix_full
+2025-01-31 21:38:46.061 +00:00 [INF] Dimensions: 3474720 x 16
+2025-01-31 21:38:46.061 +00:00 [INF] Storage size: 1847926 bytes
+2025-01-31 21:38:46.061 +00:00 [INF] Compression ratio: 240.68:1
+2025-01-31 21:38:46.061 +00:00 [INF] Number of filters: 2
+2025-01-31 21:38:46.217 +00:00 [INF] WriteInfMatrixHDF5 completed successfully
+2025-01-31 21:38:46.217 +00:00 [INF] Progress: Layer 4 / 13, Spot 3 / 9.
+2025-01-31 21:38:58.545 +00:00 [INF] Starting to write matrix to C:\Users\japankpatel\source\repos\MAAS-DoseInfluenceMatrix\Source_C#\bin\debug\results\Plan1\Beams\Beam_Field 1_Data.h5
+2025-01-31 21:38:58.545 +00:00 [INF] Matrix dimensions: 3474720 x 1
+2025-01-31 21:38:58.545 +00:00 [INF] Opened existing HDF5 file
+2025-01-31 21:38:58.561 +00:00 [INF] Full matrix dataset exists
+2025-01-31 21:38:59.311 +00:00 [INF] Successfully appended data. Dataset now has 17 spots
+2025-01-31 21:38:59.373 +00:00 [INF] Successfully closed HDF5 file
+2025-01-31 21:38:59.389 +00:00 [INF] HDF5 file size: 6290928 bytes
+2025-01-31 21:38:59.404 +00:00 [INF] Dataset: /inf_matrix_full
+2025-01-31 21:38:59.404 +00:00 [INF] Dimensions: 3474720 x 17
+2025-01-31 21:38:59.404 +00:00 [INF] Storage size: 1963421 bytes
+2025-01-31 21:38:59.404 +00:00 [INF] Compression ratio: 240.68:1
+2025-01-31 21:38:59.420 +00:00 [INF] Number of filters: 2
+2025-01-31 21:38:59.561 +00:00 [INF] WriteInfMatrixHDF5 completed successfully
+2025-01-31 21:38:59.561 +00:00 [INF] Progress: Layer 4 / 13, Spot 4 / 9.
+2025-01-31 21:39:11.935 +00:00 [INF] Starting to write matrix to C:\Users\japankpatel\source\repos\MAAS-DoseInfluenceMatrix\Source_C#\bin\debug\results\Plan1\Beams\Beam_Field 1_Data.h5
+2025-01-31 21:39:11.935 +00:00 [INF] Matrix dimensions: 3474720 x 1
+2025-01-31 21:39:11.951 +00:00 [INF] Opened existing HDF5 file
+2025-01-31 21:39:11.951 +00:00 [INF] Full matrix dataset exists
+2025-01-31 21:39:12.670 +00:00 [INF] Successfully appended data. Dataset now has 18 spots
+2025-01-31 21:39:12.717 +00:00 [INF] Successfully closed HDF5 file
+2025-01-31 21:39:12.732 +00:00 [INF] HDF5 file size: 6567578 bytes
+2025-01-31 21:39:12.748 +00:00 [INF] Dataset: /inf_matrix_full
+2025-01-31 21:39:12.748 +00:00 [INF] Dimensions: 3474720 x 18
+2025-01-31 21:39:12.748 +00:00 [INF] Storage size: 2079739 bytes
+2025-01-31 21:39:12.764 +00:00 [INF] Compression ratio: 240.59:1
+2025-01-31 21:39:12.764 +00:00 [INF] Number of filters: 2
+2025-01-31 21:39:12.904 +00:00 [INF] WriteInfMatrixHDF5 completed successfully
+2025-01-31 21:39:12.904 +00:00 [INF] Progress: Layer 4 / 13, Spot 5 / 9.
+2025-01-31 21:39:25.310 +00:00 [INF] Starting to write matrix to C:\Users\japankpatel\source\repos\MAAS-DoseInfluenceMatrix\Source_C#\bin\debug\results\Plan1\Beams\Beam_Field 1_Data.h5
+2025-01-31 21:39:25.310 +00:00 [INF] Matrix dimensions: 3474720 x 1
+2025-01-31 21:39:25.310 +00:00 [INF] Opened existing HDF5 file
+2025-01-31 21:39:25.310 +00:00 [INF] Full matrix dataset exists
+2025-01-31 21:39:25.951 +00:00 [INF] Successfully appended data. Dataset now has 19 spots
+2025-01-31 21:39:26.013 +00:00 [INF] Successfully closed HDF5 file
+2025-01-31 21:39:26.013 +00:00 [INF] HDF5 file size: 6684783 bytes
+2025-01-31 21:39:26.060 +00:00 [INF] Dataset: /inf_matrix_full
+2025-01-31 21:39:26.060 +00:00 [INF] Dimensions: 3474720 x 19
+2025-01-31 21:39:26.060 +00:00 [INF] Storage size: 2194328 bytes
+2025-01-31 21:39:26.060 +00:00 [INF] Compression ratio: 240.69:1
+2025-01-31 21:39:26.060 +00:00 [INF] Number of filters: 2
+2025-01-31 21:39:26.217 +00:00 [INF] WriteInfMatrixHDF5 completed successfully
+2025-01-31 21:39:26.217 +00:00 [INF] Progress: Layer 4 / 13, Spot 6 / 9.
+2025-01-31 21:39:38.638 +00:00 [INF] Starting to write matrix to C:\Users\japankpatel\source\repos\MAAS-DoseInfluenceMatrix\Source_C#\bin\debug\results\Plan1\Beams\Beam_Field 1_Data.h5
+2025-01-31 21:39:38.638 +00:00 [INF] Matrix dimensions: 3474720 x 1
+2025-01-31 21:39:38.638 +00:00 [INF] Opened existing HDF5 file
+2025-01-31 21:39:38.638 +00:00 [INF] Full matrix dataset exists
+2025-01-31 21:39:39.279 +00:00 [INF] Successfully appended data. Dataset now has 20 spots
+2025-01-31 21:39:39.310 +00:00 [INF] Successfully closed HDF5 file
+2025-01-31 21:39:39.326 +00:00 [INF] HDF5 file size: 6801143 bytes
+2025-01-31 21:39:39.357 +00:00 [INF] Dataset: /inf_matrix_full
+2025-01-31 21:39:39.357 +00:00 [INF] Dimensions: 3474720 x 20
+2025-01-31 21:39:39.357 +00:00 [INF] Storage size: 2310688 bytes
+2025-01-31 21:39:39.357 +00:00 [INF] Compression ratio: 240.60:1
+2025-01-31 21:39:39.373 +00:00 [INF] Number of filters: 2
+2025-01-31 21:39:39.513 +00:00 [INF] WriteInfMatrixHDF5 completed successfully
+2025-01-31 21:39:39.513 +00:00 [INF] Progress: Layer 4 / 13, Spot 7 / 9.
+2025-01-31 21:39:51.779 +00:00 [INF] Starting to write matrix to C:\Users\japankpatel\source\repos\MAAS-DoseInfluenceMatrix\Source_C#\bin\debug\results\Plan1\Beams\Beam_Field 1_Data.h5
+2025-01-31 22:05:06.168 +00:00 [INF] Matrix dimensions: 3474720 x 1
+2025-01-31 22:05:06.183 +00:00 [INF] Opened existing HDF5 file
+2025-01-31 22:05:06.183 +00:00 [INF] Full matrix dataset exists
+2025-01-31 22:05:06.917 +00:00 [INF] Successfully appended data. Dataset now has 21 spots
+2025-01-31 22:05:06.964 +00:00 [INF] Successfully closed HDF5 file
+2025-01-31 22:05:06.980 +00:00 [INF] HDF5 file size: 7074247 bytes
+2025-01-31 22:05:07.011 +00:00 [INF] Dataset: /inf_matrix_full
+2025-01-31 22:05:07.011 +00:00 [INF] Dimensions: 3474720 x 21
+2025-01-31 22:05:07.011 +00:00 [INF] Storage size: 2426051 bytes
+2025-01-31 22:05:07.011 +00:00 [INF] Compression ratio: 240.62:1
+2025-01-31 22:05:07.011 +00:00 [INF] Number of filters: 2
+2025-01-31 22:05:07.246 +00:00 [INF] WriteInfMatrixHDF5 completed successfully
+2025-01-31 22:05:07.261 +00:00 [INF] Progress: Layer 4 / 13, Spot 8 / 9.

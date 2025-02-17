@@ -1,0 +1,132 @@
+2025-02-01 21:09:11.946 +00:00 [INF] Log output directed to C:\Users\japankpatel\source\repos\MAAS-DoseInfluenceMatrix\Source_C#\bin\debug\logs\influence-matrix-2025-02-01@21-09-11.txt
+2025-02-01 21:09:11.992 +00:00 [INF] Enter PatientId:
+2025-02-01 21:09:17.399 +00:00 [INF] Enter CourseId:
+2025-02-01 21:09:20.930 +00:00 [INF] Enter PlanId:
+2025-02-01 21:09:29.414 +00:00 [INF] Opening Patient "Proton 06"
+2025-02-01 21:09:29.477 +00:00 [INF] Opening Plan "Demo_00 / Plan1"
+2025-02-01 21:09:29.571 +00:00 [INF] Plan1 found.
+2025-02-01 21:09:43.774 +00:00 [INF] Results will be written to: C:\Users\japankpatel\source\repos\MAAS-DoseInfluenceMatrix\Source_C#\bin\debug\results\Plan1
+2025-02-01 21:18:40.491 +00:00 [INF] Progress: Layer 1 / 13, Spot 1 / 4.
+2025-02-01 21:18:57.772 +00:00 [INF] Starting to write matrix to C:\Users\japankpatel\source\repos\MAAS-DoseInfluenceMatrix\Source_C#\bin\debug\results\Plan1\Beams\Beam_Field 1_Data.h5
+2025-02-01 21:18:57.788 +00:00 [INF] Opened existing HDF5 file
+2025-02-01 21:18:57.788 +00:00 [INF] Full matrix dataset does not exist
+2025-02-01 21:18:58.710 +00:00 [INF] Successfully created and wrote initial dataset: /inf_matrix_full
+2025-02-01 21:18:58.788 +00:00 [INF] Sparse matrix dataset does not exist
+2025-02-01 21:18:58.788 +00:00 [INF] Successfully created and wrote initial dataset: /inf_matrix_sparse
+2025-02-01 21:18:58.804 +00:00 [INF] Successfully closed HDF5 file
+2025-02-01 21:18:58.819 +00:00 [INF] HDF5 file size: 521872 bytes
+2025-02-01 21:18:58.819 +00:00 [INF] Dataset: /inf_matrix_full
+2025-02-01 21:18:58.835 +00:00 [INF] Dimensions: 3474720 x 1
+2025-02-01 21:18:58.835 +00:00 [INF] Storage size: 117832 bytes
+2025-02-01 21:18:58.835 +00:00 [INF] Compression ratio: 235.91:1
+2025-02-01 21:18:58.835 +00:00 [INF] Number of filters: 2
+2025-02-01 21:18:58.835 +00:00 [INF] Dataset: /inf_matrix_sparse
+2025-02-01 21:18:58.835 +00:00 [INF] Dimensions: 7633 x 3
+2025-02-01 21:18:58.835 +00:00 [INF] Storage size: 54007 bytes
+2025-02-01 21:18:58.835 +00:00 [INF] Compression ratio: 3.39:1
+2025-02-01 21:18:58.850 +00:00 [INF] Number of filters: 2
+2025-02-01 21:18:58.850 +00:00 [INF] WriteInfMatrixHDF5 completed successfully
+2025-02-01 21:18:58.850 +00:00 [INF] Progress: Layer 1 / 13, Spot 2 / 4.
+2025-02-01 21:19:12.257 +00:00 [INF] Starting to write matrix to C:\Users\japankpatel\source\repos\MAAS-DoseInfluenceMatrix\Source_C#\bin\debug\results\Plan1\Beams\Beam_Field 1_Data.h5
+2025-02-01 21:19:12.257 +00:00 [INF] Opened existing HDF5 file
+2025-02-01 21:19:12.257 +00:00 [INF] Full matrix dataset exists
+2025-02-01 21:19:13.194 +00:00 [INF] Sparse matrix dataset exists
+2025-02-01 21:19:13.257 +00:00 [ERR] Error in WriteInfMatrixHDF5: Failed to write data
+2025-02-01 21:19:13.429 +00:00 [ERR] Stack trace:    at CalculateInfluenceMatrix.Helpers.AppendToDataset(Int64 fileId, String datasetPath, Array newData) in C:\Users\japankpatel\Source\Repos\MAAS-DoseInfluenceMatrix\Source_C#\Helpers.cs:line 859
+   at CalculateInfluenceMatrix.Helpers.WriteInfMatrixHDF5(Boolean bExportFullInfMatrix, Single[,] arrFullDoseMatrix, DoseData doseData, Boolean bAddLastEntry, Int32 iMaxPointCnt, Int32 iSpotIdx, String szPath) in C:\Users\japankpatel\Source\Repos\MAAS-DoseInfluenceMatrix\Source_C#\Helpers.cs:line 711
+2025-02-01 21:19:13.444 +00:00 [INF] Successfully closed HDF5 file
+2025-02-01 21:19:13.444 +00:00 [ERR] Fatal error during matrix processing: Failed to write data
+2025-02-01 21:19:13.444 +00:00 [ERR] Stack trace:    at CalculateInfluenceMatrix.Helpers.AppendToDataset(Int64 fileId, String datasetPath, Array newData) in C:\Users\japankpatel\Source\Repos\MAAS-DoseInfluenceMatrix\Source_C#\Helpers.cs:line 859
+   at CalculateInfluenceMatrix.Helpers.WriteInfMatrixHDF5(Boolean bExportFullInfMatrix, Single[,] arrFullDoseMatrix, DoseData doseData, Boolean bAddLastEntry, Int32 iMaxPointCnt, Int32 iSpotIdx, String szPath) in C:\Users\japankpatel\Source\Repos\MAAS-DoseInfluenceMatrix\Source_C#\Helpers.cs:line 719
+   at CalculateInfluenceMatrix.CalculateInfluenceMatrix.Execute(Application app, String patientId, String courseId, String planId) in C:\Users\japankpatel\Source\Repos\MAAS-DoseInfluenceMatrix\Source_C#\CalculateInfluenceMatrix.cs:line 222
+2025-02-01 21:19:13.460 +00:00 [INF] Progress: Layer 1 / 13, Spot 3 / 4.
+2025-02-01 21:19:27.069 +00:00 [INF] Starting to write matrix to C:\Users\japankpatel\source\repos\MAAS-DoseInfluenceMatrix\Source_C#\bin\debug\results\Plan1\Beams\Beam_Field 1_Data.h5
+2025-02-01 21:19:27.069 +00:00 [INF] Opened existing HDF5 file
+2025-02-01 21:19:27.069 +00:00 [INF] Full matrix dataset exists
+2025-02-01 21:19:28.132 +00:00 [INF] Sparse matrix dataset exists
+2025-02-01 21:19:28.194 +00:00 [ERR] Error in WriteInfMatrixHDF5: Failed to write data
+2025-02-01 21:19:28.194 +00:00 [ERR] Stack trace:    at CalculateInfluenceMatrix.Helpers.AppendToDataset(Int64 fileId, String datasetPath, Array newData) in C:\Users\japankpatel\Source\Repos\MAAS-DoseInfluenceMatrix\Source_C#\Helpers.cs:line 859
+   at CalculateInfluenceMatrix.Helpers.WriteInfMatrixHDF5(Boolean bExportFullInfMatrix, Single[,] arrFullDoseMatrix, DoseData doseData, Boolean bAddLastEntry, Int32 iMaxPointCnt, Int32 iSpotIdx, String szPath) in C:\Users\japankpatel\Source\Repos\MAAS-DoseInfluenceMatrix\Source_C#\Helpers.cs:line 711
+2025-02-01 21:19:28.210 +00:00 [INF] Successfully closed HDF5 file
+2025-02-01 21:19:28.210 +00:00 [ERR] Fatal error during matrix processing: Failed to write data
+2025-02-01 21:19:28.210 +00:00 [ERR] Stack trace:    at CalculateInfluenceMatrix.Helpers.AppendToDataset(Int64 fileId, String datasetPath, Array newData) in C:\Users\japankpatel\Source\Repos\MAAS-DoseInfluenceMatrix\Source_C#\Helpers.cs:line 859
+   at CalculateInfluenceMatrix.Helpers.WriteInfMatrixHDF5(Boolean bExportFullInfMatrix, Single[,] arrFullDoseMatrix, DoseData doseData, Boolean bAddLastEntry, Int32 iMaxPointCnt, Int32 iSpotIdx, String szPath) in C:\Users\japankpatel\Source\Repos\MAAS-DoseInfluenceMatrix\Source_C#\Helpers.cs:line 719
+   at CalculateInfluenceMatrix.CalculateInfluenceMatrix.Execute(Application app, String patientId, String courseId, String planId) in C:\Users\japankpatel\Source\Repos\MAAS-DoseInfluenceMatrix\Source_C#\CalculateInfluenceMatrix.cs:line 222
+2025-02-01 21:19:28.225 +00:00 [INF] Progress: Layer 1 / 13, Spot 4 / 4.
+2025-02-01 21:19:41.601 +00:00 [INF] Starting to write matrix to C:\Users\japankpatel\source\repos\MAAS-DoseInfluenceMatrix\Source_C#\bin\debug\results\Plan1\Beams\Beam_Field 1_Data.h5
+2025-02-01 21:19:41.601 +00:00 [INF] Opened existing HDF5 file
+2025-02-01 21:19:41.601 +00:00 [INF] Full matrix dataset exists
+2025-02-01 21:19:42.585 +00:00 [INF] Sparse matrix dataset exists
+2025-02-01 21:19:42.663 +00:00 [ERR] Error in WriteInfMatrixHDF5: Failed to write data
+2025-02-01 21:19:42.663 +00:00 [ERR] Stack trace:    at CalculateInfluenceMatrix.Helpers.AppendToDataset(Int64 fileId, String datasetPath, Array newData) in C:\Users\japankpatel\Source\Repos\MAAS-DoseInfluenceMatrix\Source_C#\Helpers.cs:line 859
+   at CalculateInfluenceMatrix.Helpers.WriteInfMatrixHDF5(Boolean bExportFullInfMatrix, Single[,] arrFullDoseMatrix, DoseData doseData, Boolean bAddLastEntry, Int32 iMaxPointCnt, Int32 iSpotIdx, String szPath) in C:\Users\japankpatel\Source\Repos\MAAS-DoseInfluenceMatrix\Source_C#\Helpers.cs:line 711
+2025-02-01 21:19:42.663 +00:00 [INF] Successfully closed HDF5 file
+2025-02-01 21:19:42.663 +00:00 [ERR] Fatal error during matrix processing: Failed to write data
+2025-02-01 21:19:42.663 +00:00 [ERR] Stack trace:    at CalculateInfluenceMatrix.Helpers.AppendToDataset(Int64 fileId, String datasetPath, Array newData) in C:\Users\japankpatel\Source\Repos\MAAS-DoseInfluenceMatrix\Source_C#\Helpers.cs:line 859
+   at CalculateInfluenceMatrix.Helpers.WriteInfMatrixHDF5(Boolean bExportFullInfMatrix, Single[,] arrFullDoseMatrix, DoseData doseData, Boolean bAddLastEntry, Int32 iMaxPointCnt, Int32 iSpotIdx, String szPath) in C:\Users\japankpatel\Source\Repos\MAAS-DoseInfluenceMatrix\Source_C#\Helpers.cs:line 719
+   at CalculateInfluenceMatrix.CalculateInfluenceMatrix.Execute(Application app, String patientId, String courseId, String planId) in C:\Users\japankpatel\Source\Repos\MAAS-DoseInfluenceMatrix\Source_C#\CalculateInfluenceMatrix.cs:line 222
+2025-02-01 21:19:42.679 +00:00 [INF] Progress: Layer 2 / 13, Spot 1 / 4.
+2025-02-01 21:19:56.257 +00:00 [INF] Starting to write matrix to C:\Users\japankpatel\source\repos\MAAS-DoseInfluenceMatrix\Source_C#\bin\debug\results\Plan1\Beams\Beam_Field 1_Data.h5
+2025-02-01 21:19:56.257 +00:00 [INF] Opened existing HDF5 file
+2025-02-01 21:19:56.257 +00:00 [INF] Full matrix dataset exists
+2025-02-01 21:19:57.210 +00:00 [INF] Sparse matrix dataset exists
+2025-02-01 21:19:57.257 +00:00 [ERR] Error in WriteInfMatrixHDF5: Failed to write data
+2025-02-01 21:19:57.257 +00:00 [ERR] Stack trace:    at CalculateInfluenceMatrix.Helpers.AppendToDataset(Int64 fileId, String datasetPath, Array newData) in C:\Users\japankpatel\Source\Repos\MAAS-DoseInfluenceMatrix\Source_C#\Helpers.cs:line 859
+   at CalculateInfluenceMatrix.Helpers.WriteInfMatrixHDF5(Boolean bExportFullInfMatrix, Single[,] arrFullDoseMatrix, DoseData doseData, Boolean bAddLastEntry, Int32 iMaxPointCnt, Int32 iSpotIdx, String szPath) in C:\Users\japankpatel\Source\Repos\MAAS-DoseInfluenceMatrix\Source_C#\Helpers.cs:line 711
+2025-02-01 21:19:57.272 +00:00 [INF] Successfully closed HDF5 file
+2025-02-01 21:19:57.272 +00:00 [ERR] Fatal error during matrix processing: Failed to write data
+2025-02-01 21:19:57.288 +00:00 [ERR] Stack trace:    at CalculateInfluenceMatrix.Helpers.AppendToDataset(Int64 fileId, String datasetPath, Array newData) in C:\Users\japankpatel\Source\Repos\MAAS-DoseInfluenceMatrix\Source_C#\Helpers.cs:line 859
+   at CalculateInfluenceMatrix.Helpers.WriteInfMatrixHDF5(Boolean bExportFullInfMatrix, Single[,] arrFullDoseMatrix, DoseData doseData, Boolean bAddLastEntry, Int32 iMaxPointCnt, Int32 iSpotIdx, String szPath) in C:\Users\japankpatel\Source\Repos\MAAS-DoseInfluenceMatrix\Source_C#\Helpers.cs:line 719
+   at CalculateInfluenceMatrix.CalculateInfluenceMatrix.Execute(Application app, String patientId, String courseId, String planId) in C:\Users\japankpatel\Source\Repos\MAAS-DoseInfluenceMatrix\Source_C#\CalculateInfluenceMatrix.cs:line 222
+2025-02-01 21:19:57.288 +00:00 [INF] Progress: Layer 2 / 13, Spot 2 / 4.
+2025-02-01 21:20:10.913 +00:00 [INF] Starting to write matrix to C:\Users\japankpatel\source\repos\MAAS-DoseInfluenceMatrix\Source_C#\bin\debug\results\Plan1\Beams\Beam_Field 1_Data.h5
+2025-02-01 21:20:10.913 +00:00 [INF] Opened existing HDF5 file
+2025-02-01 21:20:10.913 +00:00 [INF] Full matrix dataset exists
+2025-02-01 21:20:11.882 +00:00 [INF] Sparse matrix dataset exists
+2025-02-01 21:20:11.944 +00:00 [ERR] Error in WriteInfMatrixHDF5: Failed to write data
+2025-02-01 21:20:11.944 +00:00 [ERR] Stack trace:    at CalculateInfluenceMatrix.Helpers.AppendToDataset(Int64 fileId, String datasetPath, Array newData) in C:\Users\japankpatel\Source\Repos\MAAS-DoseInfluenceMatrix\Source_C#\Helpers.cs:line 859
+   at CalculateInfluenceMatrix.Helpers.WriteInfMatrixHDF5(Boolean bExportFullInfMatrix, Single[,] arrFullDoseMatrix, DoseData doseData, Boolean bAddLastEntry, Int32 iMaxPointCnt, Int32 iSpotIdx, String szPath) in C:\Users\japankpatel\Source\Repos\MAAS-DoseInfluenceMatrix\Source_C#\Helpers.cs:line 711
+2025-02-01 21:20:11.960 +00:00 [INF] Successfully closed HDF5 file
+2025-02-01 21:20:11.960 +00:00 [ERR] Fatal error during matrix processing: Failed to write data
+2025-02-01 21:20:11.960 +00:00 [ERR] Stack trace:    at CalculateInfluenceMatrix.Helpers.AppendToDataset(Int64 fileId, String datasetPath, Array newData) in C:\Users\japankpatel\Source\Repos\MAAS-DoseInfluenceMatrix\Source_C#\Helpers.cs:line 859
+   at CalculateInfluenceMatrix.Helpers.WriteInfMatrixHDF5(Boolean bExportFullInfMatrix, Single[,] arrFullDoseMatrix, DoseData doseData, Boolean bAddLastEntry, Int32 iMaxPointCnt, Int32 iSpotIdx, String szPath) in C:\Users\japankpatel\Source\Repos\MAAS-DoseInfluenceMatrix\Source_C#\Helpers.cs:line 719
+   at CalculateInfluenceMatrix.CalculateInfluenceMatrix.Execute(Application app, String patientId, String courseId, String planId) in C:\Users\japankpatel\Source\Repos\MAAS-DoseInfluenceMatrix\Source_C#\CalculateInfluenceMatrix.cs:line 222
+2025-02-01 21:20:11.976 +00:00 [INF] Progress: Layer 2 / 13, Spot 3 / 4.
+2025-02-01 21:20:26.132 +00:00 [INF] Starting to write matrix to C:\Users\japankpatel\source\repos\MAAS-DoseInfluenceMatrix\Source_C#\bin\debug\results\Plan1\Beams\Beam_Field 1_Data.h5
+2025-02-01 21:20:26.132 +00:00 [INF] Opened existing HDF5 file
+2025-02-01 21:20:26.148 +00:00 [INF] Full matrix dataset exists
+2025-02-01 21:20:27.210 +00:00 [INF] Sparse matrix dataset exists
+2025-02-01 21:20:27.288 +00:00 [ERR] Error in WriteInfMatrixHDF5: Failed to write data
+2025-02-01 21:20:27.288 +00:00 [ERR] Stack trace:    at CalculateInfluenceMatrix.Helpers.AppendToDataset(Int64 fileId, String datasetPath, Array newData) in C:\Users\japankpatel\Source\Repos\MAAS-DoseInfluenceMatrix\Source_C#\Helpers.cs:line 859
+   at CalculateInfluenceMatrix.Helpers.WriteInfMatrixHDF5(Boolean bExportFullInfMatrix, Single[,] arrFullDoseMatrix, DoseData doseData, Boolean bAddLastEntry, Int32 iMaxPointCnt, Int32 iSpotIdx, String szPath) in C:\Users\japankpatel\Source\Repos\MAAS-DoseInfluenceMatrix\Source_C#\Helpers.cs:line 711
+2025-02-01 21:20:27.304 +00:00 [INF] Successfully closed HDF5 file
+2025-02-01 21:20:27.304 +00:00 [ERR] Fatal error during matrix processing: Failed to write data
+2025-02-01 21:20:27.304 +00:00 [ERR] Stack trace:    at CalculateInfluenceMatrix.Helpers.AppendToDataset(Int64 fileId, String datasetPath, Array newData) in C:\Users\japankpatel\Source\Repos\MAAS-DoseInfluenceMatrix\Source_C#\Helpers.cs:line 859
+   at CalculateInfluenceMatrix.Helpers.WriteInfMatrixHDF5(Boolean bExportFullInfMatrix, Single[,] arrFullDoseMatrix, DoseData doseData, Boolean bAddLastEntry, Int32 iMaxPointCnt, Int32 iSpotIdx, String szPath) in C:\Users\japankpatel\Source\Repos\MAAS-DoseInfluenceMatrix\Source_C#\Helpers.cs:line 719
+   at CalculateInfluenceMatrix.CalculateInfluenceMatrix.Execute(Application app, String patientId, String courseId, String planId) in C:\Users\japankpatel\Source\Repos\MAAS-DoseInfluenceMatrix\Source_C#\CalculateInfluenceMatrix.cs:line 222
+2025-02-01 21:20:27.304 +00:00 [INF] Progress: Layer 2 / 13, Spot 4 / 4.
+2025-02-01 21:20:41.773 +00:00 [INF] Starting to write matrix to C:\Users\japankpatel\source\repos\MAAS-DoseInfluenceMatrix\Source_C#\bin\debug\results\Plan1\Beams\Beam_Field 1_Data.h5
+2025-02-01 21:20:41.788 +00:00 [INF] Opened existing HDF5 file
+2025-02-01 21:20:41.788 +00:00 [INF] Full matrix dataset exists
+2025-02-01 21:20:42.757 +00:00 [INF] Sparse matrix dataset exists
+2025-02-01 21:20:42.835 +00:00 [ERR] Error in WriteInfMatrixHDF5: Failed to write data
+2025-02-01 21:20:42.835 +00:00 [ERR] Stack trace:    at CalculateInfluenceMatrix.Helpers.AppendToDataset(Int64 fileId, String datasetPath, Array newData) in C:\Users\japankpatel\Source\Repos\MAAS-DoseInfluenceMatrix\Source_C#\Helpers.cs:line 859
+   at CalculateInfluenceMatrix.Helpers.WriteInfMatrixHDF5(Boolean bExportFullInfMatrix, Single[,] arrFullDoseMatrix, DoseData doseData, Boolean bAddLastEntry, Int32 iMaxPointCnt, Int32 iSpotIdx, String szPath) in C:\Users\japankpatel\Source\Repos\MAAS-DoseInfluenceMatrix\Source_C#\Helpers.cs:line 711
+2025-02-01 21:20:42.851 +00:00 [INF] Successfully closed HDF5 file
+2025-02-01 21:20:42.851 +00:00 [ERR] Fatal error during matrix processing: Failed to write data
+2025-02-01 21:20:42.851 +00:00 [ERR] Stack trace:    at CalculateInfluenceMatrix.Helpers.AppendToDataset(Int64 fileId, String datasetPath, Array newData) in C:\Users\japankpatel\Source\Repos\MAAS-DoseInfluenceMatrix\Source_C#\Helpers.cs:line 859
+   at CalculateInfluenceMatrix.Helpers.WriteInfMatrixHDF5(Boolean bExportFullInfMatrix, Single[,] arrFullDoseMatrix, DoseData doseData, Boolean bAddLastEntry, Int32 iMaxPointCnt, Int32 iSpotIdx, String szPath) in C:\Users\japankpatel\Source\Repos\MAAS-DoseInfluenceMatrix\Source_C#\Helpers.cs:line 719
+   at CalculateInfluenceMatrix.CalculateInfluenceMatrix.Execute(Application app, String patientId, String courseId, String planId) in C:\Users\japankpatel\Source\Repos\MAAS-DoseInfluenceMatrix\Source_C#\CalculateInfluenceMatrix.cs:line 222
+2025-02-01 21:20:42.866 +00:00 [INF] Progress: Layer 3 / 13, Spot 1 / 6.
+2025-02-01 21:20:56.601 +00:00 [INF] Starting to write matrix to C:\Users\japankpatel\source\repos\MAAS-DoseInfluenceMatrix\Source_C#\bin\debug\results\Plan1\Beams\Beam_Field 1_Data.h5
+2025-02-01 21:20:56.601 +00:00 [INF] Opened existing HDF5 file
+2025-02-01 21:20:56.617 +00:00 [INF] Full matrix dataset exists
+2025-02-01 21:20:57.523 +00:00 [INF] Sparse matrix dataset exists
+2025-02-01 21:20:57.585 +00:00 [ERR] Error in WriteInfMatrixHDF5: Failed to write data
+2025-02-01 21:20:57.585 +00:00 [ERR] Stack trace:    at CalculateInfluenceMatrix.Helpers.AppendToDataset(Int64 fileId, String datasetPath, Array newData) in C:\Users\japankpatel\Source\Repos\MAAS-DoseInfluenceMatrix\Source_C#\Helpers.cs:line 859
+   at CalculateInfluenceMatrix.Helpers.WriteInfMatrixHDF5(Boolean bExportFullInfMatrix, Single[,] arrFullDoseMatrix, DoseData doseData, Boolean bAddLastEntry, Int32 iMaxPointCnt, Int32 iSpotIdx, String szPath) in C:\Users\japankpatel\Source\Repos\MAAS-DoseInfluenceMatrix\Source_C#\Helpers.cs:line 711
+2025-02-01 21:20:57.601 +00:00 [INF] Successfully closed HDF5 file
+2025-02-01 21:20:57.601 +00:00 [ERR] Fatal error during matrix processing: Failed to write data
+2025-02-01 21:20:57.601 +00:00 [ERR] Stack trace:    at CalculateInfluenceMatrix.Helpers.AppendToDataset(Int64 fileId, String datasetPath, Array newData) in C:\Users\japankpatel\Source\Repos\MAAS-DoseInfluenceMatrix\Source_C#\Helpers.cs:line 859
+   at CalculateInfluenceMatrix.Helpers.WriteInfMatrixHDF5(Boolean bExportFullInfMatrix, Single[,] arrFullDoseMatrix, DoseData doseData, Boolean bAddLastEntry, Int32 iMaxPointCnt, Int32 iSpotIdx, String szPath) in C:\Users\japankpatel\Source\Repos\MAAS-DoseInfluenceMatrix\Source_C#\Helpers.cs:line 719
+   at CalculateInfluenceMatrix.CalculateInfluenceMatrix.Execute(Application app, String patientId, String courseId, String planId) in C:\Users\japankpatel\Source\Repos\MAAS-DoseInfluenceMatrix\Source_C#\CalculateInfluenceMatrix.cs:line 222

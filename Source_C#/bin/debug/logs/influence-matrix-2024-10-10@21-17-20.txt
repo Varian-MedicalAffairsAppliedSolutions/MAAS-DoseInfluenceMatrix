@@ -1,0 +1,10 @@
+2024-10-10 21:17:20.356 +00:00 [INF] Log output directed to C:\Users\japankpatel\source\repos\MAAS-DoseInfluenceMatrix\Source_C#\bin\debug\logs\influence-matrix-2024-10-10@21-17-20.txt
+2024-10-10 21:17:20.395 +00:00 [INF] Enter PatientId:
+2024-10-10 21:17:53.655 +00:00 [INF] Enter CourseId:
+2024-10-10 21:18:09.223 +00:00 [INF] Enter PlanId:
+2024-10-10 21:18:50.130 +00:00 [INF] Opening Patient "Proton 06"
+2024-10-10 21:18:50.180 +00:00 [INF] Opening Plan "Demo_00 / Plan01"
+2024-10-10 21:18:50.381 +00:00 [ERR] System.ApplicationException: Could not find IonPlan with ID "Plan01"
+   at CalculateInfluenceMatrix.Helpers.GetIonPlan(Application app, String patientId, String courseId, String planId) in C:\Users\japankpatel\Source\Repos\MAAS-DoseInfluenceMatrix\Source_C#\Helpers.cs:line 91
+   at CalculateInfluenceMatrix.CalculateInfluenceMatrix.Execute(Application app, String patientId, String courseId, String planId) in C:\Users\japankpatel\Source\Repos\MAAS-DoseInfluenceMatrix\Source_C#\CalculateInfluenceMatrix.cs:line 84
+   at CalculateInfluenceMatrix.CalculateInfluenceMatrix.Main(String[] args) in C:\Users\japankpatel\Source\Repos\MAAS-DoseInfluenceMatrix\Source_C#\CalculateInfluenceMatrix.cs:line 66

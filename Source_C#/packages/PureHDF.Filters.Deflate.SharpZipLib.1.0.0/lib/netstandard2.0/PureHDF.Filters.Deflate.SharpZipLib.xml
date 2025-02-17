@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>PureHDF.Filters.Deflate.SharpZipLib</name>
+    </assembly>
+    <members>
+        <member name="T:PureHDF.Filters.DeflateSharpZipLibFilter">
+            <summary>
+            Deflate filter based on SharpZipLib.
+            </summary>
+        </member>
+        <member name="F:PureHDF.Filters.DeflateSharpZipLibFilter.COMPRESSION_LEVEL">
+            <summary>
+            The compression level options key. The compression level must be in the range of -1..9 and the default is -1.
+            </summary>
+        </member>
+        <member name="F:PureHDF.Filters.DeflateSharpZipLibFilter.Id">
+            <summary>
+            The deflate filter identifier.
+            </summary>
+        </member>
+        <member name="P:PureHDF.Filters.DeflateSharpZipLibFilter.FilterId">
+            <inheritdoc />
+        </member>
+        <member name="P:PureHDF.Filters.DeflateSharpZipLibFilter.Name">
+            <inheritdoc />
+        </member>
+        <member name="M:PureHDF.Filters.DeflateSharpZipLibFilter.Filter(PureHDF.Filters.FilterInfo)">
+            <inheritdoc />
+        </member>
+        <member name="M:PureHDF.Filters.DeflateSharpZipLibFilter.GetParameters(System.UInt32[],System.UInt32,System.Collections.Generic.Dictionary{System.String,System.Object})">
+            <inheritdoc />
+        </member>
+    </members>
+</doc>
