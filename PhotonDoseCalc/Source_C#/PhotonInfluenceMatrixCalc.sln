@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34525.116
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhotonInfluenceMatrixCalc", "PhotonInfluenceMatrixCalc.csproj", "{976C43EF-CA46-42B8-99A2-33065276921C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhotonInfluenceMatrixCalcPlugin", "..\Plugin\PhotonInfluenceMatrixCalcPlugin.csproj", "{A33AF698-A7B0-4218-9881-3E051BA90103}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{976C43EF-CA46-42B8-99A2-33065276921C}.Debug|x64.ActiveCfg = Debug|x64
+		{976C43EF-CA46-42B8-99A2-33065276921C}.Debug|x64.Build.0 = Debug|x64
+		{976C43EF-CA46-42B8-99A2-33065276921C}.Release|x64.ActiveCfg = Release|x64
+		{976C43EF-CA46-42B8-99A2-33065276921C}.Release|x64.Build.0 = Release|x64
+		{A33AF698-A7B0-4218-9881-3E051BA90103}.Debug|x64.ActiveCfg = Debug|x64
+		{A33AF698-A7B0-4218-9881-3E051BA90103}.Debug|x64.Build.0 = Debug|x64
+		{A33AF698-A7B0-4218-9881-3E051BA90103}.Release|x64.ActiveCfg = Release|x64
+		{A33AF698-A7B0-4218-9881-3E051BA90103}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4DAAA831-37BB-49D5-AF67-5A13247C2496}
+	EndGlobalSection
+EndGlobal

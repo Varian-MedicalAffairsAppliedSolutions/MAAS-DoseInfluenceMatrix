@@ -1,0 +1,2 @@
+2024-07-23 17:03:22.098 -04:00 [INF] Log output directed to D:\Projects\Tests\MAAS-ProtonInfluenceMatrix-main\Source\bin\release\logs\influence-matrix-2024-07-23@17-03-22.txt
+2024-07-23 17:03:22.135 -04:00 [INF] Enter PatientId:

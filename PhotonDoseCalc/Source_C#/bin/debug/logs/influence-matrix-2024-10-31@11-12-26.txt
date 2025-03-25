@@ -1,0 +1,6 @@
+2024-10-31 11:12:26.974 -04:00 [INF] Log output directed to D:\Projects\MPCS\EclipsePlugins\CalculateInfluenceMatrix_OpenSource\bin\release\logs\influence-matrix-2024-10-31@11-12-26.txt
+2024-10-31 11:12:28.749 -04:00 [INF] Opening Patient "20230817"
+2024-10-31 11:12:28.807 -04:00 [INF] Opening Plan "C1 / ProtonTestSM3"
+2024-10-31 11:12:29.194 -04:00 [ERR] System.InvalidCastException: Unable to cast object of type 'VMS.TPS.Common.Model.API.IonPlanSetup' to type 'VMS.TPS.Common.Model.API.ExternalPlanSetup'.
+   at CalculateInfluenceMatrix.CalculateInfluenceMatrix.Execute(Application app, String patientId, String courseId, String planId) in D:\Projects\MPCS\EclipsePlugins\CalculateInfluenceMatrix_OpenSource\CalculateInfluenceMatrix.cs:line 0
+   at CalculateInfluenceMatrix.CalculateInfluenceMatrix.Main(String[] args) in D:\Projects\MPCS\EclipsePlugins\CalculateInfluenceMatrix_OpenSource\CalculateInfluenceMatrix.cs:line 52

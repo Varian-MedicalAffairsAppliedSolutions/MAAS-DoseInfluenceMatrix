@@ -1,0 +1,14 @@
+2024-10-24 12:27:47.772 -04:00 [INF] Log output directed to D:\Projects\MPCS\EclipsePlugins\CalculateInfluenceMatrix_OpenSource\bin\release\logs\influence-matrix-2024-10-24@12-27-47.txt
+2024-10-24 12:27:49.658 -04:00 [INF] Opening Patient "LUNG1-005"
+2024-10-24 12:27:49.715 -04:00 [INF] Opening Plan "Data / HPTest_1024"
+2024-10-24 12:27:52.697 -04:00 [INF] HPTest_1024 found.
+2024-10-24 12:27:52.710 -04:00 [INF] Results will be written to: D:\Projects\MPCS\EclipsePlugins\CalculateInfluenceMatrix_OpenSource\bin\release\results\HPTest_1024
+2024-10-24 12:29:15.535 -04:00 [INF] Progress: Beamlet 5/1166.
+2024-10-24 12:29:15.537 -04:00 [INF] Progress: Beamlet 10/1166.
+2024-10-24 12:29:15.538 -04:00 [INF] Progress: Beamlet 15/1166.
+2024-10-24 12:29:15.540 -04:00 [INF] Progress: Beamlet 20/1166.
+2024-10-24 12:29:15.542 -04:00 [INF] Progress: Beamlet 25/1166.
+2024-10-24 12:29:15.550 -04:00 [INF] Progress: Beamlet 30/1166.
+2024-10-24 12:29:32.951 -04:00 [INF] Progress: Beamlet 35/1166.
+2024-10-24 12:29:55.131 -04:00 [INF] Progress: Beamlet 40/1166.
+2024-10-24 12:30:21.992 -04:00 [INF] Progress: Beamlet 45/1166.

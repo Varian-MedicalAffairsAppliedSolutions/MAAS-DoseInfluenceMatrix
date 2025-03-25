@@ -1,0 +1,93 @@
+2024-10-29 14:30:00.905 -04:00 [INF] Log output directed to D:\Projects\MPCS\EclipsePlugins\CalculateInfluenceMatrix_OpenSource\bin\release\logs\influence-matrix-2024-10-29@14-30-00.txt
+2024-10-29 14:30:02.729 -04:00 [INF] Opening Patient "LUNG1-005"
+2024-10-29 14:30:02.789 -04:00 [INF] Opening Plan "Data / HPTest_1028"
+2024-10-29 14:30:05.835 -04:00 [INF] HPTest_1028 found.
+2024-10-29 14:30:05.847 -04:00 [INF] Results will be written to: D:\Projects\MPCS\EclipsePlugins\CalculateInfluenceMatrix_OpenSource\bin\release\results\HPTest_1028
+2024-10-29 14:31:30.009 -04:00 [INF] Progress: Beamlet 5/399.
+2024-10-29 14:31:51.694 -04:00 [INF] Progress: Beamlet 10/399.
+2024-10-29 14:32:12.393 -04:00 [INF] Progress: Beamlet 15/399.
+2024-10-29 14:32:34.293 -04:00 [INF] Progress: Beamlet 20/399.
+2024-10-29 14:32:57.808 -04:00 [INF] Progress: Beamlet 25/399.
+2024-10-29 14:33:22.965 -04:00 [INF] Progress: Beamlet 30/399.
+2024-10-29 14:33:49.704 -04:00 [INF] Progress: Beamlet 35/399.
+2024-10-29 14:34:18.221 -04:00 [INF] Progress: Beamlet 40/399.
+2024-10-29 14:34:48.664 -04:00 [INF] Progress: Beamlet 45/399.
+2024-10-29 14:35:20.775 -04:00 [INF] Progress: Beamlet 50/399.
+2024-10-29 14:35:54.144 -04:00 [INF] Progress: Beamlet 55/399.
+2024-10-29 14:36:29.297 -04:00 [INF] Progress: Beamlet 60/399.
+2024-10-29 14:37:06.309 -04:00 [INF] Progress: Beamlet 65/399.
+2024-10-29 14:37:44.328 -04:00 [INF] Progress: Beamlet 70/399.
+2024-10-29 14:38:24.099 -04:00 [INF] Progress: Beamlet 75/399.
+2024-10-29 14:39:06.081 -04:00 [INF] Progress: Beamlet 80/399.
+2024-10-29 14:39:49.495 -04:00 [INF] Progress: Beamlet 85/399.
+2024-10-29 14:40:35.065 -04:00 [INF] Progress: Beamlet 90/399.
+2024-10-29 14:41:22.689 -04:00 [INF] Progress: Beamlet 95/399.
+2024-10-29 14:42:11.170 -04:00 [INF] Progress: Beamlet 100/399.
+2024-10-29 14:43:01.745 -04:00 [INF] Progress: Beamlet 105/399.
+2024-10-29 14:43:54.346 -04:00 [INF] Progress: Beamlet 110/399.
+2024-10-29 14:44:47.713 -04:00 [INF] Progress: Beamlet 115/399.
+2024-10-29 14:45:42.496 -04:00 [INF] Progress: Beamlet 120/399.
+2024-10-29 14:46:39.182 -04:00 [INF] Progress: Beamlet 125/399.
+2024-10-29 14:47:37.220 -04:00 [INF] Progress: Beamlet 130/399.
+2024-10-29 14:48:38.490 -04:00 [INF] Progress: Beamlet 135/399.
+2024-10-29 14:49:40.235 -04:00 [INF] Progress: Beamlet 140/399.
+2024-10-29 14:50:43.313 -04:00 [INF] Progress: Beamlet 145/399.
+2024-10-29 14:51:47.549 -04:00 [INF] Progress: Beamlet 150/399.
+2024-10-29 14:52:52.747 -04:00 [INF] Progress: Beamlet 155/399.
+2024-10-29 14:54:00.852 -04:00 [INF] Progress: Beamlet 160/399.
+2024-10-29 14:55:12.049 -04:00 [INF] Progress: Beamlet 165/399.
+2024-10-29 14:56:22.585 -04:00 [INF] Progress: Beamlet 170/399.
+2024-10-29 14:57:35.634 -04:00 [INF] Progress: Beamlet 175/399.
+2024-10-29 14:58:49.833 -04:00 [INF] Progress: Beamlet 180/399.
+2024-10-29 15:00:06.871 -04:00 [INF] Progress: Beamlet 185/399.
+2024-10-29 15:01:26.727 -04:00 [INF] Progress: Beamlet 190/399.
+2024-10-29 15:02:48.140 -04:00 [INF] Progress: Beamlet 195/399.
+2024-10-29 15:04:09.617 -04:00 [INF] Progress: Beamlet 200/399.
+2024-10-29 15:05:32.597 -04:00 [INF] Progress: Beamlet 205/399.
+2024-10-29 15:06:57.615 -04:00 [INF] Progress: Beamlet 210/399.
+2024-10-29 15:08:24.872 -04:00 [INF] Progress: Beamlet 215/399.
+2024-10-29 15:09:52.253 -04:00 [INF] Progress: Beamlet 220/399.
+2024-10-29 15:11:23.449 -04:00 [INF] Progress: Beamlet 225/399.
+2024-10-29 15:12:53.065 -04:00 [INF] Progress: Beamlet 230/399.
+2024-10-29 15:14:26.572 -04:00 [INF] Progress: Beamlet 235/399.
+2024-10-29 15:16:01.090 -04:00 [INF] Progress: Beamlet 240/399.
+2024-10-29 15:17:36.696 -04:00 [INF] Progress: Beamlet 245/399.
+2024-10-29 15:19:15.780 -04:00 [INF] Progress: Beamlet 250/399.
+2024-10-29 15:20:57.542 -04:00 [INF] Progress: Beamlet 255/399.
+2024-10-29 15:22:41.560 -04:00 [INF] Progress: Beamlet 260/399.
+2024-10-29 15:24:26.376 -04:00 [INF] Progress: Beamlet 265/399.
+2024-10-29 15:26:12.364 -04:00 [INF] Progress: Beamlet 270/399.
+2024-10-29 15:28:01.359 -04:00 [INF] Progress: Beamlet 275/399.
+2024-10-29 15:29:51.341 -04:00 [INF] Progress: Beamlet 280/399.
+2024-10-29 15:31:53.882 -04:00 [INF] Progress: Beamlet 285/399.
+2024-10-29 15:33:46.030 -04:00 [INF] Progress: Beamlet 290/399.
+2024-10-29 15:35:42.899 -04:00 [INF] Progress: Beamlet 295/399.
+2024-10-29 15:37:39.185 -04:00 [INF] Progress: Beamlet 300/399.
+2024-10-29 15:39:30.052 -04:00 [INF] Progress: Beamlet 305/399.
+2024-10-29 15:41:20.675 -04:00 [INF] Progress: Beamlet 310/399.
+2024-10-29 15:43:04.257 -04:00 [INF] Progress: Beamlet 315/399.
+2024-10-29 15:44:46.934 -04:00 [INF] Progress: Beamlet 320/399.
+2024-10-29 15:46:30.956 -04:00 [INF] Progress: Beamlet 325/399.
+2024-10-29 15:48:01.653 -04:00 [INF] Progress: Beamlet 330/399.
+2024-10-29 15:49:33.605 -04:00 [INF] Progress: Beamlet 335/399.
+2024-10-29 15:51:06.242 -04:00 [INF] Progress: Beamlet 340/399.
+2024-10-29 15:52:42.238 -04:00 [INF] Progress: Beamlet 345/399.
+2024-10-29 15:54:18.299 -04:00 [INF] Progress: Beamlet 350/399.
+2024-10-29 15:55:44.464 -04:00 [INF] Progress: Beamlet 355/399.
+2024-10-29 15:57:08.349 -04:00 [INF] Progress: Beamlet 360/399.
+2024-10-29 15:58:33.550 -04:00 [INF] Progress: Beamlet 365/399.
+2024-10-29 15:59:59.163 -04:00 [INF] Progress: Beamlet 370/399.
+2024-10-29 16:01:27.610 -04:00 [INF] Progress: Beamlet 375/399.
+2024-10-29 16:02:55.534 -04:00 [INF] Progress: Beamlet 380/399.
+2024-10-29 16:03:58.218 -04:00 [INF] Progress: Beamlet 385/399.
+2024-10-29 16:05:00.652 -04:00 [INF] Progress: Beamlet 390/399.
+2024-10-29 16:05:43.045 -04:00 [INF] Progress: Beamlet 395/399.
+2024-10-29 16:06:24.843 -04:00 [INF] Progress: Beamlet 400/399.
+2024-10-29 16:06:57.141 -04:00 [INF] Progress: Finalizing beam 01.
+2024-10-29 16:07:45.907 -04:00 [INF] Progress: Finalizing beam 02.
+2024-10-29 16:08:40.209 -04:00 [INF] Progress: Finalizing beam 03.
+2024-10-29 16:09:45.332 -04:00 [INF] Progress: Finalizing beam 04.
+2024-10-29 16:10:53.642 -04:00 [INF] Progress: Finalizing beam 05.
+2024-10-29 16:11:54.362 -04:00 [INF] Progress: Finalizing beam 06.
+2024-10-29 16:12:45.771 -04:00 [INF] Progress: Finalizing beam 07.
+2024-10-29 16:13:31.435 -04:00 [INF] Influence matrix calculation finished.

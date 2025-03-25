@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34525.116
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CalculateInfluenceMatrix", "CalculateInfluenceMatrix.csproj", "{976C43EF-CA46-42B8-99A2-33065276921C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CalculateInfluenceMatrixPlugin", "..\Plugin\CalculateInfluenceMatrixPlugin.csproj", "{C0192C80-BF6D-44AF-9ABE-6F0C588D637F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{976C43EF-CA46-42B8-99A2-33065276921C}.Debug|x64.ActiveCfg = Debug|x64
+		{976C43EF-CA46-42B8-99A2-33065276921C}.Debug|x64.Build.0 = Debug|x64
+		{976C43EF-CA46-42B8-99A2-33065276921C}.Release|x64.ActiveCfg = Release|x64
+		{976C43EF-CA46-42B8-99A2-33065276921C}.Release|x64.Build.0 = Release|x64
+		{C0192C80-BF6D-44AF-9ABE-6F0C588D637F}.Debug|x64.ActiveCfg = Debug|x64
+		{C0192C80-BF6D-44AF-9ABE-6F0C588D637F}.Debug|x64.Build.0 = Debug|x64
+		{C0192C80-BF6D-44AF-9ABE-6F0C588D637F}.Release|x64.ActiveCfg = Release|x64
+		{C0192C80-BF6D-44AF-9ABE-6F0C588D637F}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4DAAA831-37BB-49D5-AF67-5A13247C2496}
+	EndGlobalSection
+EndGlobal

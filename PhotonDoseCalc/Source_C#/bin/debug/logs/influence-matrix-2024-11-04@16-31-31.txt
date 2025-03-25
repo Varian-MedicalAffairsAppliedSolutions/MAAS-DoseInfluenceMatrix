@@ -1,0 +1,12 @@
+2024-11-04 16:31:31.971 -05:00 [INF] Log output directed to D:\Projects\Git\MAAS_PhotonInfluenceMatrixCalc\Source_C#\bin\release\logs\influence-matrix-2024-11-04@16-31-31.txt
+2024-11-04 16:31:52.328 -05:00 [INF] Opening Patient "LUNG1-005"
+2024-11-04 16:31:52.399 -05:00 [INF] Opening Plan "Data / HPTest_1031_2"
+2024-11-04 16:31:56.936 -05:00 [INF] HPTest_1031_2 found.
+2024-11-04 16:32:02.111 -05:00 [INF] Results will be written to: D:\Projects\Git\MAAS_PhotonInfluenceMatrixCalc\Source_C#\NSCLC_LUNG1-005$LUNG1-005\HPTest_1031_2
+2024-11-04 16:33:29.396 -05:00 [INF] Progress: Beamlet 10/595.
+2024-11-04 16:33:29.440 -05:00 [INF] Retry: Beamlet 10/595.
+2024-11-04 16:33:29.448 -05:00 [INF] Retry: Beamlet 10/595.
+2024-11-04 16:33:29.457 -05:00 [INF] Retry: Beamlet 10/595.
+2024-11-04 16:33:29.885 -05:00 [ERR] System.ApplicationException: Dose Calculation Failed after 4 attempts
+   at PhotonInfluenceMatrixCalc.PhotonInfluenceMatrixCalc.Execute(Application app, String patientId, String courseId, String planId) in D:\Projects\Git\MAAS_PhotonInfluenceMatrixCalc\Source_C#\PhotonInfluenceMatrixCalc.cs:line 0
+   at PhotonInfluenceMatrixCalc.PhotonInfluenceMatrixCalc.Main(String[] args) in D:\Projects\Git\MAAS_PhotonInfluenceMatrixCalc\Source_C#\PhotonInfluenceMatrixCalc.cs:line 52

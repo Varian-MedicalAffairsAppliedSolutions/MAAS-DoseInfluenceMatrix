@@ -1,0 +1,16 @@
+2024-10-11 15:44:49.759 +00:00 [INF] Log output directed to C:\Users\japankpatel\source\repos\MAAS-DoseInfluenceMatrix\Source_C#\bin\debug\logs\influence-matrix-2024-10-11@15-44-49.txt
+2024-10-11 15:44:49.805 +00:00 [INF] Enter PatientId:
+2024-10-11 15:44:59.665 +00:00 [INF] Enter CourseId:
+2024-10-11 15:45:06.368 +00:00 [INF] Enter PlanId:
+2024-10-11 15:45:18.102 +00:00 [INF] Opening Patient "Proton 06"
+2024-10-11 15:45:18.165 +00:00 [INF] Opening Plan "Demo_00 / Plan1"
+2024-10-11 15:45:18.274 +00:00 [INF] Plan1 found.
+2024-10-11 15:45:31.962 +00:00 [INF] Results will be written to: C:\Users\japankpatel\source\repos\MAAS-DoseInfluenceMatrix\Source_C#\bin\debug\results\Plan1
+2024-10-11 15:54:14.756 +00:00 [INF] Progress: Layer 1 / 13, Spot 1 / 4.
+2024-10-11 15:54:33.275 +00:00 [ERR] HDF5CSharp.DataTypes.Hdf5Exception: Unable to create data set for inf_matrix_sparse
+   at HDF5CSharp.Hdf5Utils.GetId(Int64 parentId, String name, Int64 dataType, Int64 spaceId, Int64 propId, Hdf5ElementType type)
+   at HDF5CSharp.Hdf5.WriteDatasetFromArray[T](Int64 groupId, String name, Array dset)
+   at CalculateInfluenceMatrix.Helpers.AddOrAppendDataSet[T](Int64 fileId, String szDataSetName, Array arrDataSet) in C:\Users\japankpatel\Source\Repos\MAAS-DoseInfluenceMatrix\Source_C#\Helpers.cs:line 376
+   at CalculateInfluenceMatrix.Helpers.WriteInfMatrixHDF5(Boolean bExportFullInfMatrix, Single[,] arrFullDoseMatrix, DoseData doseData, Boolean bAddLastEntry, Int32 iMaxPointCnt, Int32 iSpotIdx, String szPath) in C:\Users\japankpatel\Source\Repos\MAAS-DoseInfluenceMatrix\Source_C#\Helpers.cs:line 486
+   at CalculateInfluenceMatrix.CalculateInfluenceMatrix.Execute(Application app, String patientId, String courseId, String planId) in C:\Users\japankpatel\Source\Repos\MAAS-DoseInfluenceMatrix\Source_C#\CalculateInfluenceMatrix.cs:line 219
+   at CalculateInfluenceMatrix.CalculateInfluenceMatrix.Main(String[] args) in C:\Users\japankpatel\Source\Repos\MAAS-DoseInfluenceMatrix\Source_C#\CalculateInfluenceMatrix.cs:line 66

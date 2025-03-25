@@ -1,0 +1,67 @@
+2024-11-05 08:59:39.450 -05:00 [INF] Log output directed to D:\Projects\Git\MAAS_PhotonInfluenceMatrixCalc\Source_C#\bin\release\logs\influence-matrix-2024-11-05@08-59-39.txt
+2024-11-05 08:59:43.181 -05:00 [INF] Opening Patient "LUNG1-005"
+2024-11-05 08:59:43.241 -05:00 [INF] Opening Plan "Data / HPTest_1031_2"
+2024-11-05 08:59:46.653 -05:00 [INF] HPTest_1031_2 found.
+2024-11-05 08:59:52.034 -05:00 [INF] Results will be written to: D:\Projects\Git\MAAS_PhotonInfluenceMatrixCalc\Source_C#\NSCLC_LUNG1-005$LUNG1-005\HPTest_1031_2
+2024-11-05 09:01:15.974 -05:00 [INF] Progress: Beamlet 10/595.
+2024-11-05 09:01:29.012 -05:00 [INF] Progress: Beamlet 20/595.
+2024-11-05 09:01:36.837 -05:00 [INF] Progress: Beamlet 30/595.
+2024-11-05 09:01:44.639 -05:00 [INF] Progress: Beamlet 40/595.
+2024-11-05 09:01:54.242 -05:00 [INF] Progress: Beamlet 50/595.
+2024-11-05 09:02:03.952 -05:00 [INF] Progress: Beamlet 60/595.
+2024-11-05 09:02:14.004 -05:00 [INF] Progress: Beamlet 70/595.
+2024-11-05 09:02:23.863 -05:00 [INF] Progress: Beamlet 80/595.
+2024-11-05 09:02:33.879 -05:00 [INF] Progress: Beamlet 90/595.
+2024-11-05 09:02:44.681 -05:00 [INF] Progress: Beamlet 100/595.
+2024-11-05 09:02:54.755 -05:00 [INF] Progress: Beamlet 110/595.
+2024-11-05 09:03:04.757 -05:00 [INF] Progress: Beamlet 120/595.
+2024-11-05 09:03:14.809 -05:00 [INF] Progress: Beamlet 130/595.
+2024-11-05 09:03:24.817 -05:00 [INF] Progress: Beamlet 140/595.
+2024-11-05 09:03:35.377 -05:00 [INF] Progress: Beamlet 150/595.
+2024-11-05 09:03:45.702 -05:00 [INF] Progress: Beamlet 160/595.
+2024-11-05 09:03:56.957 -05:00 [INF] Progress: Beamlet 170/595.
+2024-11-05 09:04:07.317 -05:00 [INF] Progress: Beamlet 180/595.
+2024-11-05 09:04:18.014 -05:00 [INF] Progress: Beamlet 190/595.
+2024-11-05 09:04:28.545 -05:00 [INF] Progress: Beamlet 200/595.
+2024-11-05 09:04:38.713 -05:00 [INF] Progress: Beamlet 210/595.
+2024-11-05 09:04:49.906 -05:00 [INF] Progress: Beamlet 220/595.
+2024-11-05 09:05:00.203 -05:00 [INF] Progress: Beamlet 230/595.
+2024-11-05 09:05:11.049 -05:00 [INF] Progress: Beamlet 240/595.
+2024-11-05 09:05:21.360 -05:00 [INF] Progress: Beamlet 250/595.
+2024-11-05 09:05:32.346 -05:00 [INF] Progress: Beamlet 260/595.
+2024-11-05 09:05:42.633 -05:00 [INF] Progress: Beamlet 270/595.
+2024-11-05 09:05:53.167 -05:00 [INF] Progress: Beamlet 280/595.
+2024-11-05 09:06:03.677 -05:00 [INF] Progress: Beamlet 290/595.
+2024-11-05 09:06:14.317 -05:00 [INF] Progress: Beamlet 300/595.
+2024-11-05 09:06:24.906 -05:00 [INF] Progress: Beamlet 310/595.
+2024-11-05 09:06:35.937 -05:00 [INF] Progress: Beamlet 320/595.
+2024-11-05 09:06:46.576 -05:00 [INF] Progress: Beamlet 330/595.
+2024-11-05 09:06:57.224 -05:00 [INF] Progress: Beamlet 340/595.
+2024-11-05 09:07:08.066 -05:00 [INF] Progress: Beamlet 350/595.
+2024-11-05 09:07:19.040 -05:00 [INF] Progress: Beamlet 360/595.
+2024-11-05 09:07:29.591 -05:00 [INF] Progress: Beamlet 370/595.
+2024-11-05 09:07:40.055 -05:00 [INF] Progress: Beamlet 380/595.
+2024-11-05 09:07:50.091 -05:00 [INF] Progress: Beamlet 390/595.
+2024-11-05 09:08:00.796 -05:00 [INF] Progress: Beamlet 400/595.
+2024-11-05 09:08:11.168 -05:00 [INF] Progress: Beamlet 410/595.
+2024-11-05 09:08:21.450 -05:00 [INF] Progress: Beamlet 420/595.
+2024-11-05 09:08:31.722 -05:00 [INF] Progress: Beamlet 430/595.
+2024-11-05 09:08:42.267 -05:00 [INF] Progress: Beamlet 440/595.
+2024-11-05 09:08:52.799 -05:00 [INF] Progress: Beamlet 450/595.
+2024-11-05 09:09:03.423 -05:00 [INF] Progress: Beamlet 460/595.
+2024-11-05 09:09:14.091 -05:00 [INF] Progress: Beamlet 470/595.
+2024-11-05 09:09:24.956 -05:00 [INF] Progress: Beamlet 480/595.
+2024-11-05 09:09:35.089 -05:00 [INF] Progress: Beamlet 490/595.
+2024-11-05 09:09:45.631 -05:00 [INF] Progress: Beamlet 500/595.
+2024-11-05 09:09:56.148 -05:00 [INF] Progress: Beamlet 510/595.
+2024-11-05 09:10:07.605 -05:00 [INF] Progress: Beamlet 520/595.
+2024-11-05 09:10:18.350 -05:00 [INF] Progress: Beamlet 530/595.
+2024-11-05 09:10:28.834 -05:00 [INF] Progress: Beamlet 540/595.
+2024-11-05 09:10:39.466 -05:00 [INF] Progress: Beamlet 550/595.
+2024-11-05 09:10:50.274 -05:00 [INF] Progress: Beamlet 560/595.
+2024-11-05 09:11:01.090 -05:00 [INF] Progress: Beamlet 570/595.
+2024-11-05 09:11:11.721 -05:00 [INF] Progress: Beamlet 580/595.
+2024-11-05 09:11:22.750 -05:00 [INF] Progress: Beamlet 590/595.
+2024-11-05 09:11:32.964 -05:00 [INF] Progress: Beamlet 600/595.
+2024-11-05 09:11:42.370 -05:00 [INF] Progress: Finalizing beam Template Beam.
+2024-11-05 09:13:29.415 -05:00 [INF] Influence matrix calculation finished.

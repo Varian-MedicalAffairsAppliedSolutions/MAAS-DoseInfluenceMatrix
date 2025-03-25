@@ -1,0 +1,10 @@
+2025-02-11 12:01:21.262 -05:00 [INF] Log output directed to D:\Projects\Git\MAAS-ProtonInfluenceMatrixCalc\MAAS-DoseInfluenceMatrix\Source_C#\bin\debug\logs\influence-matrix-2025-02-11@12-01-21.txt
+2025-02-11 12:01:29.840 -05:00 [INF] Opening Patient "20230817"
+2025-02-11 12:01:29.886 -05:00 [INF] Opening Plan "C1 / ProtonTestSM1"
+2025-02-11 12:01:30.039 -05:00 [INF] ProtonTestSM1 found.
+2025-02-11 12:01:30.045 -05:00 [INF] Influence matrix calculation started.
+2025-02-11 12:01:30.057 -05:00 [INF] Calculating beam line...
+2025-02-11 12:01:52.043 -05:00 [INF] Results will be written to: \PROTON$20230817\ProtonTestSM1
+2025-02-11 12:01:52.044 -05:00 [INF] Exporting structure outlines and masks...
+2025-02-11 12:05:56.411 -05:00 [INF] Progress: Layer 1 / 29, Spot 1 / 2.
+2025-02-11 12:08:57.058 -05:00 [INF] Starting to write matrix to \PROTON$20230817\ProtonTestSM1\Beams\Beam_Field 1_Data.h5

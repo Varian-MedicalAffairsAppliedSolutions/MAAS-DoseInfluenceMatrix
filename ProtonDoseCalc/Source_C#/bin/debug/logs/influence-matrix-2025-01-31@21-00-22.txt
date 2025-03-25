@@ -1,0 +1,21 @@
+2025-01-31 21:00:22.291 +00:00 [INF] Log output directed to C:\Users\japankpatel\source\repos\MAAS-DoseInfluenceMatrix\Source_C#\bin\debug\logs\influence-matrix-2025-01-31@21-00-22.txt
+2025-01-31 21:00:22.338 +00:00 [INF] Enter PatientId:
+2025-01-31 21:00:26.850 +00:00 [INF] Enter CourseId:
+2025-01-31 21:00:31.896 +00:00 [INF] Enter PlanId:
+2025-01-31 21:00:39.865 +00:00 [INF] Opening Patient "Proton 06"
+2025-01-31 21:00:39.912 +00:00 [INF] Opening Plan "Demo_00 / Plan1"
+2025-01-31 21:00:40.006 +00:00 [INF] Plan1 found.
+2025-01-31 21:00:53.641 +00:00 [INF] Results will be written to: C:\Users\japankpatel\source\repos\MAAS-DoseInfluenceMatrix\Source_C#\bin\debug\results\Plan1
+2025-01-31 21:09:15.181 +00:00 [INF] Progress: Layer 1 / 13, Spot 1 / 4.
+2025-01-31 21:09:30.462 +00:00 [INF] Starting to write matrix to C:\Users\japankpatel\source\repos\MAAS-DoseInfluenceMatrix\Source_C#\bin\debug\results\Plan1\Beams\Beam_Field 1_Data.h5
+2025-01-31 21:09:30.462 +00:00 [INF] Matrix dimensions: 3474720 x 1
+2025-01-31 21:09:30.462 +00:00 [INF] Starting to write full matrix...
+2025-01-31 21:09:30.587 +00:00 [ERR] Error writing compressed matrix: Failed to open dataset: /inf_matrix_full
+2025-01-31 21:09:30.587 +00:00 [ERR] Error in WriteInfMatrixHDF5: Failed to open dataset: /inf_matrix_full
+2025-01-31 21:09:30.603 +00:00 [ERR] Stack trace:    at CalculateInfluenceMatrix.Helpers.WriteCompressedMatrix[T](Int64 fileId, String datasetPath, T[,] matrix, Boolean isFirstSpot) in C:\Users\japankpatel\Source\Repos\MAAS-DoseInfluenceMatrix\Source_C#\Helpers.cs:line 623
+   at CalculateInfluenceMatrix.Helpers.WriteInfMatrixHDF5(Boolean bExportFullInfMatrix, Single[,] arrFullDoseMatrix, DoseData doseData, Boolean bAddLastEntry, Int32 iMaxPointCnt, Int32 iSpotIdx, String szPath) in C:\Users\japankpatel\Source\Repos\MAAS-DoseInfluenceMatrix\Source_C#\Helpers.cs:line 661
+2025-01-31 21:09:30.603 +00:00 [INF] Successfully closed HDF5 file
+2025-01-31 21:09:30.603 +00:00 [ERR] Fatal error during matrix processing: Failed to open dataset: /inf_matrix_full
+2025-01-31 21:09:30.618 +00:00 [ERR] Stack trace:    at CalculateInfluenceMatrix.Helpers.WriteCompressedMatrix[T](Int64 fileId, String datasetPath, T[,] matrix, Boolean isFirstSpot) in C:\Users\japankpatel\Source\Repos\MAAS-DoseInfluenceMatrix\Source_C#\Helpers.cs:line 623
+   at CalculateInfluenceMatrix.Helpers.WriteInfMatrixHDF5(Boolean bExportFullInfMatrix, Single[,] arrFullDoseMatrix, DoseData doseData, Boolean bAddLastEntry, Int32 iMaxPointCnt, Int32 iSpotIdx, String szPath) in C:\Users\japankpatel\Source\Repos\MAAS-DoseInfluenceMatrix\Source_C#\Helpers.cs:line 699
+   at CalculateInfluenceMatrix.CalculateInfluenceMatrix.Execute(Application app, String patientId, String courseId, String planId) in C:\Users\japankpatel\Source\Repos\MAAS-DoseInfluenceMatrix\Source_C#\CalculateInfluenceMatrix.cs:line 222

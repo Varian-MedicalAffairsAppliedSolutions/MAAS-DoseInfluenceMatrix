@@ -1,0 +1,36 @@
+2025-01-30 02:22:14.732 +00:00 [INF] Log output directed to C:\Users\japankpatel\source\repos\MAAS-DoseInfluenceMatrix\Source_C#\bin\debug\logs\influence-matrix-2025-01-30@02-22-14.txt
+2025-01-30 02:22:14.779 +00:00 [INF] Enter PatientId:
+2025-01-30 02:22:20.216 +00:00 [INF] Enter CourseId:
+2025-01-30 02:22:23.341 +00:00 [INF] Enter PlanId:
+2025-01-30 02:22:33.999 +00:00 [INF] Opening Patient "Proton 06"
+2025-01-30 02:22:34.046 +00:00 [INF] Opening Plan "Demo_00 / Plan1"
+2025-01-30 02:22:34.140 +00:00 [INF] Plan1 found.
+2025-01-30 02:22:49.145 +00:00 [INF] Results will be written to: C:\Users\japankpatel\source\repos\MAAS-DoseInfluenceMatrix\Source_C#\bin\debug\results\Plan1
+2025-01-30 02:30:42.322 +00:00 [INF] Progress: Layer 1 / 13, Spot 1 / 4.
+2025-01-30 02:30:58.009 +00:00 [INF] Dataset: /inf_matrix_full
+2025-01-30 02:30:58.009 +00:00 [INF] Raw size: 13898880 bytes
+2025-01-30 02:30:58.009 +00:00 [INF] Compressed size: 264527 bytes
+2025-01-30 02:30:58.009 +00:00 [INF] Compression ratio: 52.54:1
+2025-01-30 02:30:58.040 +00:00 [INF] Dataset: /inf_matrix_sparse
+2025-01-30 02:30:58.040 +00:00 [INF] Raw size: 183192 bytes
+2025-01-30 02:30:58.040 +00:00 [INF] Compressed size: 84631 bytes
+2025-01-30 02:30:58.040 +00:00 [INF] Compression ratio: 2.16:1
+2025-01-30 02:30:58.056 +00:00 [INF] HDF5 file size: 1180635 bytes
+2025-01-30 02:30:58.072 +00:00 [INF] Dataset: /inf_matrix_full
+2025-01-30 02:30:58.072 +00:00 [INF] Dimensions: 3474720 x 1
+2025-01-30 02:30:58.072 +00:00 [INF] Storage size: 264527 bytes
+2025-01-30 02:30:58.072 +00:00 [INF] Compression ratio: 105.08:1
+2025-01-30 02:30:58.072 +00:00 [INF] Number of filters: 2
+2025-01-30 02:30:58.072 +00:00 [INF] Dataset: /inf_matrix_sparse
+2025-01-30 02:30:58.072 +00:00 [INF] Dimensions: 7633 x 3
+2025-01-30 02:30:58.072 +00:00 [INF] Storage size: 84631 bytes
+2025-01-30 02:30:58.072 +00:00 [INF] Compression ratio: 2.16:1
+2025-01-30 02:30:58.072 +00:00 [INF] Number of filters: 2
+2025-01-30 02:30:58.087 +00:00 [INF] Progress: Layer 1 / 13, Spot 2 / 4.
+2025-01-30 02:31:10.571 +00:00 [ERR] Error writing compressed matrix: Failed to create dataset
+2025-01-30 02:31:10.587 +00:00 [ERR] Error in WriteInfMatrixHDF5: Failed to create dataset
+2025-01-30 02:31:11.118 +00:00 [ERR] System.Exception: Failed to create dataset
+   at CalculateInfluenceMatrix.Helpers.WriteCompressedMatrix[T](Int64 fileId, String datasetPath, T[,] matrix) in C:\Users\japankpatel\Source\Repos\MAAS-DoseInfluenceMatrix\Source_C#\Helpers.cs:line 578
+   at CalculateInfluenceMatrix.Helpers.WriteInfMatrixHDF5(Boolean bExportFullInfMatrix, Single[,] arrFullDoseMatrix, DoseData doseData, Boolean bAddLastEntry, Int32 iMaxPointCnt, Int32 iSpotIdx, String szPath) in C:\Users\japankpatel\Source\Repos\MAAS-DoseInfluenceMatrix\Source_C#\Helpers.cs:line 640
+   at CalculateInfluenceMatrix.CalculateInfluenceMatrix.Execute(Application app, String patientId, String courseId, String planId) in C:\Users\japankpatel\Source\Repos\MAAS-DoseInfluenceMatrix\Source_C#\CalculateInfluenceMatrix.cs:line 219
+   at CalculateInfluenceMatrix.CalculateInfluenceMatrix.Main(String[] args) in C:\Users\japankpatel\Source\Repos\MAAS-DoseInfluenceMatrix\Source_C#\CalculateInfluenceMatrix.cs:line 66

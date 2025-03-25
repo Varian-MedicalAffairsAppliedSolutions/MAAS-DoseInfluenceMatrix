@@ -1,0 +1,5 @@
+2024-11-04 15:35:02.342 -05:00 [INF] Log output directed to D:\Projects\Git\MAAS_PhotonInfluenceMatrixCalc\Source_C#\bin\release\logs\influence-matrix-2024-11-04@15-35-02.txt
+2024-11-04 15:35:06.046 -05:00 [INF] Opening Patient "LUNG1-005"
+2024-11-04 15:35:06.102 -05:00 [INF] Opening Plan "Data / HPTest_1031_2"
+2024-11-04 15:35:09.472 -05:00 [INF] HPTest_1031_2 found.
+2024-11-04 15:35:14.629 -05:00 [INF] Results will be written to: D:\Projects\Git\MAAS_PhotonInfluenceMatrixCalc\Source_C#\NSCLC_LUNG1-005$LUNG1-005\HPTest_1031_2

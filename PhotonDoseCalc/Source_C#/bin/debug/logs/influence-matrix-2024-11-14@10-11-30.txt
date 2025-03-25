@@ -1,0 +1,9 @@
+2024-11-14 10:11:30.185 -05:00 [INF] Log output directed to D:\Projects\Git\MAAS_PhotonInfluenceMatrixCalc\Source_C#\bin\release\logs\influence-matrix-2024-11-14@10-11-30.txt
+2024-11-14 10:11:32.158 -05:00 [INF] Opening Patient "LUNG1-005"
+2024-11-14 10:11:32.226 -05:00 [INF] Opening Plan "Data / 1114Open"
+2024-11-14 10:11:39.623 -05:00 [INF] 1114Open found.
+2024-11-14 10:11:39.635 -05:00 [INF] Results will be written to: D:\Projects\Git\MAAS_PhotonInfluenceMatrixCalc\Source_C#\Results\NSCLC_LUNG1-005$LUNG1-005\1114Open
+2024-11-14 10:25:08.682 -05:00 [ERR] System.NullReferenceException: Object reference not set to an instance of an object.
+   at PhotonInfluenceMatrixCalc.PhotonInfluenceMatrixCalc.GetLeafWidths(MLC mlc, Boolean halcyon) in D:\Projects\Git\MAAS_PhotonInfluenceMatrixCalc\Source_C#\PhotonInfluenceMatrixCalc.cs:line 621
+   at PhotonInfluenceMatrixCalc.PhotonInfluenceMatrixCalc.Execute(Application app, String patientId, String courseId, String planId) in D:\Projects\Git\MAAS_PhotonInfluenceMatrixCalc\Source_C#\PhotonInfluenceMatrixCalc.cs:line 153
+   at PhotonInfluenceMatrixCalc.PhotonInfluenceMatrixCalc.Main(String[] args) in D:\Projects\Git\MAAS_PhotonInfluenceMatrixCalc\Source_C#\PhotonInfluenceMatrixCalc.cs:line 52

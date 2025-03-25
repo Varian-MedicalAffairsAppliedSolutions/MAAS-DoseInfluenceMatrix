@@ -1,0 +1,5 @@
+2024-10-31 10:32:58.568 -04:00 [INF] Log output directed to D:\Projects\MPCS\EclipsePlugins\CalculateInfluenceMatrix_OpenSource\bin\release\logs\influence-matrix-2024-10-31@10-32-58.txt
+2024-10-31 10:33:00.423 -04:00 [INF] Opening Patient "LUNG1-005"
+2024-10-31 10:33:00.480 -04:00 [INF] Opening Plan "data / 1030Open"
+2024-10-31 10:33:03.633 -04:00 [INF] 1030Open found.
+2024-10-31 10:33:09.361 -04:00 [INF] Results will be written to: D:\Projects\MPCS\EclipsePlugins\CalculateInfluenceMatrix_OpenSource\Results\NSCLC_LUNG1-005$LUNG1-005\1030Open
