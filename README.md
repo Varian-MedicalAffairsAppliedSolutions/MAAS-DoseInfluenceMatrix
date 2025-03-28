@@ -1,4 +1,4 @@
-# MAAS-DoseInfluenceMatrix
+# MAAS-DoseInfluenceMatrix: Test
 Script for calculating the influence matrix of each spot in the raw spot list of a plan. The script only supports plans with exactly one field.
 Script usage:
 .\CalculateInfluenceMatrix.exe <patientId> <courseId> <planId>
