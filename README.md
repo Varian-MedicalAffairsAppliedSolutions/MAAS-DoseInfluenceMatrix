@@ -32,7 +32,7 @@ A typical output folder structure for a patient might look like this:
 ```
 #### Example JSON and HDF5 Files
 
-``` Beam_0_metadata.json ```
+##### Beam_0_metadata.json
 Below is an example `.json` file for a beam. Notice how the larger data arrays (e.g., beamlets, influence matrices) point to external `.h5` files with specific tags. For instance, ``` "influenceMatrixSparse_File": "Beam_0_Data.h5/inf_matrix_sparse"```, means the influence matrix is stored in a file named  *Beam_0_Data.h5* under a tag named *inf_matrix_sparse*. 
   
 ```json
@@ -66,7 +66,7 @@ Below is an example `.json` file for a beam. Notice how the larger data arrays (
 }
 ```
 
-```Beam_0_Data.h5 ```
+##### Beam_0_Data.h5
 HDF5 (Hierarchical Data Format version 5) is a common and powerful format that is supported by most programming languages. It is designed to store and organize large amounts of complex data using a flexible, hierarchical structure, allowing efficient access, compression, and storage of multidimensional arrays. The following example shows the hierarchical data for a beam. [HDFViwer](https://www.hdfgroup.org/downloads/hdfview/) can be used to see through a .h5 file. 
 ```
 Beam_0_Data.h5
