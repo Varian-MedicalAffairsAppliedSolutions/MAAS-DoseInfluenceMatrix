@@ -3,8 +3,7 @@
 ## Introduction 
 This repository contains ESAPI scripts to extract all data required for performing treatment planning optimization outside the Eclipse environment. An Eclipse instance is required to extract the data. Once the data is obtained, a treatment planning optimization software, such as [PortPy](https://github.com/cqad/PortPy), can load the data and perform the planning optimization. This approach provides flexibility to researchers who want to develop novel treatment planning optimization techniques that are not readily available within ESAPI.
 
-**Note:** Only the photon version is currently available. The proton version is a work in progress.  
-The script loops through each field, subdivides the beam into small beamlets (or spots in proton mode), and calculates dose for each beamlet. Hence, the process can be computationally demanding and time-consuming.
+**Note:** *Only the photon version is currently available. The proton version is a work in progress. The script loops through each field, subdivides the beam into small beamlets (or spots in proton mode), and calculates dose for each beamlet. Hence, the process can be computationally demanding and time-consuming.*
 
 ## Data and data format
 Each beam is divided into small 2D beamlets/spots, and the patient’s body is divided into small 3D voxels. Eclipse is used to calculate the dose contribution of each beamlet to every voxel, resulting in a **dose influence matrix** (also called a dose deposition matrix or dij matrix). Relevant beamlet and voxel information (e.g., size, coordinates) is stored, as well as CT data (e.g., voxel Hounsfield Units, coordinates) and structure data (e.g., structure names, masks).
