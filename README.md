@@ -1,4 +1,4 @@
-# MAAS-DoseInfluenceMatrix
+# MAAS-DoseInfluenceMatrix 
 This repository contain scripts to perform photon and proton dose calculation for the users having access to Eclipse TPS and save the data in the format compatible with [PortPy](https://github.com/PortPy-Project/PortPy). This data consist of all the necessary data for treatment plan optimization (e.g., beamlets, voxels, dose influence matrix). 
 
 You can run the photon/proton dose calculation using one of the following methods. Below is an example for doing dose calculation for photon. Similar steps can be followed for proton version by navigating to [ProtonDoseCalc](https://github.com/Varian-MedicalAffairsAppliedSolutions/MAAS-DoseInfluenceMatrix/tree/main/ProtonDoseCalc) repository 
