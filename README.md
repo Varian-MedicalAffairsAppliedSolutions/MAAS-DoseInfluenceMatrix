@@ -89,7 +89,7 @@ Beam_0_Data.h5
 
 The following snippet shows how PortPy can be used for loading the data, performing planning optimization, and visulaization. See [PortPy Tutorial](https://github.com/PortPy-Project/PortPy/blob/master/examples/1_basic_tutorial.ipynb) for more details.
 
-```
+```Python 
 import portpy as pp
 # Use PortPy DataExplorer class to  load the data
 data = pp.DataExplorer(data_dir='../data')
