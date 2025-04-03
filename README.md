@@ -8,7 +8,7 @@ This repository contains ESAPI scripts to extract all data required for performi
 ## Data and data format
 Each beam is divided into small 2D beamlets/spots, and the patient’s body is divided into small 3D voxels. Eclipse is used to calculate the dose contribution of each beamlet to every voxel, resulting in a **dose influence matrix** (also called a dose deposition matrix or dij matrix). Relevant beamlet and voxel information (e.g., size, coordinates) is stored, as well as CT data (e.g., voxel Hounsfield Units, coordinates) and structure data (e.g., structure names, masks).
 
-The scripts adopt the [PortPy](https://github.com/cqad/PortPy) data format, where:
+The scripts adopt the data format, where:
 
 -   Light-weight metadata is stored in human-readable `.json` files.
     
@@ -85,7 +85,7 @@ Beam_0_Data.h5
 ```
 
 # How to read the data? 
-**Python users** can use [PortPy](https://github.com/cqad/PortPy) to parse the JSON/HDF5 files into Python dictionaries and objects that can be easilly used in python. **Other languages** (e.g., C#) will require you to parse `.json` and `.h5` files in your own code.
+**Python users** can use PortPy to parse the JSON/HDF5 files into Python dictionaries and objects that can be easilly used in python. **Other languages** (e.g., C#) will require you to parse `.json` and `.h5` files in your own code.
 
 The following snippet shows how PortPy can be used for loading the data, performing planning optimization, and visulaization. See [PortPy Tutorial](https://github.com/PortPy-Project/PortPy/blob/master/examples/1_basic_tutorial.ipynb) for more details.
 
