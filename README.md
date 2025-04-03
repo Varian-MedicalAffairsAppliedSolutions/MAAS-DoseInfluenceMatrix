@@ -1,8 +1,5 @@
 # MAAS-DoseInfluenceMatrix 
 
-
-# MAAS-DoseInfluenceMatrix 
-
 ## Introduction 
 This repository contains ESAPI scripts to extract all data required for performing treatment planning optimization outside the Eclipse environment. An Eclipse instance is required to extract the data. Once the data is obtained, a treatment planning optimization software, such as [PortPy](https://github.com/cqad/PortPy), can load the data and perform the planning optimization. This approach provides flexibility to researchers who want to develop novel treatment planning optimization techniques that are not readily available within ESAPI.
 
