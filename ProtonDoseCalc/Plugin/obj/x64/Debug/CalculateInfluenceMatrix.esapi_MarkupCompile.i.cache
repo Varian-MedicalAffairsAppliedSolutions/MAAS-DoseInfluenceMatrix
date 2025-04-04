@@ -4,7 +4,7 @@
 library
 C#
 .cs
-D:\Projects\Git\MAAS-ProtonInfluenceMatrixCalc\MAAS-DoseInfluenceMatrix\Plugin\obj\x64\Debug\
+F:\Matt_and_Japan\MAAS-DoseInfluenceMatrix\ProtonDoseCalc\Plugin\obj\x64\Debug\
 CalculateInfluenceMatrix
 none
 false
@@ -12,8 +12,8 @@ DEBUG;TRACE
 
 11675578838
 
-5484516537
-146-195061847
+62019251033
+1461857147928
 ctrlMain.xaml;
 
 True
