@@ -6,17 +6,45 @@
              xmlns:local="clr-namespace:PhotonInfluenceMatrixCalc"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid Margin="5,5,5,5">
+    <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="0.9*" />
-            <RowDefinition Height="0.1*" />
+            <RowDefinition Height="30"/>
+            <!-- Title bar row -->
+            <RowDefinition Height="*"/>
+            <!-- Main content area -->
+            <RowDefinition Height="20"/>
+            <!-- Footer row -->
         </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="0.5*"/>
-            <ColumnDefinition Width="0.5*"/>
-        </Grid.ColumnDefinitions>
-        <TextBox x:Name="txtMessages" Text="" Margin="5" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" BorderBrush="Black" IsReadOnly="True"/>
-        <Button x:Name="butCalculate" Grid.Row="1" Grid.Column="0" Content="Calculate" Margin="5" Click="butCalculate_Click"/>
-        <Button x:Name="butClose" Grid.Row="1" Grid.Column="1" Content="Close" Margin="5" Click="butClose_Click"/>
+
+        <!-- Title Bar -->
+        <Border Grid.Row="0" Background="#007ACC" BorderBrush="#005A9E" BorderThickness="0,0,0,1">
+            <TextBlock Text="Photon Influence Matrix Calculator" Foreground="White" FontWeight="SemiBold" 
+                     HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        </Border>
+
+        <!-- Main content (your original grid) -->
+        <Grid Grid.Row="1" Margin="5,5,5,2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="0.9*" />
+                <RowDefinition Height="0.1*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0.5*"/>
+                <ColumnDefinition Width="0.5*"/>
+            </Grid.ColumnDefinitions>
+            <TextBox x:Name="txtMessages" Text="" Margin="5" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" BorderBrush="Black" IsReadOnly="True"/>
+            <Button x:Name="butCalculate" Grid.Row="1" Grid.Column="0" Content="Calculate" Margin="5" Click="butCalculate_Click"/>
+            <Button x:Name="butClose" Grid.Row="1" Grid.Column="1" Content="Close" Margin="5" Click="butClose_Click"/>
+        </Grid>
+
+        <!-- Footer with license link and warning -->
+        <DockPanel Grid.Row="2" Background="PaleVioletRed" LastChildFill="True" Height="20">
+            <TextBlock VerticalAlignment="Center" Margin="5,0,0,0" FontSize="11">
+                <Hyperlink NavigateUri="http://medicalaffairs.varian.com/download/VarianLUSLA.pdf" RequestNavigate="Hyperlink_RequestNavigate">
+                    Bound by the terms of the Varian LUSLA
+                </Hyperlink>
+            </TextBlock>
+            <TextBlock VerticalAlignment="Center" Margin="10,0,0,0" Text="{Binding ValidationWarning}" FontSize="11"/>
+        </DockPanel>
     </Grid>
 </UserControl>
