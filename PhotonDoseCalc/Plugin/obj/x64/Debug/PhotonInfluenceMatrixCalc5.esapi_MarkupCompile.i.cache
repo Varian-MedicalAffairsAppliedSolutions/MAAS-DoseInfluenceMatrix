@@ -1,4 +1,4 @@
-﻿PhotonInfluenceMatrixCalc1.esapi
+﻿PhotonInfluenceMatrixCalc5.esapi
 
 
 library
@@ -16,5 +16,5 @@ DEBUG;TRACE
 142-1580283656
 ctrlMain.xaml;
 
-False
+True
 
