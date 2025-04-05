@@ -21,9 +21,6 @@ D:\Projects\Git\MAAS_PhotonInfluenceMatrixCalc\Plugin\obj\x64\Debug\PhotonInflue
 D:\Projects\Git\MAAS_PhotonInfluenceMatrixCalc\Plugin\obj\x64\Debug\PhotonInfluenceMatrixCalcPlugin.esapi.pdb
 F:\Matt_and_Japan\MAAS-DoseInfluenceMatrix\PhotonDoseCalc\Plugin\bin\Debug\hdf5.dll
 F:\Matt_and_Japan\MAAS-DoseInfluenceMatrix\PhotonDoseCalc\Plugin\bin\Debug\hdf5_hl.dll
-F:\Matt_and_Japan\MAAS-DoseInfluenceMatrix\PhotonDoseCalc\Plugin\bin\Debug\PhotonInfluenceMatrixCalc.esapi.dll.config
-F:\Matt_and_Japan\MAAS-DoseInfluenceMatrix\PhotonDoseCalc\Plugin\bin\Debug\PhotonInfluenceMatrixCalc.esapi.dll
-F:\Matt_and_Japan\MAAS-DoseInfluenceMatrix\PhotonDoseCalc\Plugin\bin\Debug\PhotonInfluenceMatrixCalc.esapi.pdb
 F:\Matt_and_Japan\MAAS-DoseInfluenceMatrix\PhotonDoseCalc\Plugin\bin\Debug\Microsoft.Win32.Primitives.dll
 F:\Matt_and_Japan\MAAS-DoseInfluenceMatrix\PhotonDoseCalc\Plugin\bin\Debug\netstandard.dll
 F:\Matt_and_Japan\MAAS-DoseInfluenceMatrix\PhotonDoseCalc\Plugin\bin\Debug\System.AppContext.dll
@@ -154,11 +151,14 @@ F:\Matt_and_Japan\MAAS-DoseInfluenceMatrix\PhotonDoseCalc\Plugin\bin\Debug\Syste
 F:\Matt_and_Japan\MAAS-DoseInfluenceMatrix\PhotonDoseCalc\Plugin\bin\Debug\System.Threading.Tasks.Extensions.xml
 F:\Matt_and_Japan\MAAS-DoseInfluenceMatrix\PhotonDoseCalc\Plugin\obj\x64\Debug\PhotonInfluenceMatrixCalcPlugin.csproj.AssemblyReference.cache
 F:\Matt_and_Japan\MAAS-DoseInfluenceMatrix\PhotonDoseCalc\Plugin\obj\x64\Debug\ctrlMain.g.cs
-F:\Matt_and_Japan\MAAS-DoseInfluenceMatrix\PhotonDoseCalc\Plugin\obj\x64\Debug\PhotonInfluenceMatrixCalc.esapi_MarkupCompile.cache
-F:\Matt_and_Japan\MAAS-DoseInfluenceMatrix\PhotonDoseCalc\Plugin\obj\x64\Debug\PhotonInfluenceMatrixCalc.esapi_MarkupCompile.lref
 F:\Matt_and_Japan\MAAS-DoseInfluenceMatrix\PhotonDoseCalc\Plugin\obj\x64\Debug\ctrlMain.baml
-F:\Matt_and_Japan\MAAS-DoseInfluenceMatrix\PhotonDoseCalc\Plugin\obj\x64\Debug\PhotonInfluenceMatrixCalc.esapi.g.resources
 F:\Matt_and_Japan\MAAS-DoseInfluenceMatrix\PhotonDoseCalc\Plugin\obj\x64\Debug\PhotonInfluenceMatrixCalcPlugin.csproj.CoreCompileInputs.cache
 F:\Matt_and_Japan\MAAS-DoseInfluenceMatrix\PhotonDoseCalc\Plugin\obj\x64\Debug\PhotonIn.1C55FF36.Up2Date
+F:\Matt_and_Japan\MAAS-DoseInfluenceMatrix\PhotonDoseCalc\Plugin\bin\Debug\PhotonInfluenceMatrixCalc.esapi.dll.config
+F:\Matt_and_Japan\MAAS-DoseInfluenceMatrix\PhotonDoseCalc\Plugin\bin\Debug\PhotonInfluenceMatrixCalc.esapi.dll
+F:\Matt_and_Japan\MAAS-DoseInfluenceMatrix\PhotonDoseCalc\Plugin\bin\Debug\PhotonInfluenceMatrixCalc.esapi.pdb
+F:\Matt_and_Japan\MAAS-DoseInfluenceMatrix\PhotonDoseCalc\Plugin\obj\x64\Debug\PhotonInfluenceMatrixCalc.esapi_MarkupCompile.cache
+F:\Matt_and_Japan\MAAS-DoseInfluenceMatrix\PhotonDoseCalc\Plugin\obj\x64\Debug\PhotonInfluenceMatrixCalc.esapi_MarkupCompile.lref
+F:\Matt_and_Japan\MAAS-DoseInfluenceMatrix\PhotonDoseCalc\Plugin\obj\x64\Debug\PhotonInfluenceMatrixCalc.esapi.g.resources
 F:\Matt_and_Japan\MAAS-DoseInfluenceMatrix\PhotonDoseCalc\Plugin\obj\x64\Debug\PhotonInfluenceMatrixCalc.esapi.dll
 F:\Matt_and_Japan\MAAS-DoseInfluenceMatrix\PhotonDoseCalc\Plugin\obj\x64\Debug\PhotonInfluenceMatrixCalc.esapi.pdb

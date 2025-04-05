@@ -98,8 +98,6 @@ F:\Matt_and_Japan\MAAS-DoseInfluenceMatrix\PhotonDoseCalc\Source_C#\bin\debug\Sy
 F:\Matt_and_Japan\MAAS-DoseInfluenceMatrix\PhotonDoseCalc\Source_C#\bin\debug\System.Memory.dll
 F:\Matt_and_Japan\MAAS-DoseInfluenceMatrix\PhotonDoseCalc\Source_C#\bin\debug\PureHDF.dll
 F:\Matt_and_Japan\MAAS-DoseInfluenceMatrix\PhotonDoseCalc\Source_C#\bin\debug\System.Numerics.Vectors.dll
-F:\Matt_and_Japan\MAAS-DoseInfluenceMatrix\PhotonDoseCalc\Source_C#\bin\debug\PhotonInfluenceMatrixCalc.esapi.pdb
-F:\Matt_and_Japan\MAAS-DoseInfluenceMatrix\PhotonDoseCalc\Source_C#\bin\debug\PhotonInfluenceMatrixCalc.esapi.dll.config
 F:\Matt_and_Japan\MAAS-DoseInfluenceMatrix\PhotonDoseCalc\Source_C#\bin\debug\HDF.PInvoke.xml
 F:\Matt_and_Japan\MAAS-DoseInfluenceMatrix\PhotonDoseCalc\Source_C#\bin\debug\HDF.PInvoke.dll.config
 F:\Matt_and_Japan\MAAS-DoseInfluenceMatrix\PhotonDoseCalc\Source_C#\bin\debug\Microsoft.Bcl.AsyncInterfaces.xml
@@ -127,3 +125,5 @@ F:\Matt_and_Japan\MAAS-DoseInfluenceMatrix\PhotonDoseCalc\Source_C#\obj\x64\Debu
 F:\Matt_and_Japan\MAAS-DoseInfluenceMatrix\PhotonDoseCalc\Source_C#\obj\x64\Debug\PhotonIn.BEBD53D9.Up2Date
 F:\Matt_and_Japan\MAAS-DoseInfluenceMatrix\PhotonDoseCalc\Source_C#\obj\x64\Debug\PhotonInfluenceMatrixCalc.exe
 F:\Matt_and_Japan\MAAS-DoseInfluenceMatrix\PhotonDoseCalc\Source_C#\obj\x64\Debug\PhotonInfluenceMatrixCalc.pdb
+F:\Matt_and_Japan\MAAS-DoseInfluenceMatrix\PhotonDoseCalc\Source_C#\bin\debug\PhotonInfluenceMatrixCalc.esapi.pdb
+F:\Matt_and_Japan\MAAS-DoseInfluenceMatrix\PhotonDoseCalc\Source_C#\bin\debug\PhotonInfluenceMatrixCalc.esapi.dll.config
