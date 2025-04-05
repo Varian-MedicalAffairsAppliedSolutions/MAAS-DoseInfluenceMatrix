@@ -4,15 +4,15 @@
 library
 C#
 .cs
-F:\Matt_and_Japan\MAAS-DoseInfluenceMatrix\ProtonDoseCalc\Plugin\obj\x64\Debug\
+F:\Matt_and_Japan\MAAS-DoseInfluenceMatrix\ProtonDoseCalc\Plugin\obj\x64\Release\
 CalculateInfluenceMatrix
 none
 false
-DEBUG;TRACE
+TRACE
 
 11675578838
 
-62019251033
+5-1306846225
 1461857147928
 ctrlMain.xaml;
 
