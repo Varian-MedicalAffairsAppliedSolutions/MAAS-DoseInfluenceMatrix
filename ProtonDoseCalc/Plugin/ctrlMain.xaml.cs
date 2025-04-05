@@ -1,7 +1,9 @@
 ﻿//using System;
 //using System.Collections.Generic;
+//using System.ComponentModel;
+//using System.Diagnostics;
+//using System.IO;
 //using System.Linq;
-//using System.Runtime.Remoting.Contexts;
 //using System.Text;
 //using System.Threading.Tasks;
 //using System.Windows;
@@ -21,20 +23,116 @@
 //    /// <summary>
 //    /// Interaction logic for UserControl1.xaml
 //    /// </summary>
-//    public partial class ctrlMain : UserControl
+//    public partial class ctrlMain : UserControl, INotifyPropertyChanged
 //    {
 //        VMS.TPS.Script m_hScript;
 //        System.Windows.Window m_hMainWnd;
 
+//        private string _validationWarning = string.Empty;
+//        public string ValidationWarning
+//        {
+//            get { return _validationWarning; }
+//            set
+//            {
+//                _validationWarning = value;
+//                OnPropertyChanged("ValidationWarning");
+//            }
+//        }
+
+//        public event PropertyChangedEventHandler PropertyChanged;
+//        protected void OnPropertyChanged(string name)
+//        {
+//            PropertyChangedEventHandler handler = PropertyChanged;
+//            if (handler != null)
+//            {
+//                handler(this, new PropertyChangedEventArgs(name));
+//            }
+//        }
+
 //        public ctrlMain()
 //        {
 //            InitializeComponent();
+//            this.DataContext = this;
 //        }
+
 //        public ctrlMain(VMS.TPS.Script script, System.Windows.Window hMainWnd)
 //        {
 //            m_hScript = script;
-//            InitializeComponent();
 //            m_hMainWnd = hMainWnd;
+
+//            InitializeComponent();
+//            this.DataContext = this;
+
+//            // Check for license expiration (NOEXPIRE flag)
+//            CheckLicenseExpiration();
+
+//            // Check validation status
+//            CheckValidationStatus();
+//        }
+
+//        private void CheckLicenseExpiration()
+//        {
+//            // Check for NOEXPIRE environment variable
+//            if (Environment.GetEnvironmentVariable("NOEXPIRE") == null)
+//            {
+//                // Handle license expiration logic here
+//                // For example, check license file, etc.
+//            }
+//        }
+
+//        private void CheckValidationStatus()
+//        {
+//            try
+//            {
+//                // Path to config file - adjust as needed
+//                string configPath = System.IO.Path.Combine(
+//                    Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
+//                    "YourCompany", "DoseInfluenceMatrix", "config.ini");
+
+//                bool validated = false;
+
+//                if (System.IO.File.Exists(configPath))
+//                {
+//                    // Read config file
+//                    string[] lines = System.IO.File.ReadAllLines(configPath);
+//                    foreach (string line in lines)
+//                    {
+//                        if (line.StartsWith("Validated="))
+//                        {
+//                            validated = line.Equals("Validated=True", StringComparison.OrdinalIgnoreCase);
+//                            break;
+//                        }
+//                    }
+//                }
+
+//                // Set validation warning if not validated
+//                if (!validated)
+//                {
+//                    ValidationWarning = "***Not validated for Clinical Use***";
+//                }
+//            }
+//            catch (Exception)
+//            {
+//                // If there's an error reading config, default to not validated
+//                ValidationWarning = "***Not validated for Clinical Use***";
+//            }
+//        }
+
+//        private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
+//        {
+//            try
+//            {
+//                Process.Start(new ProcessStartInfo
+//                {
+//                    FileName = e.Uri.AbsoluteUri,
+//                    UseShellExecute = true
+//                });
+//            }
+//            catch
+//            {
+//                MessageBox.Show("Could not open license URL.");
+//            }
+//            e.Handled = true;
 //        }
 
 //        private void butCalculate_Click(object sender, RoutedEventArgs e)
@@ -47,11 +145,20 @@
 //            butClose.IsEnabled = true;
 //            butCalculate.IsEnabled = true;
 //        }
+
 //        public void AddMessage(string szMsg)
 //        {
 //            txtMessages.Text = txtMessages.Text + "\n" + szMsg;
 //            txtMessages.ScrollToEnd();
-//            Dispatcher.Invoke(new Action(() => { }), DispatcherPriority.ContextIdle, null);
+
+//            try
+//            {
+//                this.Dispatcher.Invoke(new Action(() => { }), DispatcherPriority.ContextIdle, null);
+//            }
+//            catch
+//            {
+//                // Ignore dispatcher errors
+//            }
 //        }
 
 //        private void butClose_Click(object sender, RoutedEventArgs e)
@@ -67,6 +174,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -79,6 +187,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using System.Xml.Linq;
 using VMS.TPS.Common.Model.API;
 
 namespace CalculateInfluenceMatrix
@@ -116,6 +225,9 @@ namespace CalculateInfluenceMatrix
         {
             InitializeComponent();
             this.DataContext = this;
+
+            // Check validation status
+            CheckValidationStatus();
         }
 
         public ctrlMain(VMS.TPS.Script script, System.Windows.Window hMainWnd)
@@ -147,36 +259,42 @@ namespace CalculateInfluenceMatrix
         {
             try
             {
-                // Path to config file - adjust as needed
-                string configPath = System.IO.Path.Combine(
-                    Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
-                    "YourCompany", "DoseInfluenceMatrix", "config.ini");
+                // Get the location of the executing assembly
+                string assemblyLocation = Assembly.GetExecutingAssembly().Location;
+                string configPath = assemblyLocation + ".config";
 
-                bool validated = false;
+                // Default to showing the warning
+                ValidationWarning = "***Not validated for Clinical Use***";
 
-                if (System.IO.File.Exists(configPath))
+                if (File.Exists(configPath))
                 {
-                    // Read config file
-                    string[] lines = System.IO.File.ReadAllLines(configPath);
-                    foreach (string line in lines)
+                    var doc = XDocument.Load(configPath);
+                    var validationSetting = doc
+                        .Descendants("configuration")
+                        .Descendants("appSettings")
+                        .Descendants("add")
+                        .Where(x => x.Attribute("key")?.Value == "Validation")
+                        .Select(x => x.Attribute("value")?.Value)
+                        .FirstOrDefault();
+
+                    // If validation is explicitly set to "true", clear the warning
+                    if (!string.IsNullOrEmpty(validationSetting) &&
+                        validationSetting.Equals("true", StringComparison.OrdinalIgnoreCase))
                     {
-                        if (line.StartsWith("Validated="))
-                        {
-                            validated = line.Equals("Validated=True", StringComparison.OrdinalIgnoreCase);
-                            break;
-                        }
+                        ValidationWarning = string.Empty;
                     }
-                }
 
-                // Set validation warning if not validated
-                if (!validated)
-                {
-                    ValidationWarning = "***Not validated for Clinical Use***";
+                    // Optional debug message - uncomment if needed
+                    // MessageBox.Show($"Validation setting: '{validationSetting}', Warning: '{ValidationWarning}'");
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                // If there's an error reading config, default to not validated
+                // Log the error if needed
+                // File.WriteAllText(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), 
+                //                   "validation_error.txt"), ex.ToString());
+
+                // Default to showing the warning on error
                 ValidationWarning = "***Not validated for Clinical Use***";
             }
         }

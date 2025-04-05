@@ -76,7 +76,7 @@ namespace CalculateInfluenceMatrix {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/CalculateInfluenceMatrix.esapi;component/ctrlmain.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/CalculateInfluenceMatrix2.esapi;component/ctrlmain.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\ctrlMain.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);
