@@ -1,4 +1,4 @@
-﻿CalculateInfluenceMatrix2.esapi
+﻿CalculateInfluenceMatrix.esapi
 
 
 library
@@ -11,7 +11,7 @@ false
 DEBUG;TRACE
 
 11675578838
-2-1232957349
+
 5-1306846225
 1461857147928
 ctrlMain.xaml;
