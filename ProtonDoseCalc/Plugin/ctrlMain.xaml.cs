@@ -1,191 +1,20 @@
-﻿//using System;
-//using System.Collections.Generic;
-//using System.ComponentModel;
-//using System.Diagnostics;
-//using System.IO;
-//using System.Linq;
-//using System.Reflection;
-//using System.Text;
-//using System.Threading.Tasks;
-//using System.Windows;
-//using System.Windows.Controls;
-//using System.Windows.Data;
-//using System.Windows.Documents;
-//using System.Windows.Input;
-//using System.Windows.Media;
-//using System.Windows.Media.Imaging;
-//using System.Windows.Navigation;
-//using System.Windows.Shapes;
-//using System.Windows.Threading;
-//using System.Xml.Linq;
-//using VMS.TPS.Common.Model.API;
-
-//namespace CalculateInfluenceMatrix
-//{
-//    /// <summary>
-//    /// Interaction logic for UserControl1.xaml
-//    /// </summary>
-//    public partial class ctrlMain : UserControl, INotifyPropertyChanged
-//    {
-//        VMS.TPS.Script m_hScript;
-//        System.Windows.Window m_hMainWnd;
-
-//        private string _validationWarning = string.Empty;
-//        public string ValidationWarning
-//        {
-//            get { return _validationWarning; }
-//            set
-//            {
-//                _validationWarning = value;
-//                OnPropertyChanged("ValidationWarning");
-//            }
-//        }
-
-//        public event PropertyChangedEventHandler PropertyChanged;
-//        protected void OnPropertyChanged(string name)
-//        {
-//            PropertyChangedEventHandler handler = PropertyChanged;
-//            if (handler != null)
-//            {
-//                handler(this, new PropertyChangedEventArgs(name));
-//            }
-//        }
-
-//        public ctrlMain()
-//        {
-//            InitializeComponent();
-//            this.DataContext = this;
-
-//            // Check validation status
-//            CheckValidationStatus();
-//        }
-
-//        public ctrlMain(VMS.TPS.Script script, System.Windows.Window hMainWnd)
-//        {
-//            m_hScript = script;
-//            m_hMainWnd = hMainWnd;
-
-//            InitializeComponent();
-//            this.DataContext = this;
-
-//            // Check for license expiration (NOEXPIRE flag)
-//            CheckLicenseExpiration();
-
-//            // Check validation status
-//            CheckValidationStatus();
-//        }
-
-//        private void CheckLicenseExpiration()
-//        {
-//            // Check for NOEXPIRE environment variable
-//            if (Environment.GetEnvironmentVariable("NOEXPIRE") == null)
-//            {
-//                // Handle license expiration logic here
-//                // For example, check license file, etc.
-//            }
-//        }
-
-//        private void CheckValidationStatus()
-//        {
-//            try
-//            {
-//                // Get the location of the executing assembly
-//                string assemblyLocation = Assembly.GetExecutingAssembly().Location;
-//                string configPath = assemblyLocation + ".config";
-
-//                // Default to showing the warning
-//                ValidationWarning = "***Not validated for Clinical Use***";
-
-//                if (File.Exists(configPath))
-//                {
-//                    var doc = XDocument.Load(configPath);
-//                    var validationSetting = doc
-//                        .Descendants("configuration")
-//                        .Descendants("appSettings")
-//                        .Descendants("add")
-//                        .Where(x => x.Attribute("key")?.Value == "Validation")
-//                        .Select(x => x.Attribute("value")?.Value)
-//                        .FirstOrDefault();
-
-//                    // If validation is explicitly set to "true", clear the warning
-//                    if (!string.IsNullOrEmpty(validationSetting) &&
-//                        validationSetting.Equals("true", StringComparison.OrdinalIgnoreCase))
-//                    {
-//                        ValidationWarning = string.Empty;
-//                    }
-
-//                    // Optional debug message - uncomment if needed
-//                    // MessageBox.Show($"Validation setting: '{validationSetting}', Warning: '{ValidationWarning}'");
-//                }
-//            }
-//            catch (Exception ex)
-//            {
-//                // Log the error if needed
-//                // File.WriteAllText(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), 
-//                //                   "validation_error.txt"), ex.ToString());
-
-//                // Default to showing the warning on error
-//                ValidationWarning = "***Not validated for Clinical Use***";
-//            }
-//        }
-
-//        private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
-//        {
-//            try
-//            {
-//                Process.Start(new ProcessStartInfo
-//                {
-//                    FileName = e.Uri.AbsoluteUri,
-//                    UseShellExecute = true
-//                });
-//            }
-//            catch
-//            {
-//                MessageBox.Show("Could not open license URL.");
-//            }
-//            e.Handled = true;
-//        }
-
-//        private void butCalculate_Click(object sender, RoutedEventArgs e)
-//        {
-//            butClose.IsEnabled = false;
-//            butCalculate.IsEnabled = false;
-
-//            m_hScript.RunInfMatrixCalc();
-
-//            butClose.IsEnabled = true;
-//            butCalculate.IsEnabled = true;
-//        }
-
-//        public void AddMessage(string szMsg)
-//        {
-//            txtMessages.Text = txtMessages.Text + "\n" + szMsg;
-//            txtMessages.ScrollToEnd();
-
-//            try
-//            {
-//                this.Dispatcher.Invoke(new Action(() => { }), DispatcherPriority.ContextIdle, null);
-//            }
-//            catch
-//            {
-//                // Ignore dispatcher errors
-//            }
-//        }
-
-//        private void butClose_Click(object sender, RoutedEventArgs e)
-//        {
-//            m_hMainWnd.Close();
-//        }
-//    }
-//}
-
+﻿using Microsoft.Extensions.Logging;
+using Newtonsoft.Json.Linq;
+using Serilog.Parsing;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Diagnostics.Contracts;
+using System.Diagnostics.Metrics;
 using System.IO;
+using System.IO.Ports;
 using System.Linq;
+using System.Numerics;
 using System.Reflection;
+using System.Reflection.Emit;
+using System.Runtime.Remoting.Contexts;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -193,13 +22,16 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Markup;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 using System.Xml.Linq;
 using VMS.TPS.Common.Model.API;
+using static HDF5DotNet.H5T;
 
 namespace CalculateInfluenceMatrix
 {
@@ -210,6 +42,9 @@ namespace CalculateInfluenceMatrix
     {
         VMS.TPS.Script m_hScript;
         System.Windows.Window m_hMainWnd;
+        private bool _isCalculating = false;
+        private bool _cancelRequested = false;
+        public static bool CancellationRequested { get; set; } = false;
 
         private string _validationWarning = string.Empty;
         public string ValidationWarning
@@ -432,7 +267,7 @@ namespace CalculateInfluenceMatrix
 
                 return agreed;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // If we fail, fall back to a simple MessageBox
                 MessageBoxResult result = MessageBox.Show(
@@ -539,6 +374,7 @@ namespace CalculateInfluenceMatrix
         By clicking 'I Agree', you acknowledge that you have read, understood, and agree to be bound by the terms of the Varian LUSLA.";
         }
 
+
         private void CheckValidationStatus()
     {
         try
@@ -567,17 +403,10 @@ namespace CalculateInfluenceMatrix
                 {
                     ValidationWarning = string.Empty;
                 }
-
-                // Optional debug message - uncomment if needed
-                // MessageBox.Show($"Validation setting: '{validationSetting}', Warning: '{ValidationWarning}'");
             }
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            // Log the error if needed
-            // File.WriteAllText(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), 
-            //                   "validation_error.txt"), ex.ToString());
-
             // Default to showing the warning on error
             ValidationWarning = "***Not validated for Clinical Use***";
         }
@@ -600,18 +429,110 @@ namespace CalculateInfluenceMatrix
         e.Handled = true;
     }
 
-    private void butCalculate_Click(object sender, RoutedEventArgs e)
-    {
-        butClose.IsEnabled = false;
-        butCalculate.IsEnabled = false;
 
-        m_hScript.RunInfMatrixCalc();
+        private void butCalculate_Click(object sender, RoutedEventArgs e)
+        {
+            // If already calculating, this acts as a cancel button
+            if (_isCalculating)
+            {
+                _cancelRequested = true;
+                CancellationRequested = true;
+                butCalculate.Content = "Cancelling...";
+                butCalculate.IsEnabled = false;
+                AddMessage("Cancellation requested. Please wait...");
 
-        butClose.IsEnabled = true;
-        butCalculate.IsEnabled = true;
-    }
+                // Force a more aggressive cancellation approach
+                // This will periodically try to interrupt the calculation
+                DispatcherTimer forceTimer = new DispatcherTimer();
+                forceTimer.Interval = TimeSpan.FromSeconds(3); // Check every 3 seconds
+                forceTimer.Tick += (s, args) =>
+                {
+                    if (!_isCalculating)
+                    {
+                        ((DispatcherTimer)s).Stop();
+                        return;
+                    }
 
-    public void AddMessage(string szMsg)
+                    // Try more aggressive cancellation
+                    AddMessage("Still attempting to cancel...");
+                    CancellationRequested = true;
+
+                    // After a certain number of attempts, suggest closing the application
+                    if (forceTimer.Tag == null)
+                        forceTimer.Tag = 0;
+
+                    int attempts = (int)forceTimer.Tag + 1;
+                    forceTimer.Tag = attempts;
+
+                    if (attempts > 3) // After about 9 seconds
+                    {
+                        AddMessage("Cancellation is taking longer than expected. You may need to close the application if it doesn't respond.");
+                        forceTimer.Stop();
+                    }
+                };
+                forceTimer.Start();
+
+                return;
+            }
+
+            // Start calculation
+            _isCalculating = true;
+            _cancelRequested = false;
+            CancellationRequested = false;
+
+            // Change button to Cancel during calculation
+            butCalculate.Content = "Cancel";
+            butClose.IsEnabled = false;
+
+            // Create a timer to keep the UI responsive
+            DispatcherTimer timer = new DispatcherTimer();
+            timer.Interval = TimeSpan.FromMilliseconds(100);
+            timer.Tick += (s, args) =>
+            {
+                // Process pending UI events to keep the interface responsive
+                this.Dispatcher.Invoke(DispatcherPriority.Background, new Action(() => { }));
+
+                // Update the cancellation flag if requested
+                if (_cancelRequested)
+                {
+                    CancellationRequested = true;
+                }
+            };
+            timer.Start();
+
+            try
+            {
+                // Run the calculation
+                m_hScript.RunInfMatrixCalc();
+            }
+            catch (OperationCanceledException)
+            {
+                AddMessage("Calculation was cancelled.");
+            }
+            catch (Exception ex)
+            {
+                AddMessage("Error: " + ex.Message);
+            }
+            finally
+            {
+                // Stop the timer
+                timer.Stop();
+
+                // Reset UI state
+                _isCalculating = false;
+                _cancelRequested = false;
+                CancellationRequested = false;
+
+                this.Dispatcher.Invoke(() =>
+                {
+                    butCalculate.Content = "Calculate";
+                    butCalculate.IsEnabled = true;
+                    butClose.IsEnabled = true;
+                });
+            }
+        }
+
+        public void AddMessage(string szMsg)
     {
         txtMessages.Text = txtMessages.Text + "\n" + szMsg;
         txtMessages.ScrollToEnd();
@@ -626,9 +547,19 @@ namespace CalculateInfluenceMatrix
         }
     }
 
-    private void butClose_Click(object sender, RoutedEventArgs e)
-    {
-        m_hMainWnd.Close();
+        private void butClose_Click(object sender, RoutedEventArgs e)
+        {
+            // If a calculation is in progress, cancel it first
+            if (_isCalculating)
+            {
+                _cancelRequested = true;
+                AddMessage("Cancelling calculation before closing...");
+                // Wait a bit for the cancellation to be processed
+                System.Threading.Thread.Sleep(500);
+            }
+
+            m_hMainWnd.Close();
+        }
+
     }
-}
 }

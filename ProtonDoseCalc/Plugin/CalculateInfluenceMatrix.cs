@@ -27,13 +27,22 @@ namespace VMS.TPS
     class MyDisplayProgress : DisplayProgress
     {
         ctrlMain m_ctrlMain;
+
         public MyDisplayProgress(ctrlMain ctrl)
         {
             m_ctrlMain = ctrl;
         }
+
         public override void Message(string szMsg)
         {
             m_ctrlMain.AddMessage(szMsg);
+
+            // Check for cancellation on each message
+            if (CalculateInfluenceMatrix.ctrlMain.CancellationRequested)
+            {
+                m_ctrlMain.AddMessage("Cancellation requested. Stopping calculation...");
+                throw new OperationCanceledException("Operation was cancelled by user");
+            }
         }
     }
 
@@ -41,7 +50,8 @@ namespace VMS.TPS
     {
         bool m_bCloseMainWindowOnLoaded;
         ctrlMain m_ctrlMain;
-
+        public bool CancelRequested { get; set; } = false;
+        //public static bool CancellationRequested { get; set; } = false;
         Patient m_hPatient;
         Course m_hCourse;
         IonPlanSetup m_hPlanSetup;
@@ -71,27 +81,50 @@ namespace VMS.TPS
             window.Height = 400;
             window.Width = 600;
         }
+
         void MainWindow_Loaded(object sender, EventArgs e)
         {
             if (m_bCloseMainWindowOnLoaded)
                 (sender as Window).Close();
         }
+
+        
         public void RunInfMatrixCalc()
         {
-            System.Configuration.Configuration hConfig = System.Configuration.ConfigurationManager.OpenExeConfiguration(this.GetType().Assembly.Location);
-            double dInfCutoffValue = System.Convert.ToDouble(hConfig.AppSettings.Settings["InfCutoffValue"].Value);
-            bool bExportFullInfMatrix = hConfig.AppSettings.Settings["ExportFullInfMatrix"].Value == "1";
-            string szOutputRootFolder = hConfig.AppSettings.Settings["OutputRootFolder"].Value;
+            try
+            {
+                System.Configuration.Configuration hConfig = System.Configuration.ConfigurationManager.OpenExeConfiguration(this.GetType().Assembly.Location);
+                double dInfCutoffValue = System.Convert.ToDouble(hConfig.AppSettings.Settings["InfCutoffValue"].Value);
+                bool bExportFullInfMatrix = hConfig.AppSettings.Settings["ExportFullInfMatrix"].Value == "1";
+                string szOutputRootFolder = hConfig.AppSettings.Settings["OutputRootFolder"].Value;
 
-            string resultsDirPath = szOutputRootFolder + $"\\{m_hPatient.LastName}${m_hPatient.Id}";
+                string resultsDirPath = szOutputRootFolder + $"\\{m_hPatient.LastName}${m_hPatient.Id}";
 
-            MyDisplayProgress hProgress = new MyDisplayProgress(m_ctrlMain);
-            Calculate(m_hPatient, m_hCourse, m_hPlanSetup, bExportFullInfMatrix, dInfCutoffValue, szOutputRootFolder, hProgress);
+                MyDisplayProgress hProgress = new MyDisplayProgress(m_ctrlMain);
+                Calculate(m_hPatient, m_hCourse, m_hPlanSetup, bExportFullInfMatrix, dInfCutoffValue, szOutputRootFolder, hProgress, () => CalculateInfluenceMatrix.ctrlMain.CancellationRequested);
+            }
+            catch (OperationCanceledException)
+            {
+                if (m_ctrlMain != null)
+                    m_ctrlMain.AddMessage("Calculation was cancelled.");
+            }
         }
-        public static void Calculate(Patient hPatient, Course course, IonPlanSetup plan, bool bExportFullInfMatrix, double dInfCutoffValue, string resultsDirPath, DisplayProgress hProgress)
+
+        public static void Calculate(Patient hPatient, Course course, IonPlanSetup plan, bool bExportFullInfMatrix,
+                                   double dInfCutoffValue, string resultsDirPath, DisplayProgress hProgress,
+                                   Func<bool> checkCancellation = null)
         {
             if (hProgress != null)
                 hProgress.Message("Influence matrix calculation started.");
+
+            
+
+            // Check for cancellation
+            if (checkCancellation != null && checkCancellation())
+            {
+                hProgress?.Message("Calculation cancelled by user.");
+                return;
+            }
 
             hPatient.BeginModifications();
 
@@ -99,6 +132,7 @@ namespace VMS.TPS
             plan.CalculateBeamLine();
             Helpers.SetAllSpotsToZero(plan);
 
+           
             int iFieldCnt = plan.IonBeams.Count();
 
             if (!System.IO.Directory.Exists(resultsDirPath))
@@ -120,7 +154,17 @@ namespace VMS.TPS
                 hProgress.Message("Exporting structure outlines and masks...");
             }
 
-            ExportStructureOutlinesAndMasks(plan, planResultsPath);
+            // Check for cancellation
+            if (checkCancellation != null && checkCancellation())
+            {
+                hProgress?.Message("Calculation cancelled by user.");
+                return;
+            }
+
+
+            // ExportStructureOutlinesAndMasks(plan, planResultsPath);
+            
+            ExportStructureOutlinesAndMasks(plan, planResultsPath, checkCancellation);
 
             // cache data for all beams
             int iMaxLayerCnt = int.MinValue;
@@ -144,9 +188,23 @@ namespace VMS.TPS
             List<int> lstMaxSpotCnt = new List<int>();
             for (int layerIdx = 0; layerIdx < iMaxLayerCnt; layerIdx++)
             {
+                //// For each spot calculation, add more frequent cancellation checks
+                //if (checkCancellation != null && checkCancellation())
+                //{
+                //    hProgress?.Message("Calculation cancelled by user.");
+                //    throw new OperationCanceledException("Operation was cancelled by user");
+                //}
+
                 int iMaxSpotCnt = int.MinValue;
                 foreach (IonBeam b in plan.IonBeams)
                 {
+                    // For each spot calculation, add more frequent cancellation checks
+                    if (checkCancellation != null && checkCancellation())
+                    {
+                        hProgress?.Message("Calculation cancelled by user.");
+                        throw new OperationCanceledException("Operation was cancelled by user");
+                    }
+
                     MyBeamParameters bp = tblBeamParameters[b];
                     if (layerIdx < bp.iLayerCnt)
                     {
@@ -172,10 +230,24 @@ namespace VMS.TPS
                 int iMaxSpotCnt = lstMaxSpotCnt[layerIdx];
                 for (int spotIdx = 0; spotIdx < iMaxSpotCnt; spotIdx++)
                 {
+                    // Check for cancellation periodically (e.g., every 10 spots)
+                    if (spotIdx % 10 == 0 && checkCancellation != null && checkCancellation())
+                    {
+                        hProgress?.Message("Calculation cancelled by user.");
+                        return;
+                    }
+
                     bool bRunCalc = false;
                     // turn on this spot for all beams
                     foreach (IonBeam b in plan.IonBeams)
                     {
+                        // For each spot calculation, add more frequent cancellation checks
+                        if (checkCancellation != null && checkCancellation())
+                        {
+                            hProgress?.Message("Calculation cancelled by user.");
+                            throw new OperationCanceledException("Operation was cancelled by user");
+                        }
+
                         MyBeamParameters bp = tblBeamParameters[b];
                         if (layerIdx < bp.iLayerCnt && spotIdx < bp.lstSpotCnt[layerIdx])
                         {
@@ -220,6 +292,14 @@ namespace VMS.TPS
                         // extract dose for all beams
                         foreach (IonBeam b in plan.IonBeams)
                         {
+
+                            // For each spot calculation, add more frequent cancellation checks
+                            if (checkCancellation != null && checkCancellation())
+                            {
+                                hProgress?.Message("Calculation cancelled by user.");
+                                throw new OperationCanceledException("Operation was cancelled by user");
+                            }
+
                             MyBeamParameters bp = tblBeamParameters[b];
                             if (layerIdx < bp.iLayerCnt && spotIdx < bp.lstSpotCnt[layerIdx])
                             {
@@ -248,6 +328,13 @@ namespace VMS.TPS
             // export beam meta data
             foreach (IonBeam b in plan.IonBeams)
             {
+                // For each spot calculation, add more frequent cancellation checks
+                if (checkCancellation != null && checkCancellation())
+                {
+                    hProgress?.Message("Calculation cancelled by user.");
+                    throw new OperationCanceledException("Operation was cancelled by user");
+                }
+
                 string szHDF5DataFile = System.IO.Path.Combine(szBeamPath, $"Beam_{b.Id}_Data.h5");
                 Helpers.WriteSpotInfoHDF5(tblBeamParameters[b], szHDF5DataFile);
 
@@ -327,7 +414,7 @@ namespace VMS.TPS
             return iPtCnt;
         }
 
-        public static void ExportStructureOutlinesAndMasks(IonPlanSetup hPlanSetup, string szOutputFolder)
+        public static void ExportStructureOutlinesAndMasks(IonPlanSetup hPlanSetup, string szOutputFolder, Func<bool> checkCancellation = null)
         {
             string szStructOutlinesFolder = System.IO.Path.Combine(szOutputFolder, "Beams");
 
@@ -336,9 +423,21 @@ namespace VMS.TPS
                 Directory.CreateDirectory(szStructOutlinesFolder);
             }
 
+            // Check for cancellation before starting structure outlines export
+            if (checkCancellation != null && checkCancellation())
+            {
+                throw new OperationCanceledException("Operation was cancelled by user");
+            }
+
             // Export structure outlines
             foreach (Beam b in hPlanSetup.Beams)
             {
+                // Check for cancellation before each beam
+                if (checkCancellation != null && checkCancellation())
+                {
+                    throw new OperationCanceledException("Operation was cancelled by user");
+                }
+
                 if (b.IsSetupField)
                 {
                     continue;
@@ -349,6 +448,13 @@ namespace VMS.TPS
 
                 foreach (Structure s in hPlanSetup.StructureSet.Structures)
                 {
+                    // Check for cancellation before each structure
+                    if (checkCancellation != null && checkCancellation())
+                    {
+                        Hdf5.CloseFile(fileId1);
+                        throw new OperationCanceledException("Operation was cancelled by user");
+                    }
+
                     try
                     {
                         Point[][] arrOutlines = b.GetStructureOutlines(s, true);
@@ -356,6 +462,13 @@ namespace VMS.TPS
                         {
                             for (int j = 0; j < arrOutlines.Length; j++)
                             {
+                                // Periodically check for cancellation during segment processing
+                                if (j % 10 == 0 && checkCancellation != null && checkCancellation())
+                                {
+                                    Hdf5.CloseFile(fileId1);
+                                    throw new OperationCanceledException("Operation was cancelled by user");
+                                }
+
                                 Point[] points = arrOutlines[j];
                                 string szDatasetName = $"/BEV_structure_contour_points/{s.Id}/Segment-{j}";
                                 double[,] arrPoints = new double[points.Length, 2];
@@ -373,6 +486,12 @@ namespace VMS.TPS
                 Hdf5.CloseFile(fileId1);
             }
 
+            // Check for cancellation before starting structure masks export
+            if (checkCancellation != null && checkCancellation())
+            {
+                throw new OperationCanceledException("Operation was cancelled by user");
+            }
+
             // Export structure masks
             string szH5MaskPath = System.IO.Path.Combine(szOutputFolder, "StructureSet_Data.h5");
             long fileId = Hdf5.CreateFile(szH5MaskPath);
@@ -381,14 +500,21 @@ namespace VMS.TPS
             VMS.TPS.Common.Model.API.Image hCT = hPlanSetup.StructureSet.Image;
             foreach (Structure s in hPlanSetup.StructureSet.Structures)
             {
+                // Check for cancellation before each structure mask
+                if (checkCancellation != null && checkCancellation())
+                {
+                    Hdf5.CloseFile(fileId);
+                    throw new OperationCanceledException("Operation was cancelled by user");
+                }
+
                 try
                 {
                     if (s.HasSegment)
                     {
                         string szStructID = s.Id;
-                        string szStandardStructName = szStructID; // dictOrganName[szStructID]
+                        string szStandardStructName = szStructID;
 
-                        byte[,,] struct3DMask = Transpose<byte>(MakeSegmentMaskForStructure(hCT, s));
+                        byte[,,] struct3DMask = Transpose<byte>(MakeSegmentMaskForStructure(hCT, s, checkCancellation));
                         Helpers.CreateDataSet<byte>(fileId, "/" + szStructID, struct3DMask);
 
                         lstAllStructsMetaData.Add(new
@@ -396,7 +522,7 @@ namespace VMS.TPS
                             name = szStandardStructName,
                             volume_cc = s.Volume,
                             dicom_structure_name = szStructID,
-                            fraction_of_vol_in_calc_box = 1, // echoData.dictOrganFractionVolInCalcBox[szStructID] if szStructID in echoData.dictOrganFractionVolInCalcBox else 1,
+                            fraction_of_vol_in_calc_box = 1,
                             structure_mask_3d_File = $"StructureSet_Data.h5/{szStandardStructName}"
                         });
                     }
@@ -408,16 +534,18 @@ namespace VMS.TPS
             string szMetaDataFile = System.IO.Path.Combine(szOutputFolder, "StructureSet_MetaData.json");
             Helpers.WriteJSONFile(lstAllStructsMetaData, szMetaDataFile);
         }
-        public static byte[,,] MakeSegmentMaskForStructure(VMS.TPS.Common.Model.API.Image hCT, Structure hStruct)
+
+        public static byte[,,] MakeSegmentMaskForStructure(VMS.TPS.Common.Model.API.Image hCT, Structure hStruct, Func<bool> checkCancellation = null)
         {
             if (hStruct.HasSegment)
             {
                 System.Collections.BitArray pre_buffer = new System.Collections.BitArray(hCT.ZSize);
-                return fill_in_profiles(hCT, hStruct, pre_buffer);
+                return fill_in_profiles(hCT, hStruct, pre_buffer, checkCancellation);
             }
             else
                 throw new Exception("Structure has no segment data");
         }
+
         public static T[,,] Transpose<T>(T[,,] arrInput) where T : struct
         {
             int iXSize = arrInput.GetLength(2);
@@ -440,7 +568,7 @@ namespace VMS.TPS
             return transposed;
         }
 
-        private static byte[,,] fill_in_profiles(VMS.TPS.Common.Model.API.Image hCT, Structure hStruct, System.Collections.BitArray pre_buffer) // dose_or_image, profile_fxn, row_buffer, dtype, pre_buffer= None)
+        private static byte[,,] fill_in_profiles(VMS.TPS.Common.Model.API.Image hCT, Structure hStruct, System.Collections.BitArray pre_buffer, Func<bool> checkCancellation = null)
         {
             int iXSize = hCT.XSize;
             int iYSize = hCT.YSize;
@@ -451,14 +579,25 @@ namespace VMS.TPS
             VVector y_step = hCT.YRes * hCT.YDirection;
 
             VVector start_x, stop;
-            for (int x = 0; x < iXSize; x++)    //) :  # scan X dimensions
+            for (int x = 0; x < iXSize; x++)
             {
+                // Check for cancellation every few iterations
+                if (x % 10 == 0 && checkCancellation != null && checkCancellation())
+                {
+                    throw new OperationCanceledException("Operation was cancelled by user");
+                }
+
                 start_x = hCT.Origin + ((x * hCT.XRes) * hCT.XDirection);
 
-                for (int y = 0; y < iYSize; y++)  // # scan Y dimension
+                for (int y = 0; y < iYSize; y++)
                 {
-                    stop = start_x + z_direction;
+                    // Check for cancellation periodically
+                    if (y % 50 == 0 && x % 10 == 0 && checkCancellation != null && checkCancellation())
+                    {
+                        throw new OperationCanceledException("Operation was cancelled by user");
+                    }
 
+                    stop = start_x + z_direction;
                     hStruct.GetSegmentProfile(start_x, stop, pre_buffer);
 
                     for (int z = 0; z < iZSize; z++)
@@ -469,5 +608,6 @@ namespace VMS.TPS
             }
             return mask_array;
         }
+
     }
 }
