@@ -481,7 +481,7 @@ namespace CalculateInfluenceMatrix
             CancellationRequested = false;
 
             // Change button to Cancel during calculation
-            butCalculate.Content = "Cancel";
+            butCalculate.Content = "Cancel after current step";
             butClose.IsEnabled = false;
 
             // Create a timer to keep the UI responsive
