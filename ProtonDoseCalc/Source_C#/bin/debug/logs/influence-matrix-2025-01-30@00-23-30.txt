@@ -1,8 +1,0 @@
-2025-01-30 00:23:31.079 +00:00 [INF] Log output directed to C:\Users\japankpatel\source\repos\MAAS-DoseInfluenceMatrix\Source_C#\bin\debug\logs\influence-matrix-2025-01-30@00-23-30.txt
-2025-01-30 00:23:31.126 +00:00 [INF] Enter PatientId:
-2025-01-30 00:23:44.529 +00:00 [INF] Enter CourseId:
-2025-01-30 00:24:05.315 +00:00 [INF] Enter PlanId:
-2025-01-30 00:24:19.005 +00:00 [INF] Opening Patient "Proton 06"
-2025-01-30 00:24:19.052 +00:00 [INF] Opening Plan "Demo_00 / Plan1"
-2025-01-30 00:24:19.161 +00:00 [INF] Plan1 found.
-2025-01-30 00:24:48.177 +00:00 [INF] Results will be written to: C:\Users\japankpatel\source\repos\MAAS-DoseInfluenceMatrix\Source_C#\bin\debug\results\Plan1

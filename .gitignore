@@ -2,3 +2,6 @@
 *.vsidx 
 .vs/ 
 *.vsidx 
+bin/
+obj/
+packages/

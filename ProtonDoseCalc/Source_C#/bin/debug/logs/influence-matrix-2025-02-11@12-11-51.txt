@@ -1,4 +1,0 @@
-2025-02-11 12:11:51.631 -05:00 [INF] Log output directed to D:\Projects\Git\MAAS-ProtonInfluenceMatrixCalc\MAAS-DoseInfluenceMatrix\Source_C#\bin\debug\logs\influence-matrix-2025-02-11@12-11-51.txt
-2025-02-11 12:11:56.018 -05:00 [INF] Opening Patient "20230817"
-2025-02-11 12:11:56.064 -05:00 [INF] Opening Plan "C1 / ProtonTestSM1"
-2025-02-11 12:11:56.244 -05:00 [INF] ProtonTestSM1 found.

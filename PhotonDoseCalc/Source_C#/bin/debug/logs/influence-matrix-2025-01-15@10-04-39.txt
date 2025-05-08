@@ -1,6 +1,0 @@
-2025-01-15 10:04:39.862 -05:00 [INF] Log output directed to D:\Projects\Git\MAAS_PhotonInfluenceMatrixCalc\Source_C#\bin\release\logs\influence-matrix-2025-01-15@10-04-39.txt
-2025-01-15 10:04:43.502 -05:00 [INF] Opening Patient "LUNG1-005"
-2025-01-15 10:04:43.542 -05:00 [INF] Opening Plan "Data / 0114Open"
-2025-01-15 10:04:45.590 -05:00 [ERR] System.ApplicationException: Could not find Plan with ID "0114Open"
-   at PhotonInfluenceMatrixCalc.PhotonInfluenceMatrixCalc.Execute(Application app, String patientId, String courseId, String planId) in D:\Projects\Git\MAAS_PhotonInfluenceMatrixCalc\Source_C#\PhotonInfluenceMatrixCalc.cs:line 102
-   at PhotonInfluenceMatrixCalc.PhotonInfluenceMatrixCalc.Main(String[] args) in D:\Projects\Git\MAAS_PhotonInfluenceMatrixCalc\Source_C#\PhotonInfluenceMatrixCalc.cs:line 60

@@ -1,5 +1,0 @@
-2024-07-23 17:04:03.774 -04:00 [INF] Log output directed to D:\Projects\Tests\MAAS-ProtonInfluenceMatrix-main\Source\bin\release\logs\influence-matrix-2024-07-23@17-04-03.txt
-2024-07-23 17:04:06.562 -04:00 [INF] Opening Patient "20230817"
-2024-07-23 17:04:06.617 -04:00 [INF] Opening Plan "C1 / ProtonTestSM1"
-2024-07-23 17:04:06.770 -04:00 [INF] ProtonTestSM1 found.
-2024-07-23 17:04:13.260 -04:00 [INF] Results will be written to: D:\Projects\Tests\MAAS-ProtonInfluenceMatrix-main\Source\bin\release\results\ProtonTestSM1

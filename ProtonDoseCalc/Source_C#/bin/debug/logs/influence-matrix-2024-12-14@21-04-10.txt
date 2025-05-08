@@ -1,9 +1,0 @@
-2024-12-14 21:04:10.740 +00:00 [INF] Log output directed to C:\Users\japankpatel\Source\Repos\MAAS-DoseInfluenceMatrix\Source_C#\bin\debug\logs\influence-matrix-2024-12-14@21-04-10.txt
-2024-12-14 21:04:10.787 +00:00 [INF] Enter PatientId:
-2024-12-14 21:04:14.959 +00:00 [INF] Enter CourseId:
-2024-12-14 21:04:28.867 +00:00 [INF] Enter PlanId:
-2024-12-14 21:04:45.149 +00:00 [INF] Opening Patient "Proton 06"
-2024-12-14 21:04:45.196 +00:00 [INF] Opening Plan "C1 / IMPT66Gy_Ap1"
-2024-12-14 21:04:45.274 +00:00 [INF] IMPT66Gy_Ap1 found.
-2024-12-14 21:04:53.946 +00:00 [INF] Results will be written to: C:\Users\japankpatel\Source\Repos\MAAS-DoseInfluenceMatrix\Source_C#\bin\debug\results\IMPT66Gy_Ap1
-2024-12-14 21:10:27.391 +00:00 [INF] Influence matrix calculation finished.

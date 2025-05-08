@@ -1,5 +1,0 @@
-2024-10-28 14:23:35.666 -04:00 [INF] Log output directed to D:\Projects\MPCS\EclipsePlugins\CalculateInfluenceMatrix_OpenSource\bin\release\logs\influence-matrix-2024-10-28@14-23-35.txt
-2024-10-28 14:23:37.537 -04:00 [INF] Opening Patient "LUNG1-005"
-2024-10-28 14:23:37.594 -04:00 [INF] Opening Plan "Data / HPTest_1028"
-2024-10-28 14:23:40.614 -04:00 [INF] HPTest_1028 found.
-2024-10-28 14:23:40.627 -04:00 [INF] Results will be written to: D:\Projects\MPCS\EclipsePlugins\CalculateInfluenceMatrix_OpenSource\bin\release\results\HPTest_1028

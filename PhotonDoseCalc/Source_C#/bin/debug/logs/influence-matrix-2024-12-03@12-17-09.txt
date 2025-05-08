@@ -1,4 +1,0 @@
-2024-12-03 12:17:09.503 -05:00 [INF] Log output directed to D:\Projects\Git\MAAS_PhotonInfluenceMatrixCalc\Source_C#\bin\release\logs\influence-matrix-2024-12-03@12-17-09.txt
-2024-12-03 12:17:09.834 -05:00 [ERR] System.NullReferenceException: Object reference not set to an instance of an object.
-   at VMS.TPS.Common.Model.API.Application.CreateApplicationCommon(String scriptName, Func`2 createExecutionGuardFunc)
-   at PhotonInfluenceMatrixCalc.PhotonInfluenceMatrixCalc.Main(String[] args) in D:\Projects\Git\MAAS_PhotonInfluenceMatrixCalc\Source_C#\PhotonInfluenceMatrixCalc.cs:line 50

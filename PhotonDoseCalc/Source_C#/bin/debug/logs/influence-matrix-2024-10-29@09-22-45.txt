@@ -1,9 +1,0 @@
-2024-10-29 09:22:45.595 -04:00 [INF] Log output directed to D:\Projects\MPCS\EclipsePlugins\CalculateInfluenceMatrix_OpenSource\bin\release\logs\influence-matrix-2024-10-29@09-22-45.txt
-2024-10-29 09:22:47.556 -04:00 [INF] Opening Patient "LUNG1-005"
-2024-10-29 09:22:47.614 -04:00 [INF] Opening Plan "Data / HPTest_1028"
-2024-10-29 09:22:50.707 -04:00 [INF] HPTest_1028 found.
-2024-10-29 09:22:50.907 -04:00 [ERR] System.IO.IOException: The process cannot access the file 'Beam_01_Data.h5' because it is being used by another process.
-   at System.IO.Directory.DeleteHelper(String fullPath, String userPath, Boolean recursive, Boolean throwOnTopLevelDirectoryNotFound, WIN32_FIND_DATA& data)
-   at System.IO.Directory.Delete(String fullPath, String userPath, Boolean recursive, Boolean checkHost)
-   at CalculateInfluenceMatrix.CalculateInfluenceMatrix.Execute(Application app, String patientId, String courseId, String planId) in D:\Projects\MPCS\EclipsePlugins\CalculateInfluenceMatrix_OpenSource\CalculateInfluenceMatrix.cs:line 111
-   at CalculateInfluenceMatrix.CalculateInfluenceMatrix.Main(String[] args) in D:\Projects\MPCS\EclipsePlugins\CalculateInfluenceMatrix_OpenSource\CalculateInfluenceMatrix.cs:line 52
