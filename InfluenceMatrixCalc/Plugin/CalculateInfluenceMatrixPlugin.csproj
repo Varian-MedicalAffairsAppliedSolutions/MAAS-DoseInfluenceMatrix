@@ -70,10 +70,13 @@
       <HintPath>..\Standalone\packages\PureHDF.1.0.0\lib\netstandard2.0\PureHDF.dll</HintPath>
     </Reference>
     <Reference Include="Serilog, Version=4.2.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
-      <HintPath>..\Standalone\packages\Serilog.4.2.0\lib\netstandard2.0\Serilog.dll</HintPath>
+      <HintPath>..\packages\Serilog.4.2.0\lib\netstandard2.0\Serilog.dll</HintPath>
     </Reference>
-    <Reference Include="Serilog.Extensions.Logging, Version=7.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
-      <HintPath>..\Standalone\packages\Serilog.Extensions.Logging.8.0.0\lib\netstandard2.0\Serilog.Extensions.Logging.dll</HintPath>
+    <Reference Include="Serilog.Sinks.Console, Version=6.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
+      <HintPath>..\packages\Serilog.Sinks.Console.6.0.0\lib\netstandard2.0\Serilog.Sinks.Console.dll</HintPath>
+    </Reference>
+    <Reference Include="Serilog.Sinks.File, Version=7.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
+      <HintPath>..\packages\Serilog.Sinks.File.7.0.0\lib\netstandard2.0\Serilog.Sinks.File.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
