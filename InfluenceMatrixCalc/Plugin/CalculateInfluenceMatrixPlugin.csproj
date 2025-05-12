@@ -85,8 +85,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Serilog.Extensions.Logging, Version=7.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
-      <HintPath>..\packages\Serilog.Extensions.Logging.8.0.0\lib\netstandard2.0\Serilog.Extensions.Logging.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\Standalone\packages\Serilog.Extensions.Logging.8.0.0\lib\netstandard2.0\Serilog.Extensions.Logging.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
@@ -101,8 +100,7 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Diagnostics.DiagnosticSource, Version=8.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Diagnostics.DiagnosticSource.8.0.1\lib\netstandard2.0\System.Diagnostics.DiagnosticSource.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\Standalone\packages\System.Diagnostics.DiagnosticSource.8.0.1\lib\netstandard2.0\System.Diagnostics.DiagnosticSource.dll</HintPath>
     </Reference>
     <Reference Include="System.Memory, Version=4.0.1.2, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Memory.4.5.5\lib\net461\System.Memory.dll</HintPath>
