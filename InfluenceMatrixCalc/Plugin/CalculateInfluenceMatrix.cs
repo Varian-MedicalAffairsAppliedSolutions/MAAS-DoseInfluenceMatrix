@@ -127,7 +127,7 @@ namespace VMS.TPS
                     ProtonCalculateInfluenceMatrix.ProtonInfluenceMatrixCalc.Calculate(m_hPatient, m_hCourse, m_hPlanSetup as IonPlanSetup, bExportFullInfMatrix, dInfCutoffValue, szOutputRootFolder, hProgress, 
                         () => CalculateInfluenceMatrix.ctrlMain.CancellationRequested);
                 }
-            }
+            } //
             catch (OperationCanceledException)
             {
                 if (m_ctrlMain != null)
