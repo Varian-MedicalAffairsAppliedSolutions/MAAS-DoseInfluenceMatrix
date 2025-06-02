@@ -1,0 +1,132 @@
+name: Build ESAPI Script - v18.0
+
+on:
+  workflow_dispatch:
+    inputs:
+      dateInput:
+        description: 'Expiration Date'
+        required: true
+        default: '1/1/2026'
+
+jobs:
+  build:
+    runs-on: windows-2019
+    env:
+      GITHUB_WORKSPACE_PACKAGES_PATH: ..\packages\ESAPI.18.0.0.1\lib\net48\
+      SOLUTION_NAME: CalculateInfluenceMatrix
+      PROJECT_NAME_EXE: CalculateInfluenceMatrix
+      PROJECT_NAME_DLL: CalculateInfluenceMatrixPlugin
+      FOLDER_NAME_DLL: Plugin
+      FOLDER_NAME_EXE: Standalone
+      FOLDER_NAME_ROOT: InfluenceMatrixCalc
+      CONFIGURATION: Release
+      MAJOR_VERSION: 1
+      MINOR_VERSION: 0
+      PATCH_VERSION: 0
+      BUILD_NUMBER: ${{ github.run_number }}
+
+    steps:
+    - name: Get Current Date
+      id: currentDate
+      uses: Kaven-Universe/github-action-current-date-time@v1
+      with:
+        format: "MM/DD/YYYY"
+
+    - name: Checkout
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v2
+
+    - name: Navigate to Workspace
+      run: cd $GITHUB_WORKSPACE
+
+    - name: Update Target Framework Version to 4.8 for CalculateInfluenceMatrix Standalone
+      uses: Nambers/ReplaceStringInFile@v1.1
+      with:
+        path: .\${{ env.FOLDER_NAME_ROOT }}\${{ env.FOLDER_NAME_EXE }}\${{ env.PROJECT_NAME_EXE }}.csproj
+        oldString: "TargetFrameworkVersion>v[\\d\\.]+<"
+        newString: 'TargetFrameworkVersion>v4.8<'
+
+    - name: Update Target Framework Version to 4.8 for CalculateInfluenceMatrix Plugin
+      uses: Nambers/ReplaceStringInFile@v1.1
+      with:
+        path: .\${{ env.FOLDER_NAME_ROOT }}\${{ env.FOLDER_NAME_DLL }}\${{ env.PROJECT_NAME_DLL }}.csproj
+        oldString: "TargetFrameworkVersion>v[\\d\\.]+<"
+        newString: 'TargetFrameworkVersion>v4.8<'
+
+    - name: Update AssemblyInfo.cs for CalculateInfluenceMatrix Standalone
+      id: update_assembly_info
+      run: |
+        .\.github\workflows\Update-AssemblyInfo.ps1 `
+          -AssemblyInfoFilePath .\${{ env.FOLDER_NAME_ROOT }}\${{ env.FOLDER_NAME_EXE }}\Properties\AssemblyInfo.cs `
+          -ExpirationDate "${{ github.event.inputs.dateInput }}" `
+          -BuildNumber ${{ env.BUILD_NUMBER }} `
+          -ProjectName ${{ env.PROJECT_NAME_EXE }}
+
+    - name: Update AssemblyInfo.cs for CalculateInfluenceMatrix Plugin
+      run: |
+        .\.github\workflows\Update-AssemblyInfo.ps1 `
+          -AssemblyInfoFilePath .\${{ env.FOLDER_NAME_ROOT }}\${{ env.FOLDER_NAME_DLL }}\Properties\AssemblyInfo.cs `
+          -ExpirationDate "${{ github.event.inputs.dateInput }}" `
+          -BuildNumber ${{ env.BUILD_NUMBER }} `
+          -ProjectName ${{ env.PROJECT_NAME_DLL }}
+          
+    - name: Setup NuGet.exe for use with actions
+      uses: NuGet/setup-nuget@v1.0.6
+      with:
+        nuget-version: latest
+
+    - name: Download nuget packages for CalculateInfluenceMatrix Standalone
+      run: nuget install .\${{ env.FOLDER_NAME_ROOT }}\${{ env.FOLDER_NAME_EXE }}\packages.config -OutputDirectory .\packages
+
+    - name: Download nuget packages for CalculateInfluenceMatrix Plugin
+      run: nuget install .\${{ env.FOLDER_NAME_ROOT }}\${{ env.FOLDER_NAME_DLL }}\packages.config -OutputDirectory .\packages
+
+    - name: Add VIC GitHub NuGet repository
+      run: nuget source add `
+        -Name github `
+        -Source "https://nuget.pkg.github.com/Varian-MedicalAffairsAppliedSolutions/index.json" `
+        -UserName craman96 `
+        -Password ${{ secrets.GITHUB_TOKEN }} `
+        -StorePasswordInClearText
+
+    - name: Download ESAPI package
+      run: nuget install ESAPI -Version 18.0.0.1 -OutputDirectory ./packages
+
+    - name: Update hint paths in the csproj file for CalculateInfluenceMatrix Standalone
+      run: |
+        .\.github\workflows\Update-EsapiHintPaths.ps1 `
+        -CsprojFilePath .\${{ env.FOLDER_NAME_ROOT }}\${{ env.FOLDER_NAME_EXE }}\ `
+        -CsprojFileName ${{ env.PROJECT_NAME_EXE}}.csproj
+
+    - name: Update hint paths in the csproj file for CalculateInfluenceMatrix Plugin
+      run: |
+        .\.github\workflows\Update-EsapiHintPaths.ps1 `
+        -CsprojFilePath .\${{ env.FOLDER_NAME_ROOT }}\${{ env.FOLDER_NAME_DLL }}\ `
+        -CsprojFileName ${{ env.PROJECT_NAME_DLL}}.csproj
+
+    - name: Build Solution
+      run: msbuild.exe .\${{ env.FOLDER_NAME_ROOT }}\${{ env.SOLUTION_NAME}}.sln /nologo /nr:false /p:DeleteExistingFiles=True /p:platform="x64" /p:configuration="${{ env.CONFIGURATION}}"
+
+    - name: Zip
+      run: |
+        Compress-Archive `
+          -Path ".\bin\${{ env.CONFIGURATION}}\*" `
+          -DestinationPath "${{ github.workspace }}/${{ steps.update_assembly_info.outputs.RELEASE_FILE_NAME }}-EclipseV180.zip"
+    
+    - name: Create Release
+      uses: softprops/action-gh-release@v2.0.9
+      with:
+        name: ${{ steps.update_assembly_info.outputs.RELEASE_NAME }}-EclipseV18.0
+        tag_name: ${{ steps.update_assembly_info.outputs.RELEASE_NAME }}-EclipseV18.0
+        token: ${{ secrets.GITHUB_TOKEN }}
+        draft: false
+        prerelease: false
+        body: |
+          This is an official release of the **`${{ env.SOLUTION_NAME }}`** project.
+          Supported Eclipse version: `v18.0`.
+          The generated dll is valid until `${{ github.event.inputs.dateInput }}`, and generated on `${{ steps.currentDate.outputs.time }}`.
+        files: ${{ github.workspace }}/${{ steps.update_assembly_info.outputs.RELEASE_FILE_NAME }}-EclipseV180.zip
