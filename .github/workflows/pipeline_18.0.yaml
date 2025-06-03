@@ -10,7 +10,7 @@ on:
 
 jobs:
   build:
-    runs-on: windows-2019
+    runs-on: windows-latest
     env:
       GITHUB_WORKSPACE_PACKAGES_PATH: ..\packages\ESAPI.18.0.0.1\lib\net48\
       SOLUTION_NAME: CalculateInfluenceMatrix
@@ -69,7 +69,7 @@ jobs:
     - name: Update AssemblyInfo.cs for CalculateInfluenceMatrix Plugin
       run: |
         .\.github\workflows\Update-AssemblyInfo.ps1 `
-          -AssemblyInfoFilePath .\${{ env.FOLDER_NAME_ROOT }}\${{ env.FOLDER_NAME_DLL }}\Properties\AssemblyInfo.cs `
+          -AssemblyInfoFilePath .\${{ env.FOLDER_NAME_ROOT }}\${{ env.FOLDER_NAME_DLL }}\AssemblyInfo.cs `
           -ExpirationDate "${{ github.event.inputs.dateInput }}" `
           -BuildNumber ${{ env.BUILD_NUMBER }} `
           -ProjectName ${{ env.PROJECT_NAME_DLL }}
@@ -80,10 +80,10 @@ jobs:
         nuget-version: latest
 
     - name: Download nuget packages for CalculateInfluenceMatrix Standalone
-      run: nuget install .\${{ env.FOLDER_NAME_ROOT }}\${{ env.FOLDER_NAME_EXE }}\packages.config -OutputDirectory .\packages
+      run: nuget install .\${{ env.FOLDER_NAME_ROOT }}\${{ env.FOLDER_NAME_EXE }}\packages.config -OutputDirectory .\${{ env.FOLDER_NAME_ROOT }}\packages
 
     - name: Download nuget packages for CalculateInfluenceMatrix Plugin
-      run: nuget install .\${{ env.FOLDER_NAME_ROOT }}\${{ env.FOLDER_NAME_DLL }}\packages.config -OutputDirectory .\packages
+      run: nuget install .\${{ env.FOLDER_NAME_ROOT }}\${{ env.FOLDER_NAME_DLL }}\packages.config -OutputDirectory .\${{ env.FOLDER_NAME_ROOT }}\packages
 
     - name: Add VIC GitHub NuGet repository
       run: nuget source add `
@@ -94,7 +94,7 @@ jobs:
         -StorePasswordInClearText
 
     - name: Download ESAPI package
-      run: nuget install ESAPI -Version 18.0.0.1 -OutputDirectory ./packages
+      run: nuget install ESAPI -Version 18.0.0.1 -OutputDirectory .\${{ env.FOLDER_NAME_ROOT }}\packages
 
     - name: Update hint paths in the csproj file for CalculateInfluenceMatrix Standalone
       run: |
@@ -114,7 +114,7 @@ jobs:
     - name: Zip
       run: |
         Compress-Archive `
-          -Path ".\bin\${{ env.CONFIGURATION}}\*" `
+          -Path ".\${{ env.FOLDER_NAME_ROOT }}\bin\${{ env.CONFIGURATION}}\*" `
           -DestinationPath "${{ github.workspace }}/${{ steps.update_assembly_info.outputs.RELEASE_FILE_NAME }}-EclipseV180.zip"
     
     - name: Create Release
