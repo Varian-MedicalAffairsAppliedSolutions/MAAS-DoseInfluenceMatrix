@@ -1,4 +1,4 @@
-name: Build ESAPI Script - v18.0
+name: Build ESAPI Script - v16.1
 
 on:
   workflow_dispatch:
@@ -12,7 +12,7 @@ jobs:
   build:
     runs-on: windows-latest
     env:
-      GITHUB_WORKSPACE_PACKAGES_PATH: ..\packages\ESAPI.18.0.0.1\lib\net48\
+      GITHUB_WORKSPACE_PACKAGES_PATH: ..\packages\ESAPI.16.1.0\lib\net461\
       SOLUTION_NAME: CalculateInfluenceMatrix
       PROJECT_NAME_EXE: CalculateInfluenceMatrix
       PROJECT_NAME_DLL: CalculateInfluenceMatrixPlugin
@@ -43,20 +43,6 @@ jobs:
     - name: Navigate to Workspace
       run: cd $GITHUB_WORKSPACE
 
-    - name: Update Target Framework Version to 4.8 for CalculateInfluenceMatrix Standalone
-      uses: Nambers/ReplaceStringInFile@v1.1
-      with:
-        path: .\${{ env.FOLDER_NAME_ROOT }}\${{ env.FOLDER_NAME_EXE }}\${{ env.PROJECT_NAME_EXE }}.csproj
-        oldString: "TargetFrameworkVersion>v[\\d\\.]+<"
-        newString: 'TargetFrameworkVersion>v4.8<'
-
-    - name: Update Target Framework Version to 4.8 for CalculateInfluenceMatrix Plugin
-      uses: Nambers/ReplaceStringInFile@v1.1
-      with:
-        path: .\${{ env.FOLDER_NAME_ROOT }}\${{ env.FOLDER_NAME_DLL }}\${{ env.PROJECT_NAME_DLL }}.csproj
-        oldString: "TargetFrameworkVersion>v[\\d\\.]+<"
-        newString: 'TargetFrameworkVersion>v4.8<'
-
     - name: Update AssemblyInfo.cs for CalculateInfluenceMatrix Standalone
       id: update_assembly_info
       run: |
@@ -85,6 +71,9 @@ jobs:
     - name: Download nuget packages for CalculateInfluenceMatrix Plugin
       run: nuget install .\${{ env.FOLDER_NAME_ROOT }}\${{ env.FOLDER_NAME_DLL }}\packages.config -OutputDirectory .\${{ env.FOLDER_NAME_ROOT }}\packages
 
+    - name: Download Microsoft NETFramework ReferenceAssemblies for v4.6.1
+      run: nuget install Microsoft.NETFramework.ReferenceAssemblies.net461 -OutputDirectory .\${{env.FLDR_SLN_CSPROJ_NAME}}\packages
+
     - name: Add VIC GitHub NuGet repository
       run: nuget source add `
         -Name github `
@@ -94,7 +83,7 @@ jobs:
         -StorePasswordInClearText
 
     - name: Download ESAPI package
-      run: nuget install ESAPI -Version 18.0.0.1 -OutputDirectory .\${{ env.FOLDER_NAME_ROOT }}\packages
+      run: nuget install ESAPI -Version 16.0.1 -OutputDirectory .\${{ env.FOLDER_NAME_ROOT }}\packages
 
     - name: Update hint paths in the csproj file for CalculateInfluenceMatrix Standalone
       run: |
@@ -115,18 +104,18 @@ jobs:
       run: |
         Compress-Archive `
           -Path ".\${{ env.FOLDER_NAME_ROOT }}\bin\${{ env.CONFIGURATION}}\*" `
-          -DestinationPath "${{ github.workspace }}/${{ steps.update_assembly_info.outputs.RELEASE_FILE_NAME }}-EclipseV180.zip"
+          -DestinationPath "${{ github.workspace }}/${{ steps.update_assembly_info.outputs.RELEASE_FILE_NAME }}-EclipseV161.zip"
     
     - name: Create Release
       uses: softprops/action-gh-release@v2.0.9
       with:
-        name: ${{ steps.update_assembly_info.outputs.RELEASE_NAME }}-EclipseV18.0
-        tag_name: ${{ steps.update_assembly_info.outputs.RELEASE_NAME }}-EclipseV18.0
+        name: ${{ steps.update_assembly_info.outputs.RELEASE_NAME }}-EclipseV16.1
+        tag_name: ${{ steps.update_assembly_info.outputs.RELEASE_NAME }}-EclipseV16.1
         token: ${{ secrets.GITHUB_TOKEN }}
         draft: false
         prerelease: false
         body: |
           This is an official release of the **`${{ env.SOLUTION_NAME }}`** project.
-          Supported Eclipse version: `v18.0`.
+          Supported Eclipse version: `v16.1`.
           The generated dll is valid until `${{ github.event.inputs.dateInput }}`, and generated on `${{ steps.currentDate.outputs.time }}`.
-        files: ${{ github.workspace }}/${{ steps.update_assembly_info.outputs.RELEASE_FILE_NAME }}-EclipseV180.zip
+        files: ${{ github.workspace }}/${{ steps.update_assembly_info.outputs.RELEASE_FILE_NAME }}-EclipseV161.zip

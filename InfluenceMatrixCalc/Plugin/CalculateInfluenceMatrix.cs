@@ -1,6 +1,5 @@
 using System;
 using System.Windows;
-using System.Reflection;
 using System.Runtime.CompilerServices;
 using VMS.TPS.Common.Model.API;
 

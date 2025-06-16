@@ -14,7 +14,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GithubActions", "GithubActions", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
 	ProjectSection(SolutionItems) = preProject
-		.github\workflows\pipeline_15.6.yaml = .github\workflows\pipeline_15.6.yaml
 		.github\workflows\pipeline_16.1.yaml = .github\workflows\pipeline_16.1.yaml
 		.github\workflows\pipeline_17.0.yaml = .github\workflows\pipeline_17.0.yaml
 		.github\workflows\pipeline_18.0.yaml = .github\workflows\pipeline_18.0.yaml
