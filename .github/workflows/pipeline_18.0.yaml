@@ -10,7 +10,7 @@ on:
 
 jobs:
   build:
-    runs-on: windows-2019
+    runs-on: windows-2022
     env:
       GITHUB_WORKSPACE_PACKAGES_PATH: ..\packages\ESAPI.18.0.0.1\lib\net48\
       SOLUTION_NAME: CalculateInfluenceMatrix
@@ -19,6 +19,7 @@ jobs:
       FOLDER_NAME_DLL: Plugin
       FOLDER_NAME_EXE: Standalone
       FOLDER_NAME_ROOT: InfluenceMatrixCalc
+      PROJECT_ROOT: ${{ github.workspace }}
       CONFIGURATION: Release
       MAJOR_VERSION: 1
       MINOR_VERSION: 0
@@ -75,7 +76,7 @@ jobs:
           -ProjectName ${{ env.PROJECT_NAME_DLL }}
           
     - name: Setup NuGet.exe for use with actions
-      uses: NuGet/setup-nuget@v1.0.6
+      uses: NuGet/setup-nuget@v1
       with:
         nuget-version: latest
 
@@ -112,16 +113,20 @@ jobs:
       run: msbuild.exe .\${{ env.FOLDER_NAME_ROOT }}\${{ env.SOLUTION_NAME}}.sln /nologo /nr:false /p:DeleteExistingFiles=True /p:platform="x64" /p:configuration="${{ env.CONFIGURATION}}"
 
     - name: Zip
+      id: zip_release
       run: |
-        Compress-Archive `
-          -Path ".\bin\${{ env.CONFIGURATION}}\*" `
-          -DestinationPath "${{ github.workspace }}/${{ steps.update_assembly_info.outputs.RELEASE_FILE_NAME }}-EclipseV180.zip"
+        $normalizedFilePath = "${{ github.workspace }}/V18.0-${{ steps.update_assembly_info.outputs.RELEASE_FILE_NAME }}-EclipseV180.zip" -replace '\\', '/'
+        
+        Get-ChildItem -Path ".\bin\${{ env.CONFIGURATION}}\*" -Recurse |
+          Compress-Archive -DestinationPath $normalizedFilePath
+        
+        "NORMALIZED_FILE_PATH=$($normalizedFilePath)" >> $env:GITHUB_OUTPUT
     
     - name: Create Release
       uses: softprops/action-gh-release@v2.0.9
       with:
-        name: ${{ steps.update_assembly_info.outputs.RELEASE_NAME }}-EclipseV18.0
-        tag_name: ${{ steps.update_assembly_info.outputs.RELEASE_NAME }}-EclipseV18.0
+        name: V18.0-${{ steps.update_assembly_info.outputs.RELEASE_NAME }}-EclipseV18.0
+        tag_name: V18.0-${{ steps.update_assembly_info.outputs.RELEASE_NAME }}-EclipseV18.0
         token: ${{ secrets.GITHUB_TOKEN }}
         draft: false
         prerelease: false
@@ -129,4 +134,4 @@ jobs:
           This is an official release of the **`${{ env.SOLUTION_NAME }}`** project.
           Supported Eclipse version: `v18.0`.
           The generated dll is valid until `${{ github.event.inputs.dateInput }}`, and generated on `${{ steps.currentDate.outputs.time }}`.
-        files: ${{ github.workspace }}/${{ steps.update_assembly_info.outputs.RELEASE_FILE_NAME }}-EclipseV180.zip
+        files: ${{ steps.zip_release.outputs.NORMALIZED_FILE_PATH }}
