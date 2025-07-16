@@ -44,25 +44,11 @@ jobs:
     - name: Navigate to Workspace
       run: cd $GITHUB_WORKSPACE
 
-    - name: Update Target Framework Version to 4.8 for CalculateInfluenceMatrix Standalone
-      uses: Nambers/ReplaceStringInFile@v1.1
-      with:
-        path: .\${{ env.FOLDER_NAME_ROOT }}\${{ env.FOLDER_NAME_EXE }}\${{ env.PROJECT_NAME_EXE }}.csproj
-        oldString: "TargetFrameworkVersion>v[\\d\\.]+<"
-        newString: 'TargetFrameworkVersion>v4.8<'
-
-    - name: Update Target Framework Version to 4.8 for CalculateInfluenceMatrix Plugin
-      uses: Nambers/ReplaceStringInFile@v1.1
-      with:
-        path: .\${{ env.FOLDER_NAME_ROOT }}\${{ env.FOLDER_NAME_DLL }}\${{ env.PROJECT_NAME_DLL }}.csproj
-        oldString: "TargetFrameworkVersion>v[\\d\\.]+<"
-        newString: 'TargetFrameworkVersion>v4.8<'
-
     - name: Update AssemblyInfo.cs for CalculateInfluenceMatrix Standalone
       id: update_assembly_info
       run: |
         .\.github\workflows\Update-AssemblyInfo.ps1 `
-          -AssemblyInfoFilePath .\${{ env.FOLDER_NAME_ROOT }}\${{ env.FOLDER_NAME_EXE }}\Properties\AssemblyInfo.cs `
+          -AssemblyInfoFilePath ${{ env.PROJECT_ROOT }}/${{ env.FOLDER_NAME_ROOT }}/${{ env.FOLDER_NAME_EXE }}/Properties/AssemblyInfo.cs `
           -ExpirationDate "${{ github.event.inputs.dateInput }}" `
           -BuildNumber ${{ env.BUILD_NUMBER }} `
           -ProjectName ${{ env.PROJECT_NAME_EXE }}
@@ -70,15 +56,35 @@ jobs:
     - name: Update AssemblyInfo.cs for CalculateInfluenceMatrix Plugin
       run: |
         .\.github\workflows\Update-AssemblyInfo.ps1 `
-          -AssemblyInfoFilePath .\${{ env.FOLDER_NAME_ROOT }}\${{ env.FOLDER_NAME_DLL }}\AssemblyInfo.cs `
+          -AssemblyInfoFilePath ${{ env.PROJECT_ROOT }}/${{ env.FOLDER_NAME_ROOT }}/${{ env.FOLDER_NAME_DLL }}/AssemblyInfo.cs `
           -ExpirationDate "${{ github.event.inputs.dateInput }}" `
           -BuildNumber ${{ env.BUILD_NUMBER }} `
           -ProjectName ${{ env.PROJECT_NAME_DLL }}
+
+    - name: Update Target Framework Version to 4.8 for CalculateInfluenceMatrix Standalone
+      uses: Nambers/ReplaceStringInFile@v1.1
+      with:
+        path: ${{ env.PROJECT_ROOT }}/${{ env.FOLDER_NAME_ROOT }}/${{ env.FOLDER_NAME_EXE }}/${{ env.PROJECT_NAME_EXE }}.csproj
+        oldString: "TargetFrameworkVersion>v[\\d\\.]+<"
+        newString: 'TargetFrameworkVersion>v4.8<'
+
+    - name: Update Target Framework Version to 4.8 for CalculateInfluenceMatrix Plugin
+      uses: Nambers/ReplaceStringInFile@v1.1
+      with:
+        path: ${{ env.PROJECT_ROOT }}/${{ env.FOLDER_NAME_ROOT }}/${{ env.FOLDER_NAME_DLL }}/${{ env.PROJECT_NAME_DLL }}.csproj
+        oldString: "TargetFrameworkVersion>v[\\d\\.]+<"
+        newString: 'TargetFrameworkVersion>v4.8<'
           
     - name: Setup NuGet.exe for use with actions
       uses: NuGet/setup-nuget@v1
       with:
         nuget-version: latest
+
+    - name: Download nuget packages for CalculateInfluenceMatrix Standalone
+      run: nuget install ${{ env.PROJECT_ROOT }}/${{ env.FOLDER_NAME_ROOT }}/${{ env.FOLDER_NAME_EXE }}/packages.config -OutputDirectory packages
+
+    - name: Download nuget packages for CalculateInfluenceMatrix Plugin
+      run: nuget install ${{ env.PROJECT_ROOT }}/${{ env.FOLDER_NAME_ROOT }}/${{ env.FOLDER_NAME_DLL }}/packages.config -OutputDirectory packages
 
     - name: Add VIC GitHub NuGet repository
       run: nuget source add `
@@ -88,32 +94,23 @@ jobs:
         -Password ${{ secrets.GITHUB_TOKEN }} `
         -StorePasswordInClearText
 
-    - name: Download ESAPI package
+    - name: Download internal ESAPI nuget package
       run: nuget install ESAPI -Version 18.0.0.1 -OutputDirectory packages
-
-    - name: Download nuget packages for CalculateInfluenceMatrix Standalone
-      run: nuget install .\${{ env.FOLDER_NAME_ROOT }}\${{ env.FOLDER_NAME_EXE }}\packages.config -OutputDirectory packages
-
-    - name: Download nuget packages for CalculateInfluenceMatrix Plugin
-      run: nuget install .\${{ env.FOLDER_NAME_ROOT }}\${{ env.FOLDER_NAME_DLL }}\packages.config -OutputDirectory packages
-
-    - name: Restore NuGet packages for solution
-      run: nuget restore .\${{ env.FOLDER_NAME_ROOT }}\${{ env.SOLUTION_NAME}}.sln
 
     - name: Update hint paths in the csproj file for CalculateInfluenceMatrix Standalone
       run: |
         .\.github\workflows\Update-EsapiHintPaths.ps1 `
-        -CsprojFilePath .\${{ env.FOLDER_NAME_ROOT }}\${{ env.FOLDER_NAME_EXE }}\ `
+        -CsprojFilePath ${{ env.PROJECT_ROOT }}/${{ env.FOLDER_NAME_ROOT }}/${{ env.FOLDER_NAME_EXE }} `
         -CsprojFileName ${{ env.PROJECT_NAME_EXE}}.csproj
 
     - name: Update hint paths in the csproj file for CalculateInfluenceMatrix Plugin
       run: |
         .\.github\workflows\Update-EsapiHintPaths.ps1 `
-        -CsprojFilePath .\${{ env.FOLDER_NAME_ROOT }}\${{ env.FOLDER_NAME_DLL }}\ `
+        -CsprojFilePath ${{ env.PROJECT_ROOT }}/${{ env.FOLDER_NAME_ROOT }}/${{ env.FOLDER_NAME_DLL }} `
         -CsprojFileName ${{ env.PROJECT_NAME_DLL}}.csproj
 
     - name: Build Solution
-      run: msbuild.exe .\${{ env.FOLDER_NAME_ROOT }}\${{ env.SOLUTION_NAME}}.sln /nologo /nr:false /p:DeleteExistingFiles=True /p:platform="x64" /p:configuration="${{ env.CONFIGURATION}}"
+      run: msbuild.exe ${{ env.FOLDER_NAME_ROOT }}/${{ env.SOLUTION_NAME}}.sln /nologo /nr:false /p:DeleteExistingFiles=True /p:platform="x64" /p:configuration="${{ env.CONFIGURATION}}"
 
     - name: Zip
       id: zip_release
