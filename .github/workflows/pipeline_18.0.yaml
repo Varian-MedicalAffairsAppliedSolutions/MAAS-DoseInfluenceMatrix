@@ -80,12 +80,6 @@ jobs:
       with:
         nuget-version: latest
 
-    - name: Download nuget packages for CalculateInfluenceMatrix Standalone
-      run: nuget install .\${{ env.FOLDER_NAME_ROOT }}\${{ env.FOLDER_NAME_EXE }}\packages.config -OutputDirectory .\packages
-
-    - name: Download nuget packages for CalculateInfluenceMatrix Plugin
-      run: nuget install .\${{ env.FOLDER_NAME_ROOT }}\${{ env.FOLDER_NAME_DLL }}\packages.config -OutputDirectory .\packages
-
     - name: Add VIC GitHub NuGet repository
       run: nuget source add `
         -Name github `
@@ -96,6 +90,15 @@ jobs:
 
     - name: Download ESAPI package
       run: nuget install ESAPI -Version 18.0.0.1 -OutputDirectory ./packages
+
+    - name: Download nuget packages for CalculateInfluenceMatrix Standalone
+      run: nuget install .\${{ env.FOLDER_NAME_ROOT }}\${{ env.FOLDER_NAME_EXE }}\packages.config -OutputDirectory .\packages
+
+    - name: Download nuget packages for CalculateInfluenceMatrix Plugin
+      run: nuget install .\${{ env.FOLDER_NAME_ROOT }}\${{ env.FOLDER_NAME_DLL }}\packages.config -OutputDirectory .\packages
+
+    - name: Restore NuGet packages for solution
+      run: nuget restore .\${{ env.FOLDER_NAME_ROOT }}\${{ env.SOLUTION_NAME}}.sln
 
     - name: Update hint paths in the csproj file for CalculateInfluenceMatrix Standalone
       run: |
