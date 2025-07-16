@@ -12,7 +12,7 @@ jobs:
   build:
     runs-on: windows-2022
     env:
-      GITHUB_WORKSPACE_PACKAGES_PATH: ..\packages\ESAPI.18.0.0.1\lib\net48\
+      GITHUB_WORKSPACE_PACKAGES_PATH: ..\InfluenceMatrixCalc\Standalone\packages\ESAPI.18.0.0.1\lib\net48\
       SOLUTION_NAME: CalculateInfluenceMatrix
       PROJECT_NAME_EXE: CalculateInfluenceMatrix
       PROJECT_NAME_DLL: CalculateInfluenceMatrixPlugin
@@ -89,13 +89,13 @@ jobs:
         -StorePasswordInClearText
 
     - name: Download ESAPI package
-      run: nuget install ESAPI -Version 18.0.0.1 -OutputDirectory ./packages
+      run: nuget install ESAPI -Version 18.0.0.1 -OutputDirectory .\${{ env.FOLDER_NAME_ROOT }}\${{ env.FOLDER_NAME_EXE }}\packages
 
     - name: Download nuget packages for CalculateInfluenceMatrix Standalone
-      run: nuget install .\${{ env.FOLDER_NAME_ROOT }}\${{ env.FOLDER_NAME_EXE }}\packages.config -OutputDirectory .\packages
+      run: nuget install .\${{ env.FOLDER_NAME_ROOT }}\${{ env.FOLDER_NAME_EXE }}\packages.config -OutputDirectory .\${{ env.FOLDER_NAME_ROOT }}\${{ env.FOLDER_NAME_EXE }}\packages
 
     - name: Download nuget packages for CalculateInfluenceMatrix Plugin
-      run: nuget install .\${{ env.FOLDER_NAME_ROOT }}\${{ env.FOLDER_NAME_DLL }}\packages.config -OutputDirectory .\packages
+      run: nuget install .\${{ env.FOLDER_NAME_ROOT }}\${{ env.FOLDER_NAME_DLL }}\packages.config -OutputDirectory .\${{ env.FOLDER_NAME_ROOT }}\${{ env.FOLDER_NAME_EXE }}\packages
 
     - name: Restore NuGet packages for solution
       run: nuget restore .\${{ env.FOLDER_NAME_ROOT }}\${{ env.SOLUTION_NAME}}.sln
