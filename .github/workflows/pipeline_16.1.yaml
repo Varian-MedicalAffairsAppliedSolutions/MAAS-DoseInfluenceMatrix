@@ -72,7 +72,7 @@ jobs:
       run: nuget install .\${{ env.FOLDER_NAME_ROOT }}\${{ env.FOLDER_NAME_DLL }}\packages.config -OutputDirectory .\${{ env.FOLDER_NAME_ROOT }}\packages
 
     - name: Download Microsoft NETFramework ReferenceAssemblies for v4.6.1
-      run: nuget install Microsoft.NETFramework.ReferenceAssemblies.net461 -OutputDirectory .\${{env.FLDR_SLN_CSPROJ_NAME}}\packages
+      run: nuget install Microsoft.NETFramework.ReferenceAssemblies.net461 -OutputDirectory .\${{ env.FOLDER_NAME_ROOT }}\packages
 
     - name: Add VIC GitHub NuGet repository
       run: nuget source add `
