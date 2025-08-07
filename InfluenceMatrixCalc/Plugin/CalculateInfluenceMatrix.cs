@@ -7,7 +7,7 @@ using System.Globalization;
 using System.Linq;
 using System.Windows.Media.Imaging;
 using MAAS.Common.EulaVerification;
-
+using System.Reflection;
 using CalculateInfluenceMatrix;
 
 // TODO: Uncomment the following line if the script requires write access.
