@@ -83,7 +83,7 @@ jobs:
         -StorePasswordInClearText
 
     - name: Download ESAPI package
-      run: nuget install ESAPI -Version 16.0.1 -OutputDirectory .\${{ env.FOLDER_NAME_ROOT }}\packages
+      run: nuget install ESAPI -Version 16.1.0 -OutputDirectory .\${{ env.FOLDER_NAME_ROOT }}\packages
 
     - name: Update hint paths in the csproj file for CalculateInfluenceMatrix Standalone
       run: |
