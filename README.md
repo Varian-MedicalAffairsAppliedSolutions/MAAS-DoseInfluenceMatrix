@@ -1,18 +1,18 @@
 # MAAS-DoseInfluenceMatrix 
 
 ## Introduction 
-This repository contains ESAPI scripts to extract all data required for performing treatment planning optimization outside the Eclipse environment. An Eclipse instance is required to extract the data. Once the data is obtained, a treatment planning optimization software, such as [PortPy](https://github.com/cqad/PortPy), can load the data and perform the planning optimization. This approach provides flexibility to researchers who want to develop novel treatment planning optimization techniques that are not readily available within ESAPI.
+This repository contains ESAPI scripts to extract all data required for performing treatment planning optimization outside the Eclipse environment. An Eclipse instance is required to extract the data. Once the data is obtained, a treatment planning optimization software, such as [PortPy](https://github.com/PortPy-Project/PortPy), can load the data and perform the planning optimization. This approach provides flexibility to researchers who want to develop novel treatment planning optimization techniques that are not readily available within ESAPI.
 
-**Note:** *Only the photon version is currently available. The proton version is a work in progress. The script loops through each field, subdivides the beam into small beamlets (or spots in proton mode), and calculates dose for each beamlet. Hence, the process can be computationally demanding and time-consuming.*
+**Note:** *Only the photon version is currently working. The proton version is a work in progress. The script loops through each field, subdivides the beam into small beamlets (or spots in proton mode), and calculates dose for each beamlet. Hence, the process can be computationally demanding and time-consuming.*
 
 ## Data and data format
 Each beam is divided into small 2D beamlets/spots, and the patient’s body is divided into small 3D voxels. Eclipse is used to calculate the dose contribution of each beamlet to every voxel, resulting in a **dose influence matrix** (also called a dose deposition matrix or dij matrix). Relevant beamlet and voxel information (e.g., size, coordinates) is stored, as well as CT data (e.g., voxel Hounsfield Units, coordinates) and structure data (e.g., structure names, masks).
 
-The scripts adopt the data format, where:
+This tool adopts an output data format, where:
 
 -   Light-weight metadata is stored in human-readable `.json` files.
     
--   Large datasets (e.g., dose influence matrices) are stored in `.h5` (HDF5) files.
+-   Large datasets (e.g., dose influence matrices) are stored in natively compressed `.h5` (HDF5) files.
     
 
 A typical output folder structure for a patient might look like this:
@@ -67,7 +67,7 @@ Below is an example `.json` file for a beam. Notice how the larger data arrays (
 ```
 
 ##### Beam_0_Data.h5
-HDF5 (Hierarchical Data Format version 5) is a common and powerful format that is supported by most programming languages. It is designed to store and organize large amounts of complex data using a flexible, hierarchical structure, allowing efficient access, compression, and storage of multidimensional arrays. The following example shows the hierarchical data for a beam. [HDFViwer](https://www.hdfgroup.org/downloads/hdfview/) can be used to see through a .h5 file. 
+HDF5 (Hierarchical Data Format version 5) is a common and powerful format that is supported by most programming languages. It is designed to store and organize large amounts of complex data using a flexible, hierarchical structure, allowing efficient access, compression, and storage of multidimensional arrays. The following example shows the hierarchical data for a beam. [HDFViwer](https://www.hdfgroup.org/downloads/hdfview/) can be used to view a .h5 file. 
 ```
 Beam_0_Data.h5
 │
@@ -121,7 +121,7 @@ You can run the program using one of the following methods:
     Go to the [Plugin Directory](https://github.com/Varian-MedicalAffairsAppliedSolutions/MAAS-DoseInfluenceMatrix/tree/main/PhotonDoseCalc/Plugin/bin/Release).
     
 2.  **Edit the configuration file:**  
-    Open [PhotonInfluenceMatrixCalcPlugin.esapi.config](https://github.com/Varian-MedicalAffairsAppliedSolutions/MAAS-DoseInfluenceMatrix/blob/main/PhotonDoseCalc/Source_C%23/bin/release/PhotonInfluenceMatrixCalcPlugin.esapi.config) and set:
+    Open [PhotonInfluenceMatrixCalcPlugin.esapi.config](https://github.com/Varian-MedicalAffairsAppliedSolutions/MAAS-DoseInfluenceMatrix/blob/main/PhotonDoseCalc/Source_C%23/bin/release/PhotonInfluenceMatrixCalcPlugin.esapi.config) on your local machine and set:
     
     -   `OutputRootFolder` to your desired output directory.
         
@@ -147,10 +147,10 @@ You can run the program using one of the following methods:
 If you have access to an Eclipse thick-client workstation, you can run the script standalone:
 
 1.  **Locate the executable:**  
-    Go to the [Executable Directory](https://github.com/Varian-MedicalAffairsAppliedSolutions/MAAS-DoseInfluenceMatrix/tree/main/PhotonDoseCalc/Source_C%23/bin/release).
+    Go to the [Executable Directory](https://github.com/Varian-MedicalAffairsAppliedSolutions/MAAS-DoseInfluenceMatrix/tree/main/PhotonDoseCalc/Source_C%23/bin/release) on your local system.
     
 2.  **Edit the configuration file:**  
-    Open [PhotonInfluenceMatrixCalc.exe.config](https://github.com/Varian-MedicalAffairsAppliedSolutions/MAAS-DoseInfluenceMatrix/blob/main/PhotonDoseCalc/Source_C%23/bin/release/PhotonInfluenceMatrixCalc.exe.config) and set:
+    Open [PhotonInfluenceMatrixCalc.exe.config](https://github.com/Varian-MedicalAffairsAppliedSolutions/MAAS-DoseInfluenceMatrix/blob/main/PhotonDoseCalc/Source_C%23/bin/release/PhotonInfluenceMatrixCalc.exe.config) on your local system and set:
     
     -   `OutputRootFolder` to your desired output directory.
         

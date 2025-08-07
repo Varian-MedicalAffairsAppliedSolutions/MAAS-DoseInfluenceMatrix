@@ -2,6 +2,11 @@ using System;
 using System.Windows;
 using System.Runtime.CompilerServices;
 using VMS.TPS.Common.Model.API;
+using System.IO;
+using System.Globalization;
+using System.Linq;
+using System.Windows.Media.Imaging;
+using MAAS.Common.EulaVerification;
 
 using CalculateInfluenceMatrix;
 
@@ -34,6 +39,12 @@ namespace VMS.TPS
 
     public class Script
     {
+        // Define the project information for EULA verification
+        private const string PROJECT_NAME = "DoseInfluenceMatrix";
+        private const string PROJECT_VERSION = "1.0.0";
+        private const string LICENSE_URL = "https://varian-medicalaffairsappliedsolutions.github.io/MAAS-DoseInfluenceMatrix/";
+        private const string GITHUB_URL = "https://github.com/Varian-MedicalAffairsAppliedSolutions/MAAS-DoseInfluenceMatrix";
+
         bool m_bCloseMainWindowOnLoaded;
         ctrlMain m_ctrlMain;
         public bool CancelRequested { get; set; } = false;
@@ -50,14 +61,118 @@ namespace VMS.TPS
         [MethodImpl(MethodImplOptions.NoInlining)]
         public void Execute(ScriptContext context, System.Windows.Window window)
         {
-            window.Loaded += MainWindow_Loaded;
-
-            if (context.PlanSetup == null || context.Image == null || context.Course == null || context.Patient == null)
+            try
             {
-                System.Windows.MessageBox.Show("Please open a plan first.");
-                m_bCloseMainWindowOnLoaded = true;
+                // Set up the EulaConfig directory
+                string scriptPath = Assembly.GetExecutingAssembly().Location;
+                string scriptDirectory = Path.GetDirectoryName(scriptPath);
+                EulaConfig.ConfigDirectory = scriptDirectory;
+
+                // EULA verification
+                var eulaVerifier = new EulaVerifier(PROJECT_NAME, PROJECT_VERSION, LICENSE_URL);
+                var eulaConfig = EulaConfig.Load(PROJECT_NAME);
+                if (eulaConfig.Settings == null)
+                {
+                    eulaConfig.Settings = new ApplicationSettings();
+                }
+
+                if (!eulaVerifier.IsEulaAccepted())
+                {
+                    MessageBox.Show(
+                        $"This version of {PROJECT_NAME} (v{PROJECT_VERSION}) requires license acceptance before first use.\n\n" +
+                        "You will be prompted to provide an access code. Please follow the instructions to obtain your code.",
+                        "License Acceptance Required",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Information);
+
+                    BitmapImage qrCode = null;
+                    try
+                    {
+                        string assemblyName = Assembly.GetExecutingAssembly().GetName().Name;
+                        qrCode = new BitmapImage(new Uri($"pack://application:,,,/{assemblyName};component/Resources/qrcode.bmp"));
+                    }
+                    catch (Exception ex)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"Error loading QR code: {ex.Message}");
+                    }
+
+                    if (!eulaVerifier.ShowEulaDialog(qrCode))
+                    {
+                        MessageBox.Show(
+                            "License acceptance is required to use this application.\n\n" +
+                            "The application will now close.",
+                            "License Not Accepted",
+                            MessageBoxButton.OK,
+                            MessageBoxImage.Warning);
+                        return;
+                    }
+                }
+
+                // Check expiration date
+                var asmCa = typeof(Script).Assembly.CustomAttributes
+                    .FirstOrDefault(ca => ca.AttributeType.Name == "AssemblyExpirationDateAttribute");
+
+                var bNoExpire = File.Exists(Path.Combine(scriptDirectory, "NOEXPIRE"));
+
+                if (asmCa != null &&
+                    DateTime.TryParse(asmCa.ConstructorArguments.FirstOrDefault().Value as string,
+                        new CultureInfo("en-US"), DateTimeStyles.None, out DateTime endDate))
+                {
+                    if (DateTime.Now > endDate && !bNoExpire)
+                    {
+                        MessageBox.Show($"Application has expired. Newer builds with future expiration dates can be found here: {GITHUB_URL}",
+                                        "MAAS-DoseInfluenceMatrix",
+                                        MessageBoxButton.OK,
+                                        MessageBoxImage.Information);
+                        return;
+                    }
+
+                    if (!bNoExpire)
+                    {
+                        string msg;
+                        if (!eulaConfig.Settings.Validated)
+                        {
+                            // First-time message
+                            msg = $"The current MAAS-DoseInfluenceMatrix application is provided AS IS as a non-clinical, research only tool in evaluation only. The current " +
+                            $"application will only be available until {endDate.Date} after which the application will be unavailable. " +
+                            $"By Clicking 'Yes' you agree that this application will be evaluated and not utilized in providing planning decision support\n\n" +
+                            $"Newer builds with future expiration dates can be found here: {GITHUB_URL}\n\n" +
+                            "See the FAQ for more information on how to remove this pop-up and expiration";
+                        }
+                        else
+                        {
+                            // Returning user message
+                            msg = $"Application will only be available until {endDate.Date} after which the application will be unavailable. " +
+                            "By Clicking 'Yes' you agree that this application will be evaluated and not utilized in providing planning decision support\n\n" +
+                            $"Newer builds with future expiration dates can be found here: {GITHUB_URL} \n\n" +
+                            "See the FAQ for more information on how to remove this pop-up and expiration";
+                        }
+
+                        if (MessageBox.Show(msg, "Agreement", MessageBoxButton.YesNo) != MessageBoxResult.Yes)
+                        {
+                            return;
+                        }
+                    }
+                }
+
+                window.Loaded += MainWindow_Loaded;
+
+                if (context.PlanSetup == null || context.Image == null || context.Course == null || context.Patient == null)
+                {
+                    System.Windows.MessageBox.Show("Please open a plan first.");
+                    m_bCloseMainWindowOnLoaded = true;
+                    return;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error during license verification: {ex.Message}",
+                               "License Verification Error",
+                               MessageBoxButton.OK,
+                               MessageBoxImage.Error);
                 return;
             }
+
             m_hPatient = context.Patient;
             m_hCourse = context.Course;
             m_bPhotonPlan = context.ExternalPlanSetup != null;
