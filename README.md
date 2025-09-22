@@ -115,52 +115,35 @@ pp.Visualization.plot_2d_slice(my_plan=my_plan, sol=sol, slice_num=60, struct_na
 
 You can run the program using one of the following methods:
 
-#### 1. Eclipse plugin
+#### **1. Using the Eclipse Plugin (GUI Method)**
+For users unfamiliar with command-line scripting, the plugin provides a **graphical interface** for dose calculation.
 
-1.  **Locate the plugin:**  
-    Go to the [Plugin Directory](https://github.com/Varian-MedicalAffairsAppliedSolutions/MAAS-DoseInfluenceMatrix/tree/main/PhotonDoseCalc/Plugin/bin/Release).
-    
-2.  **Edit the configuration file:**  
-    Open [PhotonInfluenceMatrixCalcPlugin.esapi.config](https://github.com/Varian-MedicalAffairsAppliedSolutions/MAAS-DoseInfluenceMatrix/blob/main/PhotonDoseCalc/Source_C%23/bin/release/PhotonInfluenceMatrixCalcPlugin.esapi.config) on your local machine and set:
-    
-    -   `OutputRootFolder` to your desired output directory.
-        
-    -   `BeamletSizeX` and `BeamletSizeY` to customize the beamlet size.
-        
-    -   `EclipseVolumeDoseCalcModel` to match your dose calculation version.
-        
-3.  **Run in Eclipse:**
-    
-    -   Open the desired patient plan (e.g., **Plan1**).
-        
-    -   Go to **Tools → Scripts → Change Folder** and select the plugin directory from step 1.
-        
-    -   Click **Open**, select **PhotonInfluenceMatrixCalcPlugin.esapi.dll**, and click **Run**.
-        
-    -   (Optional) Add this plugin to **Favorites** for quicker access.
-        
+##### **Steps:**
+1. Navigate to the release [tab](https://github.com/Varian-MedicalAffairsAppliedSolutions/MAAS-DoseInfluenceMatrix/releases)  for dose calculation module and download the CalculateInfluenceMatrix package that matches with your Eclipse version. 
+2. Modify the config file:  
+   - Edit CalculateInfluenceMatrix.esapi.dll.config.  
+   - Set `Photon_OutputRootFolder` to your preferred output directory.  You can also modify `BeamletSizeX` and `BeamletSizeY` for choosing the beamlet size in X and Y direction. Please modify the `Photon_EclipseVolumeDoseCalcModel` based on your dose calculation version available at your institution.
+3. In Eclipse:
+   - Open your patient plan (e.g., **PortPy_Plan**).  
+   - Navigate to **Tools → Scripts → Change Folder**.  
+   - Change the path to downloaded folder from release and click **Open**.  
+   - Select **CalculateInfluenceMatrix.esapi.dll** and click **Run**
+   - (Optional) Add the plugin to **Favorites** for quicker access.  
 
-**Result:** The program outputs data to the `OutputRootFolder` specified in the config.
+**Output:** PortPy-compatible data will be saved in the `OutputRootFolder` specified in the config file.
 
-### 2. Command-Line (Standalone)
 
-If you have access to an Eclipse thick-client workstation, you can run the script standalone:
+#### **2. Using the Executable (Command-Line Method)**
+For users comfortable with command-line execution.
 
-1.  **Locate the executable:**  
-    Go to the [Executable Directory](https://github.com/Varian-MedicalAffairsAppliedSolutions/MAAS-DoseInfluenceMatrix/tree/main/PhotonDoseCalc/Source_C%23/bin/release) on your local system.
-    
-2.  **Edit the configuration file:**  
-    Open [PhotonInfluenceMatrixCalc.exe.config](https://github.com/Varian-MedicalAffairsAppliedSolutions/MAAS-DoseInfluenceMatrix/blob/main/PhotonDoseCalc/Source_C%23/bin/release/PhotonInfluenceMatrixCalc.exe.config) on your local system and set:
-    
-    -   `OutputRootFolder` to your desired output directory.
-        
-    -   `BeamletSizeX` and `BeamletSizeY` to customize beamlet size.
-        
-    -   `EclipseVolumeDoseCalcModel` to match your dose calculation version.
-        
-3.  **Run the program:**  
-    From a command prompt or terminal, execute: 
+##### **Steps:**
+1. Navigate to the release [tab](https://github.com/Varian-MedicalAffairsAppliedSolutions/MAAS-DoseInfluenceMatrix/releases)  for dose calculation module and download the CalculateInfluenceMatrix package that matches with your Eclipse version.
+2. Modify the config file:
+   - Edit CalculateInfluenceMatrix.exe.config.  
+   - Set `Photon_OutputRootFolder` to your preferred output directory. You can also modify `Photon_BeamletSizeX` and `Photon_BeamletSizeY` for choosing the beamlet size in X and Y direction. Please modify the `Photon_EclipseVolumeDoseCalcModel` based on your dose calculation version available at your institution.
+     
+3. Run the following command in a terminal or command prompt:  
    ```bash
-       PhotonInfluenceMatrixCalc.exe <patient_mrn> <course_name> <plan_name>
-```
+   CalculateInfluenceMatrix.exe <patient_mrn> <course_name> <plan_name>
 
+**Output:** PortPy-compatible data will be saved in the `OutputRootFolder` specified in the config file.
